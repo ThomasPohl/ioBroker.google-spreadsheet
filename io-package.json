@@ -1,0 +1,79 @@
+{
+  "common": {
+    "name": "google-spreadsheet",
+    "version": "0.0.1",
+    "news": {
+      "0.0.1": {
+        "en": "initial release",
+        "de": "Erstveröffentlichung",
+        "ru": "Начальная версия",
+        "pt": "lançamento inicial",
+        "nl": "Eerste uitgave",
+        "fr": "Première version",
+        "it": "Versione iniziale",
+        "es": "Versión inicial",
+        "pl": "Pierwsze wydanie",
+        "zh-cn": "首次出版"
+      }
+    },
+    "title": "Google Spreadsheet",
+    "titleLang": {
+      "en": "Google Spreadsheet",
+      "de": "Google-Tabelle",
+      "ru": "Таблица Google",
+      "pt": "Planilha do Google",
+      "nl": "Google-spreadsheet",
+      "fr": "Feuille de calcul Google",
+      "it": "Foglio di lavoro Google",
+      "es": "Hoja de cálculo de Google",
+      "pl": "Arkusz kalkulacyjny Google",
+      "zh-cn": "谷歌电子表格"
+    },
+    "desc": {
+      "en": "append data to a google spreadsheet",
+      "de": "Daten an eine Google-Tabelle anhängen",
+      "ru": "Отправить данные в таблицу Google",
+      "pt": "Enviar dados para uma planilha do Google",
+      "nl": "Verzend gegevens naar een Google-spreadsheet",
+      "fr": "Envoyer des données à une feuille de calcul Google",
+      "it": "Invia i dati a un foglio di lavoro Google",
+      "es": "Enviar datos a una hoja de cálculo de Google",
+      "pl": "Wyślij dane do arkusza kalkulacyjnego Google",
+      "zh-cn": "将数据发送到谷歌电子表格"
+    },
+    "authors": [
+      "Thomas Pohl <post@thomaspohl.net>"
+    ],
+    "keywords": [
+      "google",
+      "spreadsheet"
+    ],
+    "license": "Apache-2.0",
+    "platform": "Javascript/Node.js",
+    "main": "main.js",
+    "icon": "Google_Sheets_logo.svg",
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/ThomasPohl/ioBroker.google-spreadsheet/master/admin/Google_Sheets_logo.svg",
+    "readme": "https://github.com/ThomasPohl/ioBroker.google-spreadsheet/blob/master/README.md",
+    "loglevel": "info",
+    "mode": "daemon",
+    "type": "communication",
+    "compact": true,
+    "materialize": true,
+    "blockly": true,
+    "dependencies": [
+      {
+        "js-controller": ">=1.4.2"
+      }
+    ],
+    "installedFrom": "/opt/ioBroker.google-spreadsheet"
+  },
+  "native": {
+    "spreadsheetId": "",
+    "sheetName": "",
+    "serviceAccountEmail": "",
+    "privateKey": ""
+  },
+  "objects": [],
+  "instanceObjects": []
+}
