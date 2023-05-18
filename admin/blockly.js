@@ -21,22 +21,22 @@ Blockly.Translate =
     };
 
 /// --- SendTo gotify --------------------------------------------------
-Blockly.Words["googleSpreadsheet"] = { en: "Google Spreadsheet", de: "Google Tabelle" };
-Blockly.Words["googleSpreadsheet_message"] = { en: "message", de: "Meldung" };
+Blockly.Words["google-spreadsheet"] = { en: "Google Spreadsheet", de: "Google Tabelle" };
+Blockly.Words["google-spreadsheet_message"] = { en: "message", de: "Meldung" };
 
 
-Blockly.Words["googleSpreadsheet_anyInstance"] = { en: "all instances", de: "Alle Instanzen" };
-Blockly.Words["googleSpreadsheet_tooltip"] = {
+Blockly.Words["google-spreadsheet_anyInstance"] = { en: "all instances", de: "Alle Instanzen" };
+Blockly.Words["google-spreadsheet_tooltip"] = {
     en: "Append data to a google spreadsheet",
     de: "Daten an eine Google Tabelle anhängen",
 };
-Blockly.Words["googleSpreadsheet_help"] = {
+Blockly.Words["google-spreadsheet_help"] = {
     en: "https://github.com/ThomasPohl/ioBroker.google-spreadsheet/blob/master/README.md",
     de: "https://github.com/ThomasPohl/ioBroker.google-spreadsheet/blob/master/README.md",
 };
 
-Blockly.Sendto.blocks["googleSpreadsheet"] =
-    '<block type="googleSpreadsheet">' +
+Blockly.Sendto.blocks["google-spreadsheet"] =
+    '<block type="google-spreadsheet">' +
     '     <value name="INSTANCE">' +
     "     </value>" +
     '     <value name="MESSAGE">' +
@@ -46,9 +46,9 @@ Blockly.Sendto.blocks["googleSpreadsheet"] =
     "     </value>" +
     "</block>";
 
-Blockly.Blocks["googleSpreadsheet"] = {
+Blockly.Blocks["google-spreadsheet"] = {
     init: function () {
-        var options = [[Blockly.Translate("googleSpreadsheet_anyInstance"), ""]];
+        var options = [[Blockly.Translate("google-spreadsheet_anyInstance"), ""]];
         if (typeof main !== "undefined" && main.instances) {
             for (var i = 0; i < main.instances.length; i++) {
                 var m = main.instances[i].match(/^system.adapter.google-spreadsheet.(\d+)$/);
@@ -66,10 +66,10 @@ Blockly.Blocks["googleSpreadsheet"] = {
         }
 
         this.appendDummyInput("INSTANCE")
-            .appendField(Blockly.Translate("googleSpreadsheet"))
+            .appendField(Blockly.Translate("google-spreadsheet"))
             .appendField(new Blockly.FieldDropdown(options), "INSTANCE");
 
-        this.appendValueInput("MESSAGE").appendField(Blockly.Translate("googleSpreadsheet_message"));
+        this.appendValueInput("MESSAGE").appendField(Blockly.Translate("google-spreadsheet_message"));
 
        /* if (input && input.connection) {
             input.connection._optional = true;
@@ -80,12 +80,12 @@ Blockly.Blocks["googleSpreadsheet"] = {
         this.setNextStatement(true, null);
 
         this.setColour(Blockly.Sendto.HUE);
-        this.setTooltip(Blockly.Translate("googleSpreadsheet_tooltip"));
-        this.setHelpUrl(Blockly.Translate("googleSpreadsheet_help"));
+        this.setTooltip(Blockly.Translate("google-spreadsheet_tooltip"));
+        this.setHelpUrl(Blockly.Translate("google-spreadsheet_help"));
     },
 };
 
-Blockly.JavaScript["googleSpreadsheet"] = function (block) {
+Blockly.JavaScript["google-spreadsheet"] = function (block) {
     var dropdown_instance = block.getFieldValue("INSTANCE");
     var message = Blockly.JavaScript.valueToCode(block, "MESSAGE", Blockly.JavaScript.ORDER_ATOMIC);
     var text = "{\n";

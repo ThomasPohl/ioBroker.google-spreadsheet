@@ -57,10 +57,14 @@
     "readme": "https://github.com/ThomasPohl/ioBroker.google-spreadsheet/blob/master/README.md",
     "loglevel": "info",
     "mode": "daemon",
-    "type": "communication",
+    "type": "messaging",
     "compact": true,
+    "connectionType": "cloud",
+    "dataSource": "push",
     "materialize": true,
     "blockly": true,
+    "messagebox": true,
+    "subscribe": "messagebox",
     "dependencies": [
       {
         "js-controller": ">=1.4.2"
