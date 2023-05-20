@@ -13,6 +13,7 @@
         "it": "Versione iniziale",
         "es": "Versión inicial",
         "pl": "Pierwsze wydanie",
+        "uk": "Початкова версія",
         "zh-cn": "首次出版"
       }
     },
@@ -27,19 +28,21 @@
       "it": "Foglio di lavoro Google",
       "es": "Hoja de cálculo de Google",
       "pl": "Arkusz kalkulacyjny Google",
+      "uk": "Таблиця Google",
       "zh-cn": "谷歌电子表格"
     },
     "desc": {
-      "en": "append data to a google spreadsheet",
-      "de": "Daten an eine Google-Tabelle anhängen",
-      "ru": "Отправить данные в таблицу Google",
-      "pt": "Enviar dados para uma planilha do Google",
-      "nl": "Verzend gegevens naar een Google-spreadsheet",
-      "fr": "Envoyer des données à une feuille de calcul Google",
-      "it": "Invia i dati a un foglio di lavoro Google",
-      "es": "Enviar datos a una hoja de cálculo de Google",
-      "pl": "Wyślij dane do arkusza kalkulacyjnego Google",
-      "zh-cn": "将数据发送到谷歌电子表格"
+      "en": "Append data to google spreadsheets",
+      "de": "Daten an Google-Tabellen anhängen",
+      "ru": "Добавить данные в таблицы Google",
+      "pt": "Anexar dados às planilhas do Google",
+      "nl": "Voeg gegevens toe aan Google-spreadsheets",
+      "fr": "Ajouter des données aux feuilles de calcul Google",
+      "it": "Aggiungi dati ai fogli di lavoro di Google",
+      "es": "Agregar datos a las hojas de cálculo de Google",
+      "pl": "Dołącz dane do arkuszy kalkulacyjnych Google",
+      "uk": "Додавання даних до електронних таблиць Google",
+      "zh-cn": "将数据附加到谷歌电子表格"
     },
     "authors": [
       "Thomas Pohl <post@thomaspohl.net>"
@@ -50,27 +53,32 @@
     ],
     "license": "Apache-2.0",
     "platform": "Javascript/Node.js",
-    "main": "main.js",
-    "icon": "Google_Sheets_logo.svg",
+    "main": "build/main.js",
+    "icon": "google-spreadsheet.png",
     "enabled": true,
-    "extIcon": "https://raw.githubusercontent.com/ThomasPohl/ioBroker.google-spreadsheet/master/admin/Google_Sheets_logo.svg",
-    "readme": "https://github.com/ThomasPohl/ioBroker.google-spreadsheet/blob/master/README.md",
+    "extIcon": "https://raw.githubusercontent.com/ThomasPohl/ioBroker.google-spreadsheet/main/admin/google-spreadsheet.png",
+    "readme": "https://github.com/ThomasPohl/ioBroker.google-spreadsheet/blob/main/README.md",
     "loglevel": "info",
     "mode": "daemon",
-    "type": "messaging",
+    "type": "storage",
     "compact": true,
     "connectionType": "cloud",
     "dataSource": "push",
-    "materialize": true,
     "blockly": true,
     "messagebox": true,
-    "subscribe": "messagebox",
+    "adminUI": {
+      "config": "materialize"
+    },
     "dependencies": [
       {
-        "js-controller": ">=1.4.2"
+        "js-controller": ">=3.3.22"
       }
     ],
-    "installedFrom": "/opt/ioBroker.google-spreadsheet"
+    "globalDependencies": [
+      {
+        "admin": ">=5.0.0"
+      }
+    ]
   },
   "native": {
     "spreadsheetId": "",

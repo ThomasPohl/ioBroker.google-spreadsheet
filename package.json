@@ -1,10 +1,10 @@
 {
   "name": "iobroker.google-spreadsheet",
   "version": "0.0.1",
-  "description": "Send data to a google spreadsheet",
+  "description": "Append data to google spreadsheets",
   "author": {
     "name": "Thomas Pohl",
-    "email": "post@thhomaspohl.net"
+    "email": "post@thomaspohl.net"
   },
   "homepage": "https://github.com/ThomasPohl/ioBroker.google-spreadsheet",
   "license": "Apache-2.0",
@@ -14,39 +14,68 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/ThomasPohl/ioBroker.google-spreadsheet"
+    "url": "https://github.com/ThomasPohl/ioBroker.google-spreadsheet.git"
+  },
+  "engines": {
+    "node": ">= 14"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^2.6.8"
+    "@iobroker/adapter-core": "^2.6.8",
+    "googleapis": "^118.0.0"
   },
   "devDependencies": {
+    "@alcalzone/release-script": "^3.5.9",
+    "@alcalzone/release-script-plugin-iobroker": "^3.5.9",
+    "@alcalzone/release-script-plugin-license": "^3.5.9",
+    "@alcalzone/release-script-plugin-manual-review": "^3.5.9",
+    "@iobroker/adapter-dev": "^1.2.0",
     "@iobroker/testing": "^4.1.0",
+    "@tsconfig/node14": "^1.0.3",
     "@types/chai": "^4.3.5",
     "@types/chai-as-promised": "^7.1.5",
-    "@types/gulp": "^4.0.10",
     "@types/mocha": "^10.0.1",
     "@types/node": "^14.18.47",
     "@types/proxyquire": "^1.3.28",
     "@types/sinon": "^10.0.15",
     "@types/sinon-chai": "^3.2.9",
-    "axios": "^1.4.0",
+    "@typescript-eslint/eslint-plugin": "^5.59.6",
+    "@typescript-eslint/parser": "^5.59.6",
     "chai": "^4.3.7",
     "chai-as-promised": "^7.1.1",
     "eslint": "^8.40.0",
-    "gulp": "^4.0.2",
-    "mocha": "^10.2.0",
+    "mocha": "^9.2.2",
     "proxyquire": "^2.1.3",
-    "sinon": "^15.0.4",
-    "sinon-chai": "^3.7.0"
+    "rimraf": "^5.0.1",
+    "sinon": "^13.0.2",
+    "sinon-chai": "^3.7.0",
+    "source-map-support": "^0.5.21",
+    "ts-node": "^10.9.1",
+    "typescript": "~4.6.4"
   },
-  "main": "main.js",
+  "main": "build/main.js",
+  "files": [
+    "admin{,/!(src)/**}/!(tsconfig|tsconfig.*|.eslintrc).{json,json5}",
+    "admin{,/!(src)/**}/*.{html,css,png,svg,jpg,js}",
+    "build/",
+    "www/",
+    "io-package.json",
+    "LICENSE"
+  ],
   "scripts": {
-    "test:js": "mocha \"{!(node_modules|test)/**/*.test.js,*.test.js,test/**/test!(PackageFiles|Startup).js}\"",
+    "prebuild": "rimraf build",
+    "build": "build-adapter ts",
+    "watch": "build-adapter ts --watch",
+    "prebuild:ts": "rimraf build",
+    "build:ts": "build-adapter ts",
+    "watch:ts": "build-adapter ts --watch",
+    "test:ts": "mocha --config test/mocharc.custom.json src/**/*.test.ts",
     "test:package": "mocha test/package --exit",
-    "test:unit": "mocha test/unit --exit",
     "test:integration": "mocha test/integration --exit",
-    "test": "npm run test:js && npm run test:package",
-    "lint": "eslint"
+    "test": "npm run test:ts && npm run test:package",
+    "check": "tsc --noEmit",
+    "lint": "eslint --ext .ts src/",
+    "translate": "translate-adapter",
+    "release": "release-script"
   },
   "bugs": {
     "url": "https://github.com/ThomasPohl/ioBroker.google-spreadsheet/issues"

@@ -88,11 +88,7 @@ Blockly.Blocks["google-spreadsheet"] = {
 Blockly.JavaScript["google-spreadsheet"] = function (block) {
     var dropdown_instance = block.getFieldValue("INSTANCE");
     var message = Blockly.JavaScript.valueToCode(block, "MESSAGE", Blockly.JavaScript.ORDER_ATOMIC);
-    var text = "{\n";
-
-    text += "   message: " + message + "\n";
-
-    text += "}";
+    var text = message;
     var logText;
 
     return 'sendTo("google-spreadsheet' + dropdown_instance + '", "send", ' + text + ");\n";

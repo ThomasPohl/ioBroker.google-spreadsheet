@@ -1,0 +1,44 @@
+{
+    "cli": true,
+    "target": "directory",
+    "adapterName": "google-spreadsheet",
+    "title": "Google Spreadsheet",
+    "description": "Append data to google spreadsheets",
+    "keywords": [
+        "google",
+        "spreadsheet"
+    ],
+    "expert": "yes",
+    "features": [
+        "adapter"
+    ],
+    "adminFeatures": [],
+    "type": "storage",
+    "startMode": "daemon",
+    "connectionType": "cloud",
+    "dataSource": "push",
+    "connectionIndicator": "no",
+    "language": "TypeScript",
+    "nodeVersion": "14",
+    "adminUi": "html",
+    "tools": [
+        "ESLint",
+        "devcontainer"
+    ],
+    "i18n": "JSON",
+    "releaseScript": "yes",
+    "devServer": "yes",
+    "devServerPort": 8081,
+    "indentation": "Space (4)",
+    "quotes": "double",
+    "es6class": "yes",
+    "authorName": "Thomas Pohl",
+    "authorGithub": "ThomasPohl",
+    "authorEmail": "post@thomaspohl.net",
+    "gitRemoteProtocol": "HTTPS",
+    "gitCommit": "no",
+    "defaultBranch": "main",
+    "license": "Apache License 2.0",
+    "dependabot": "yes",
+    "creatorVersion": "2.4.0"
+}
