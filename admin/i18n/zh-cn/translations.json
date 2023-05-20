@@ -1,5 +1,7 @@
 {
-    "google-spreadsheet adapter settings": "google-spreadsheet的适配器设置",
-    "option1": "选项1",
-    "option2": "选项2"
+    "google-spreadsheet adapter settings": "谷歌电子表格的适配器设置",
+    "privateKey": "私钥",
+    "serviceAccountEmail": "服务帐号",
+    "sheetName": "工作表名称",
+    "spreadsheetId": "电子表格编号"
 }

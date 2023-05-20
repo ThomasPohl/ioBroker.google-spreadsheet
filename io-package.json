@@ -1,90 +1,90 @@
 {
-  "common": {
-    "name": "google-spreadsheet",
-    "version": "0.0.1",
-    "news": {
-      "0.0.1": {
-        "en": "initial release",
-        "de": "Erstveröffentlichung",
-        "ru": "Начальная версия",
-        "pt": "lançamento inicial",
-        "nl": "Eerste uitgave",
-        "fr": "Première version",
-        "it": "Versione iniziale",
-        "es": "Versión inicial",
-        "pl": "Pierwsze wydanie",
-        "uk": "Початкова версія",
-        "zh-cn": "首次出版"
-      }
+    "common": {
+        "name": "google-spreadsheet",
+        "version": "0.0.1",
+        "news": {
+            "0.0.1": {
+                "en": "initial release",
+                "de": "Erstveröffentlichung",
+                "ru": "Начальная версия",
+                "pt": "lançamento inicial",
+                "nl": "Eerste uitgave",
+                "fr": "Première version",
+                "it": "Versione iniziale",
+                "es": "Versión inicial",
+                "pl": "Pierwsze wydanie",
+                "uk": "Початкова версія",
+                "zh-cn": "首次出版"
+            }
+        },
+        "titleLang": {
+            "en": "Google Spreadsheet",
+            "de": "Google-Tabelle",
+            "ru": "Таблица Google",
+            "pt": "Planilha do Google",
+            "nl": "Google-spreadsheet",
+            "fr": "Feuille de calcul Google",
+            "it": "Foglio di lavoro Google",
+            "es": "Hoja de cálculo de Google",
+            "pl": "Arkusz kalkulacyjny Google",
+            "uk": "Таблиця Google",
+            "zh-cn": "谷歌电子表格"
+        },
+        "desc": {
+            "en": "Append data to google spreadsheets",
+            "de": "Daten an Google-Tabellen anhängen",
+            "ru": "Добавить данные в таблицы Google",
+            "pt": "Anexar dados às planilhas do Google",
+            "nl": "Voeg gegevens toe aan Google-spreadsheets",
+            "fr": "Ajouter des données aux feuilles de calcul Google",
+            "it": "Aggiungi dati ai fogli di lavoro di Google",
+            "es": "Agregar datos a las hojas de cálculo de Google",
+            "pl": "Dołącz dane do arkuszy kalkulacyjnych Google",
+            "uk": "Додавання даних до електронних таблиць Google",
+            "zh-cn": "将数据附加到谷歌电子表格"
+        },
+        "authors": [
+            "Thomas Pohl <post@thomaspohl.net>"
+        ],
+        "keywords": [
+            "google",
+            "spreadsheet"
+        ],
+        "license": "Apache-2.0",
+        "platform": "Javascript/Node.js",
+        "main": "build/main.js",
+        "icon": "google-spreadsheet.png",
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/ThomasPohl/ioBroker.google-spreadsheet/main/admin/google-spreadsheet.png",
+        "readme": "https://github.com/ThomasPohl/ioBroker.google-spreadsheet/blob/main/README.md",
+        "loglevel": "info",
+        "mode": "daemon",
+        "type": "storage",
+        "compact": true,
+        "connectionType": "cloud",
+        "dataSource": "push",
+        "blockly": true,
+        "messagebox": true,
+        "adminUI": {
+            "config": "materialize"
+        },
+        "dependencies": [
+            {
+                "js-controller": ">=3.3.22"
+            }
+        ],
+        "globalDependencies": [
+            {
+                "admin": ">=5.0.0"
+            }
+        ]
     },
-    "titleLang": {
-      "en": "Google Spreadsheet",
-      "de": "Google-Tabelle",
-      "ru": "Таблица Google",
-      "pt": "Planilha do Google",
-      "nl": "Google-spreadsheet",
-      "fr": "Feuille de calcul Google",
-      "it": "Foglio di lavoro Google",
-      "es": "Hoja de cálculo de Google",
-      "pl": "Arkusz kalkulacyjny Google",
-      "uk": "Таблиця Google",
-      "zh-cn": "谷歌电子表格"
+    "native": {
+        "spreadsheetId": "",
+        "sheetName": "",
+        "serviceAccountEmail": "",
+        "privateKey": ""
     },
-    "desc": {
-      "en": "Append data to google spreadsheets",
-      "de": "Daten an Google-Tabellen anhängen",
-      "ru": "Добавить данные в таблицы Google",
-      "pt": "Anexar dados às planilhas do Google",
-      "nl": "Voeg gegevens toe aan Google-spreadsheets",
-      "fr": "Ajouter des données aux feuilles de calcul Google",
-      "it": "Aggiungi dati ai fogli di lavoro di Google",
-      "es": "Agregar datos a las hojas de cálculo de Google",
-      "pl": "Dołącz dane do arkuszy kalkulacyjnych Google",
-      "uk": "Додавання даних до електронних таблиць Google",
-      "zh-cn": "将数据附加到谷歌电子表格"
-    },
-    "authors": [
-      "Thomas Pohl <post@thomaspohl.net>"
-    ],
-    "keywords": [
-      "google",
-      "spreadsheet"
-    ],
-    "license": "Apache-2.0",
-    "platform": "Javascript/Node.js",
-    "main": "build/main.js",
-    "icon": "google-spreadsheet.png",
-    "enabled": true,
-    "extIcon": "https://raw.githubusercontent.com/ThomasPohl/ioBroker.google-spreadsheet/main/admin/google-spreadsheet.png",
-    "readme": "https://github.com/ThomasPohl/ioBroker.google-spreadsheet/blob/main/README.md",
-    "loglevel": "info",
-    "mode": "daemon",
-    "type": "storage",
-    "compact": true,
-    "connectionType": "cloud",
-    "dataSource": "push",
-    "blockly": true,
-    "messagebox": true,
-    "adminUI": {
-      "config": "materialize"
-    },
-    "dependencies": [
-      {
-        "js-controller": ">=3.3.22"
-      }
-    ],
-    "globalDependencies": [
-      {
-        "admin": ">=5.0.0"
-      }
-    ]
-  },
-  "native": {
-    "spreadsheetId": "",
-    "sheetName": "",
-    "serviceAccountEmail": "",
-    "privateKey": ""
-  },
-  "objects": [],
-  "instanceObjects": []
+    "objects": [],
+    "instanceObjects": []
 }

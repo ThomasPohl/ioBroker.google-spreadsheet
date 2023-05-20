@@ -1,5 +1,7 @@
 {
-    "google-spreadsheet adapter settings": "Ustawienia adaptera dla google-spreadsheet",
-    "option1": "opcja 1",
-    "option2": "Opcja 2"
+    "google-spreadsheet adapter settings": "Ustawienia adaptera dla arkusza kalkulacyjnego Google",
+    "privateKey": "prywatny klucz",
+    "serviceAccountEmail": "konto usługi",
+    "sheetName": "nazwa arkusza",
+    "spreadsheetId": "identyfikator arkusza kalkulacyjnego"
 }

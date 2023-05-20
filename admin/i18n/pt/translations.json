@@ -1,5 +1,7 @@
 {
-    "google-spreadsheet adapter settings": "Configurações do adaptador para google-spreadsheet",
-    "option1": "Opção 1",
-    "option2": "opção 2"
+    "google-spreadsheet adapter settings": "Configurações do adaptador para planilha do google",
+    "privateKey": "chave privada",
+    "serviceAccountEmail": "conta de serviço",
+    "sheetName": "nome da folha",
+    "spreadsheetId": "ID da planilha"
 }

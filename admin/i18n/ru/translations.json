@@ -1,5 +1,7 @@
 {
-    "google-spreadsheet adapter settings": "Настройки адаптера для google-spreadsheet",
-    "option1": "Опция 1",
-    "option2": "вариант 2"
+    "google-spreadsheet adapter settings": "Настройки адаптера для google-таблицы",
+    "privateKey": "закрытый ключ",
+    "serviceAccountEmail": "сервисный аккаунт",
+    "sheetName": "имя листа",
+    "spreadsheetId": "идентификатор электронной таблицы"
 }

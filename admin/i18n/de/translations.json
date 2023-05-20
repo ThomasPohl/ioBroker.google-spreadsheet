@@ -1,5 +1,7 @@
 {
-    "google-spreadsheet adapter settings": "Adaptereinstellungen für google-spreadsheet",
-    "option1": "Option 1",
-    "option2": "Option 2"
+    "google-spreadsheet adapter settings": "Adaptereinstellungen für Google-Tabelle",
+    "privateKey": "Privater Schlüssel",
+    "serviceAccountEmail": "Dienstkonto",
+    "sheetName": "Blattname",
+    "spreadsheetId": "Tabellenkalkulations-ID"
 }

@@ -1,5 +1,7 @@
 {
     "google-spreadsheet adapter settings": "Adapter settings for google-spreadsheet",
-    "option1": "option1",
-    "option2": "option2"
+    "privateKey": "private key",
+    "serviceAccountEmail": "service account",
+    "sheetName": "sheet name",
+    "spreadsheetId": "spreadsheet id"
 }

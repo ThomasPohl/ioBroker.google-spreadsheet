@@ -1,5 +1,7 @@
 {
     "google-spreadsheet adapter settings": "Adapterinstellingen voor google-spreadsheet",
-    "option1": "Optie 1",
-    "option2": "Optie 2"
+    "privateKey": "prive sleutel",
+    "serviceAccountEmail": "service rekening",
+    "sheetName": "blad naam",
+    "spreadsheetId": "spreadsheet-id"
 }

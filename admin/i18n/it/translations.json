@@ -1,5 +1,7 @@
 {
-    "google-spreadsheet adapter settings": "Impostazioni dell'adattatore per google-spreadsheet",
-    "option1": "opzione 1",
-    "option2": "opzione 2"
+    "google-spreadsheet adapter settings": "Impostazioni dell'adattatore per il foglio di calcolo di Google",
+    "privateKey": "chiave privata",
+    "serviceAccountEmail": "conto di servizio",
+    "sheetName": "nome foglio",
+    "spreadsheetId": "ID foglio di calcolo"
 }
