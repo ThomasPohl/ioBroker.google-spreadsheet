@@ -5,8 +5,9 @@
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 import * as utils from "@iobroker/adapter-core";
-import {Auth} from "googleapis";
-const request = require('request');
+import { google } from "googleapis";
+import { JWT } from "google-auth-library";
+
 
 // Load your modules here, e.g.:
 // import * as fs from "fs";
@@ -19,8 +20,6 @@ class GoogleSpreadsheet extends utils.Adapter {
             name: "google-spreadsheet",
         });
         this.on("ready", this.onReady.bind(this));
-        this.on("stateChange", this.onStateChange.bind(this));
-        // this.on("objectChange", this.onObjectChange.bind(this));
         this.on("message", this.onMessage.bind(this));
         this.on("unload", this.onUnload.bind(this));
     }
@@ -36,7 +35,7 @@ class GoogleSpreadsheet extends utils.Adapter {
         this.log.info("config spreadsheetId: " + this.config.spreadsheetId);
         this.log.info("config sheetName: " + this.config.sheetName);
 
-     
+
     }
 
     /**
@@ -53,34 +52,6 @@ class GoogleSpreadsheet extends utils.Adapter {
             callback();
         } catch (e) {
             callback();
-        }
-    }
-
-    // If you need to react to object changes, uncomment the following block and the corresponding line in the constructor.
-    // You also need to subscribe to the objects with `this.subscribeObjects`, similar to `this.subscribeStates`.
-    // /**
-    //  * Is called if a subscribed object changes
-    //  */
-    // private onObjectChange(id: string, obj: ioBroker.Object | null | undefined): void {
-    //     if (obj) {
-    //         // The object was changed
-    //         this.log.info(`object ${id} changed: ${JSON.stringify(obj)}`);
-    //     } else {
-    //         // The object was deleted
-    //         this.log.info(`object ${id} deleted`);
-    //     }
-    // }
-
-    /**
-     * Is called if a subscribed state changes
-     */
-    private onStateChange(id: string, state: ioBroker.State | null | undefined): void {
-        if (state) {
-            // The state was changed
-            this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
-        } else {
-            // The state was deleted
-            this.log.info(`state ${id} deleted`);
         }
     }
 
@@ -101,52 +72,28 @@ class GoogleSpreadsheet extends utils.Adapter {
         }
     }
 
-    private fetchJwt(config: ioBroker.AdapterConfig, message: ioBroker.Message){
-        var jwtClient = new Auth.JWT(
-            this.config.serviceAccountEmail,
-            undefined,
-            this.config.privateKey.split('\\n').join('\n'),
-            ['https://www.googleapis.com/auth/spreadsheets']
-          );
-          
-          this.log.info("Fetching jwt");
-          const log = this.log;
-          // Authentifiziere den Service Account und erhalte ein Zugriffstoken
-          jwtClient.authorize(function(err, tokens) {
-            if (err) {
-              log.error(err.message);
-              return;
-            }
-            if (!tokens){
-                return;
-            }
-            log.info("Successfully fetched jwt");
-            var accessToken = tokens.access_token;
-
-            // Sende die Daten an das Google Spreadsheet
-            var url = "https://sheets.googleapis.com/v4/spreadsheets/" + config.spreadsheetId + "/values/" + encodeURIComponent(config.sheetName) + ":append?valueInputOption=RAW";
-          
-            var options = {
-              url: url,
-              method: "POST",
-              headers: {
-                Authorization: "Bearer " + accessToken
-              },
-              json: {
-                values: prepareValues(message, log)
-              }
-            };
-            log.info("Appending to spreadsheet: " + JSON.stringify(options));
-            request(options, function(error: any, response: any, body: any) {
-              if (error) {
-                log.error("Fehler beim Senden der Daten an Google Spreadsheet:"+ error);
-              } else if (response.statusCode !== 200) {
-                log.error("Fehler beim Senden der Daten an Google Spreadsheet. Statuscode:"+ response.statusCode);
-              } else {
-                log.info("Daten erfolgreich an Google Spreadsheet gesendet");
-              }
-            });
+    private fetchJwt(config: ioBroker.AdapterConfig, message: ioBroker.Message): void{
+        const auth = new JWT({
+            email: this.config.serviceAccountEmail,
+            key: this.config.privateKey,
+            scopes: ["https://www.googleapis.com/auth/spreadsheets"]
         });
+        const sheets = google.sheets({ version: "v4", auth });
+
+        sheets.spreadsheets.values.append({
+            // The [A1 notation](/sheets/api/guides/concepts#cell) of a range to search for a logical table of data. Values are appended after the last row of the table.
+            range: this.config.sheetName,
+            spreadsheetId: this.config.spreadsheetId,
+            // Request body metadata
+            requestBody: {
+                values: prepareValues(message, this.log)
+            },
+        }).then(() => {
+            this.log.info("Data successfully sent to google spreadsheet");
+        }).catch(error => {
+            this.log.error("Error while sending data to Google Spreadsheet:"+ error);
+        });
+
     }
 
 
