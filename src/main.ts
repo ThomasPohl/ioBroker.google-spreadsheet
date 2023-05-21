@@ -84,6 +84,7 @@ class GoogleSpreadsheet extends utils.Adapter {
             // The [A1 notation](/sheets/api/guides/concepts#cell) of a range to search for a logical table of data. Values are appended after the last row of the table.
             range: this.config.sheetName,
             spreadsheetId: this.config.spreadsheetId,
+            valueInputOption: "USER_ENTERED",
             // Request body metadata
             requestBody: {
                 values: prepareValues(message, this.log)

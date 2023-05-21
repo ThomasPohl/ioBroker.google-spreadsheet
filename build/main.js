@@ -19,7 +19,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 ));
 var utils = __toESM(require("@iobroker/adapter-core"));
 var import_googleapis = require("googleapis");
-const request = require("request");
+var import_google_auth_library = require("google-auth-library");
 class GoogleSpreadsheet extends utils.Adapter {
   constructor(options = {}) {
     super({
@@ -27,7 +27,6 @@ class GoogleSpreadsheet extends utils.Adapter {
       name: "google-spreadsheet"
     });
     this.on("ready", this.onReady.bind(this));
-    this.on("stateChange", this.onStateChange.bind(this));
     this.on("message", this.onMessage.bind(this));
     this.on("unload", this.onUnload.bind(this));
   }
@@ -42,13 +41,6 @@ class GoogleSpreadsheet extends utils.Adapter {
       callback();
     }
   }
-  onStateChange(id, state) {
-    if (state) {
-      this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
-    } else {
-      this.log.info(`state ${id} deleted`);
-    }
-  }
   onMessage(obj) {
     if (typeof obj === "object" && obj.message) {
       if (obj.command === "send") {
@@ -60,45 +52,23 @@ class GoogleSpreadsheet extends utils.Adapter {
     }
   }
   fetchJwt(config, message) {
-    var jwtClient = new import_googleapis.Auth.JWT(
-      this.config.serviceAccountEmail,
-      void 0,
-      this.config.privateKey.split("\\n").join("\n"),
-      ["https://www.googleapis.com/auth/spreadsheets"]
-    );
-    this.log.info("Fetching jwt");
-    const log = this.log;
-    jwtClient.authorize(function(err, tokens) {
-      if (err) {
-        log.error(err.message);
-        return;
+    const auth = new import_google_auth_library.JWT({
+      email: this.config.serviceAccountEmail,
+      key: this.config.privateKey,
+      scopes: ["https://www.googleapis.com/auth/spreadsheets"]
+    });
+    const sheets = import_googleapis.google.sheets({ version: "v4", auth });
+    sheets.spreadsheets.values.append({
+      range: this.config.sheetName,
+      spreadsheetId: this.config.spreadsheetId,
+      valueInputOption: "USER_ENTERED",
+      requestBody: {
+        values: prepareValues(message, this.log)
       }
-      if (!tokens) {
-        return;
-      }
-      log.info("Successfully fetched jwt");
-      var accessToken = tokens.access_token;
-      var url = "https://sheets.googleapis.com/v4/spreadsheets/" + config.spreadsheetId + "/values/" + encodeURIComponent(config.sheetName) + ":append?valueInputOption=RAW";
-      var options = {
-        url,
-        method: "POST",
-        headers: {
-          Authorization: "Bearer " + accessToken
-        },
-        json: {
-          values: prepareValues(message, log)
-        }
-      };
-      log.info("Appending to spreadsheet: " + JSON.stringify(options));
-      request(options, function(error, response, body) {
-        if (error) {
-          log.error("Fehler beim Senden der Daten an Google Spreadsheet:" + error);
-        } else if (response.statusCode !== 200) {
-          log.error("Fehler beim Senden der Daten an Google Spreadsheet. Statuscode:" + response.statusCode);
-        } else {
-          log.info("Daten erfolgreich an Google Spreadsheet gesendet");
-        }
-      });
+    }).then(() => {
+      this.log.info("Data successfully sent to google spreadsheet");
+    }).catch((error) => {
+      this.log.error("Error while sending data to Google Spreadsheet:" + error);
     });
   }
 }
