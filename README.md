@@ -110,15 +110,17 @@ Please refer to the [`dev-server` documentation](https://github.com/ioBroker/dev
 ## Changelog
 ### 0.0.1
 
-- First release
+* (Thomas Pohl) initial release
+
+### 0.0.2
+
+* (Thomas Pohl) Added "delete rows"
 
 <!--
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
 
-### **WORK IN PROGRESS**
-* (Thomas Pohl) initial release
 
 ## License
                                  Apache License

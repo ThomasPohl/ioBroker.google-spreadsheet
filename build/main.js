@@ -43,27 +43,27 @@ class GoogleSpreadsheet extends utils.Adapter {
   }
   onMessage(obj) {
     if (typeof obj === "object" && obj.message) {
-      if (obj.command === "send") {
-        this.log.info("send");
-        this.fetchJwt(this.config, obj);
+      if (obj.command === "append") {
+        this.log.info("append to spreadsheet");
+        this.append(this.config, obj);
+        if (obj.callback)
+          this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+      } else if (obj.command === "deleteRows") {
+        this.log.info("delete rows from spreadsheet");
+        this.deleteRows(this.config, obj);
         if (obj.callback)
           this.sendTo(obj.from, obj.command, "Message received", obj.callback);
       }
     }
   }
-  fetchJwt(config, message) {
-    const auth = new import_google_auth_library.JWT({
-      email: this.config.serviceAccountEmail,
-      key: this.config.privateKey,
-      scopes: ["https://www.googleapis.com/auth/spreadsheets"]
-    });
-    const sheets = import_googleapis.google.sheets({ version: "v4", auth });
+  append(config, message) {
+    const sheets = this.createSheet();
     sheets.spreadsheets.values.append({
       range: this.config.sheetName,
       spreadsheetId: this.config.spreadsheetId,
       valueInputOption: "USER_ENTERED",
       requestBody: {
-        values: prepareValues(message, this.log)
+        values: this.prepareValues(message)
       }
     }).then(() => {
       this.log.info("Data successfully sent to google spreadsheet");
@@ -71,15 +71,56 @@ class GoogleSpreadsheet extends utils.Adapter {
       this.log.error("Error while sending data to Google Spreadsheet:" + error);
     });
   }
-}
-function prepareValues(message, log) {
-  log.info("Type: " + message.message.constructor.toString());
-  if (Array.isArray(message.message)) {
-    log.info("is Array");
-    return [message.message];
-  } else {
-    log.info("Message: " + JSON.stringify(message));
-    return [[message.message]];
+  prepareValues(message) {
+    if (Array.isArray(message.message)) {
+      this.log.info("is Array");
+      return [message.message];
+    } else {
+      this.log.info("Message: " + JSON.stringify(message));
+      return [[message.message]];
+    }
+  }
+  deleteRows(config, message) {
+    this.log.info("Message: " + JSON.stringify(message));
+    const sheets = this.createSheet();
+    const messageData = message.message;
+    sheets.spreadsheets.get({ spreadsheetId: this.config.spreadsheetId }).then((spreadsheet) => {
+      if (spreadsheet && spreadsheet.data.sheets) {
+        const sheet = spreadsheet.data.sheets.find((sheet2) => sheet2.properties && sheet2.properties.title == this.config.sheetName);
+        if (sheet && sheet.properties) {
+          const sheetId = sheet.properties.sheetId;
+          sheets.spreadsheets.batchUpdate(
+            {
+              spreadsheetId: this.config.spreadsheetId,
+              requestBody: {
+                requests: [{
+                  deleteDimension: {
+                    range: {
+                      dimension: "ROWS",
+                      endIndex: messageData["end"],
+                      sheetId,
+                      startIndex: messageData["start"] - 1
+                    }
+                  }
+                }]
+              }
+            }
+          ).then(() => {
+            this.log.info("Rows successfully deleted from google spreadsheet");
+          }).catch((error) => {
+            this.log.error("Error while deleting rows from Google Spreadsheet:" + error);
+          });
+        }
+      }
+    });
+  }
+  createSheet() {
+    const auth = new import_google_auth_library.JWT({
+      email: this.config.serviceAccountEmail,
+      key: this.config.privateKey,
+      scopes: ["https://www.googleapis.com/auth/spreadsheets"]
+    });
+    return import_googleapis.google.sheets({ version: "v4", auth });
   }
 }
 if (require.main !== module) {

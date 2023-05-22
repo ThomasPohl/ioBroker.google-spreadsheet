@@ -5,12 +5,9 @@
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 import * as utils from "@iobroker/adapter-core";
-import { google } from "googleapis";
+import { google, sheets_v4 } from "googleapis";
 import { JWT } from "google-auth-library";
 
-
-// Load your modules here, e.g.:
-// import * as fs from "fs";
 
 class GoogleSpreadsheet extends utils.Adapter {
 
@@ -43,11 +40,6 @@ class GoogleSpreadsheet extends utils.Adapter {
      */
     private onUnload(callback: () => void): void {
         try {
-            // Here you must clear all timeouts or intervals that may still be active
-            // clearTimeout(timeout1);
-            // clearTimeout(timeout2);
-            // ...
-            // clearInterval(interval1);
 
             callback();
         } catch (e) {
@@ -62,9 +54,15 @@ class GoogleSpreadsheet extends utils.Adapter {
     //  */
     private onMessage(obj: ioBroker.Message): void {
         if (typeof obj === "object" && obj.message) {
-            if (obj.command === "send") {
-                this.log.info("send");
-                this.fetchJwt(this.config, obj);
+            if (obj.command === "append") {
+                this.log.info("append to spreadsheet");
+                this.append(this.config, obj);
+
+                // Send response in callback if required
+                if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+            } else if (obj.command === "deleteRows") {
+                this.log.info("delete rows from spreadsheet");
+                this.deleteRows(this.config, obj);
 
                 // Send response in callback if required
                 if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
@@ -72,13 +70,8 @@ class GoogleSpreadsheet extends utils.Adapter {
         }
     }
 
-    private fetchJwt(config: ioBroker.AdapterConfig, message: ioBroker.Message): void{
-        const auth = new JWT({
-            email: this.config.serviceAccountEmail,
-            key: this.config.privateKey,
-            scopes: ["https://www.googleapis.com/auth/spreadsheets"]
-        });
-        const sheets = google.sheets({ version: "v4", auth });
+    private append(config: ioBroker.AdapterConfig, message: ioBroker.Message): void{
+        const sheets = this.createSheet();
 
         sheets.spreadsheets.values.append({
             // The [A1 notation](/sheets/api/guides/concepts#cell) of a range to search for a logical table of data. Values are appended after the last row of the table.
@@ -87,7 +80,7 @@ class GoogleSpreadsheet extends utils.Adapter {
             valueInputOption: "USER_ENTERED",
             // Request body metadata
             requestBody: {
-                values: prepareValues(message, this.log)
+                values: this.prepareValues(message)
             },
         }).then(() => {
             this.log.info("Data successfully sent to google spreadsheet");
@@ -97,21 +90,71 @@ class GoogleSpreadsheet extends utils.Adapter {
 
     }
 
+    private prepareValues(message: ioBroker.Message) : any{
+        if (Array.isArray(message.message)){
+            this.log.info("is Array");
+            return [message.message];
 
-}
+        } else {
+            this.log.info("Message: "+ JSON.stringify(message));
+            return [[message.message]];
+        }
 
-function prepareValues(message: ioBroker.Message, log: ioBroker.Log) : any{
-    log.info("Type: " + message.message.constructor.toString());
-    if (Array.isArray(message.message)){
-        log.info("is Array");
-        return [message.message];
+    }
 
-    } else {
-        log.info("Message: "+ JSON.stringify(message));
-        return [[message.message]];
+    private deleteRows(config: ioBroker.AdapterConfig, message: ioBroker.Message): void {
+        this.log.info("Message: " + JSON.stringify(message));
+        const sheets = this.createSheet();
+
+        const messageData: Record<string, any> = message.message as Record<string, any>;
+
+        sheets.spreadsheets.get({spreadsheetId: this.config.spreadsheetId}).then(spreadsheet => {
+            if (spreadsheet && spreadsheet.data.sheets) {
+                const sheet = spreadsheet.data.sheets
+                    .find(sheet => sheet.properties && sheet.properties.title == this.config.sheetName);
+                if (sheet && sheet.properties) {
+                    const sheetId = sheet.properties.sheetId;
+                    sheets.spreadsheets.batchUpdate(
+                        {
+                            spreadsheetId: this.config.spreadsheetId,
+                            requestBody: {
+                                requests: [{
+                                    deleteDimension: {
+                                        range: {
+                                            dimension: "ROWS",
+                                            endIndex: messageData["end"],
+                                            sheetId: sheetId,
+                                            startIndex: messageData["start"]-1
+                                        }
+
+                                    }
+                                }]
+                            }
+                        }
+
+                    ).then(() => {
+                        this.log.info("Rows successfully deleted from google spreadsheet");
+                    }).catch(error => {
+                        this.log.error("Error while deleting rows from Google Spreadsheet:" + error);
+                    });
+                }
+            }
+        });
+
+
+    }
+
+    private createSheet(): sheets_v4.Sheets{
+        const auth = new JWT({
+            email: this.config.serviceAccountEmail,
+            key: this.config.privateKey,
+            scopes: ["https://www.googleapis.com/auth/spreadsheets"]
+        });
+        return google.sheets({ version: "v4", auth });
     }
 
 }
+
 
 if (require.main !== module) {
     // Export the constructor in compact mode
