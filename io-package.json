@@ -15,7 +15,20 @@
                 "pl": "Pierwsze wydanie",
                 "uk": "Початкова версія",
                 "zh-cn": "首次出版"
-            }
+            },
+            "0.0.2": {
+                "en": "added 'delete rows'",
+                "de": "'Zeilen löschen' hinzugefügt",
+                "ru": "добавлены 'удалить строки « »",
+                "pt": "adicionado 'excluir linhas '",
+                "nl": "Toegevoegd: 'verwijder roeien'",
+                "fr": "ajouté 'delete rows '",
+                "it": "aggiunto 'cancella righe '",
+                "es": "añadidos 'delete filas '",
+                "pl": "dodała 'delete rows'. '",
+                "uk": "доданий 'delete рядки р",
+                "zh-cn": "增幅 评 注"
+          }
         },
         "titleLang": {
             "en": "Google Spreadsheet",
