@@ -49,6 +49,7 @@ Add the following data to the configuration of your adapter instance in iobroker
 
 Use the available blocks to automatically interact with your spreadsheet.
 
+![Blockly](img/blockly-append.png)
 
 ## Changelog
 ### 0.0.1
