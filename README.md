@@ -18,6 +18,8 @@ This adapter can be used to automatically interact with google spreadsheets.
 
 * Append data to spreadsheet
 * Delete rows from a spreadsheet
+* Add sheets
+* Delete sheets
 
 ## Usage
 
