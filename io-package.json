@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "google-spreadsheet",
-        "version": "0.0.2",
+        "version": "0.0.3",
         "news": {
             "0.0.1": {
                 "en": "initial release",
@@ -28,6 +28,9 @@
                 "pl": "dodała 'delete rows'. '",
                 "uk": "доданий 'delete рядки р",
                 "zh-cn": "增幅 评 注"
+          },
+          "0.0.3": {
+              "en": "added 'add sheet' and 'delete sheet'"
           }
         },
         "titleLang": {

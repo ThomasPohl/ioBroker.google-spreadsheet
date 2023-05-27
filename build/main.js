@@ -53,17 +53,28 @@ class GoogleSpreadsheet extends utils.Adapter {
         this.deleteRows(this.config, obj);
         if (obj.callback)
           this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+      } else if (obj.command === "createSheet") {
+        this.log.info("create sheet");
+        this.createSheet(this.config, obj);
+        if (obj.callback)
+          this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+      } else if (obj.command === "deleteSheet") {
+        this.log.info("delete sheet");
+        this.deleteSheet(this.config, obj);
+        if (obj.callback)
+          this.sendTo(obj.from, obj.command, "Message received", obj.callback);
       }
     }
   }
   append(config, message) {
-    const sheets = this.createSheet();
+    const sheets = this.init();
+    const messageData = message.message;
     sheets.spreadsheets.values.append({
-      range: this.config.sheetName,
+      range: messageData["sheetName"],
       spreadsheetId: this.config.spreadsheetId,
       valueInputOption: "USER_ENTERED",
       requestBody: {
-        values: this.prepareValues(message)
+        values: this.prepareValues(messageData["data"])
       }
     }).then(() => {
       this.log.info("Data successfully sent to google spreadsheet");
@@ -72,21 +83,21 @@ class GoogleSpreadsheet extends utils.Adapter {
     });
   }
   prepareValues(message) {
-    if (Array.isArray(message.message)) {
+    if (Array.isArray(message)) {
       this.log.info("is Array");
-      return [message.message];
+      return [message];
     } else {
       this.log.info("Message: " + JSON.stringify(message));
-      return [[message.message]];
+      return [[message]];
     }
   }
   deleteRows(config, message) {
     this.log.info("Message: " + JSON.stringify(message));
-    const sheets = this.createSheet();
+    const sheets = this.init();
     const messageData = message.message;
     sheets.spreadsheets.get({ spreadsheetId: this.config.spreadsheetId }).then((spreadsheet) => {
       if (spreadsheet && spreadsheet.data.sheets) {
-        const sheet = spreadsheet.data.sheets.find((sheet2) => sheet2.properties && sheet2.properties.title == this.config.sheetName);
+        const sheet = spreadsheet.data.sheets.find((sheet2) => sheet2.properties && sheet2.properties.title == messageData["sheetName"]);
         if (sheet && sheet.properties) {
           const sheetId = sheet.properties.sheetId;
           sheets.spreadsheets.batchUpdate(
@@ -114,13 +125,56 @@ class GoogleSpreadsheet extends utils.Adapter {
       }
     });
   }
-  createSheet() {
+  init() {
     const auth = new import_google_auth_library.JWT({
       email: this.config.serviceAccountEmail,
       key: this.config.privateKey,
       scopes: ["https://www.googleapis.com/auth/spreadsheets"]
     });
     return import_googleapis.google.sheets({ version: "v4", auth });
+  }
+  createSheet(config, message) {
+    const sheets = this.init();
+    sheets.spreadsheets.batchUpdate({
+      spreadsheetId: this.config.spreadsheetId,
+      requestBody: {
+        requests: [{ addSheet: {
+          properties: {
+            title: message.message
+          }
+        } }]
+      }
+    }).then(() => {
+      this.log.info("Sheet created successfully");
+    }).catch((error) => {
+      this.log.error("Error while creating sheet:" + error);
+    });
+  }
+  deleteSheet(config, message) {
+    const sheets = this.init();
+    sheets.spreadsheets.get({ spreadsheetId: this.config.spreadsheetId }).then((spreadsheet) => {
+      if (spreadsheet && spreadsheet.data.sheets) {
+        const sheet = spreadsheet.data.sheets.find((sheet2) => sheet2.properties && sheet2.properties.title == message.message);
+        if (sheet && sheet.properties) {
+          sheets.spreadsheets.batchUpdate({
+            spreadsheetId: this.config.spreadsheetId,
+            requestBody: {
+              requests: [{
+                deleteSheet: {
+                  sheetId: sheet.properties.sheetId
+                }
+              }]
+            }
+          }).then(() => {
+            this.log.info("Data successfully sent to google spreadsheet");
+          }).catch((error) => {
+            this.log.error("Error while sending data to Google Spreadsheet:" + error);
+          });
+        }
+      }
+    }).catch((error) => {
+      this.log.error("Error while sending data to Google Spreadsheet:" + error);
+    });
   }
 }
 if (require.main !== module) {

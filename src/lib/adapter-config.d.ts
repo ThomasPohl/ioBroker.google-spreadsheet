@@ -5,7 +5,6 @@ declare global {
     namespace ioBroker {
         interface AdapterConfig {
             spreadsheetId: string;
-            sheetName: string;
             serviceAccountEmail: string;
             privateKey: string;
         }

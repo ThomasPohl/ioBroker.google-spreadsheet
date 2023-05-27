@@ -60,6 +60,11 @@ Use the available blocks to automatically interact with your spreadsheet.
 
 * (Thomas Pohl) Added "delete rows"
 
+### 0.0.3
+
+* (Thomas Pohl) Added "add Sheet"
+* (Thomas Pohl) Added "remove Sheet"
+
 <!--
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
