@@ -184,33 +184,34 @@ class GoogleSpreadsheet extends utils.Adapter {
 
     }
 
-    private deleteSheet(config: ioBroker.AdapterConfig, message: ioBroker.Message): void{
+    private deleteSheet(config: ioBroker.AdapterConfig, message: ioBroker.Message): void {
         const sheets = this.init();
 
-        sheets.spreadsheets.get({spreadsheetId: this.config.spreadsheetId as string}).then(spreadsheet => {
+        sheets.spreadsheets.get({ spreadsheetId: this.config.spreadsheetId as string }).then(spreadsheet => {
             if (spreadsheet && spreadsheet.data.sheets) {
-            const sheet = spreadsheet.data.sheets
+                const sheet = spreadsheet.data.sheets
                     .find(sheet => sheet.properties && sheet.properties.title == message.message);
                 if (sheet && sheet.properties) {
-            sheets.spreadsheets.batchUpdate({
-                spreadsheetId: this.config.spreadsheetId,
-                requestBody:{
-                    requests:[{
-                        deleteSheet:{
-                            sheetId: sheet.properties.sheetId
+                    sheets.spreadsheets.batchUpdate({
+                        spreadsheetId: this.config.spreadsheetId,
+                        requestBody: {
+                            requests: [{
+                                deleteSheet: {
+                                    sheetId: sheet.properties.sheetId
+                                }
+                            }]
                         }
-                    }]
+                    }).then(() => {
+                        this.log.info("Data successfully sent to google spreadsheet");
+                    }).catch(error => {
+                        this.log.error("Error while sending data to Google Spreadsheet:" + error);
+                    });
                 }
-            }).then(() => {
-                this.log.info("Data successfully sent to google spreadsheet");
-            }).catch(error => {
-                this.log.error("Error while sending data to Google Spreadsheet:"+ error);
-            });
-        }}
+            }
         }).catch(error => {
-            this.log.error("Error while sending data to Google Spreadsheet:"+ error);
+            this.log.error("Error while sending data to Google Spreadsheet:" + error);
         });
-        
+
 
     }
 }
