@@ -28,10 +28,20 @@
                 "pl": "dodała 'delete rows'. '",
                 "uk": "доданий 'delete рядки р",
                 "zh-cn": "增幅 评 注"
-          },
-          "0.0.3": {
-              "en": "added 'add sheet' and 'delete sheet'"
-          }
+            },
+            "0.0.3": {
+                "en": "added 'add sheet' and 'delete sheet'",
+                "de": "„Blatt hinzufügen“ und „Blatt löschen“ hinzugefügt",
+                "ru": "добавлены «добавить лист» и «удалить лист»",
+                "pt": "adicionado 'adicionar planilha' e 'excluir planilha'",
+                "nl": "toegevoegd 'blad toevoegen' en 'blad verwijderen'",
+                "fr": "ajout de 'ajouter une feuille' et 'supprimer une feuille'",
+                "it": "aggiunto 'aggiungi foglio' e 'elimina foglio'",
+                "es": "se agregaron 'agregar hoja' y 'eliminar hoja'",
+                "pl": "dodano „dodaj arkusz” i „usuń arkusz”",
+                "uk": "додано \"додати аркуш\" і \"видалити аркуш\"",
+                "zh-cn": "添加了“添加工作表”和“删除工作表”"
+            }
         },
         "titleLang": {
             "en": "Google Spreadsheet",

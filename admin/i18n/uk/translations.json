@@ -1,0 +1,7 @@
+{
+    "google-spreadsheet adapter settings": "Налаштування адаптера для google-таблиць",
+    "privateKey": "закритий ключ",
+    "serviceAccountEmail": "електронну пошту службового облікового запису",
+    "sheetName": "ім'я аркуша",
+    "spreadsheetId": "ідентифікатор електронної таблиці"
+}
