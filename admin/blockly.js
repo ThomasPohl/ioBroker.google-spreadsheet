@@ -24,13 +24,15 @@ Blockly.Translate =
 Blockly.Words["google-spreadsheet"] = { en: "Google Spreadsheet", de: "Google Tabelle" };
 Blockly.Words["google-spreadsheet_instance"] = { en: "instance", de: "Instanz" };
 Blockly.Words["google-spreadsheet_append"] = { en: "append to Google Spreadsheet", de: "An Google Tabelle anhängen" };
-Blockly.Words["google-spreadsheet_createSheet"] = { en: "create a new sheet in Google Spreadsheet", de: "Neues sheet" };
-Blockly.Words["google-spreadsheet_deleteSheet"] = { en: "delete a sheet in Google Spreadsheet", de: "Sheet löschen" };
+Blockly.Words["google-spreadsheet_createSheet"] = { en: "create a new sheet in Google Spreadsheet", de: "Neues Blatt" };
+Blockly.Words["google-spreadsheet_deleteSheet"] = { en: "delete a sheet in Google Spreadsheet", de: "Blatt löschen" };
+Blockly.Words["google-spreadsheet_duplicateSheet"] = { en: "duplicate a sheet in Google Spreadsheet", de: "Blatt duplizieren" };
 Blockly.Words["google-spreadsheet_data"] = { en: "data", de: "Daten" };
 Blockly.Words["google-spreadsheet_deleteRows"] = { en: "delete rows from Google Spreadsheet", de: "Zeilen aus Google Tabelle löschen" };
 Blockly.Words["google-spreadsheet_startRow"] = { en: "from row", de: "ab Zeile" };
 Blockly.Words["google-spreadsheet_endRow"] = { en: "to row", de: "bis Zeile" };
-Blockly.Words["google-spreadsheet_sheetName"] = { en: "sheet name", de: "Tab Name" };
+Blockly.Words["google-spreadsheet_sheetName"] = { en: "sheet name", de: "Blattname" };
+Blockly.Words["google-spreadsheet_newSheetName"] = { en: "sheet name", de: "Neuer Blasttname" };
 
 
 Blockly.Words["google-spreadsheet_anyInstance"] = { en: "all instances", de: "Alle Instanzen" };
@@ -95,6 +97,19 @@ Blockly.Sendto.blocks["google-spreadsheet.append"] =
         '     <value name="INSTANCE">' +
         "     </value>" +
         '     <value name="SHEET_NAME">' +
+        "     </value>" +
+        "</block>";
+
+
+        Blockly.Sendto.blocks["google-spreadsheetduplicateSheet"] =
+        '<block type="google-spreadsheet.duplicateSheet">' +
+        '     <value name="NAME">' +
+        "     </value>" + 
+        '     <value name="INSTANCE">' +
+        "     </value>" +
+        '     <value name="SHEET_NAME">' +
+        "     </value>" +
+        '     <value name="NEW_SHEET_NAME">' +
         "     </value>" +
         "</block>";
 
@@ -297,7 +312,57 @@ Blockly.Blocks["google-spreadsheet.deleteSheet"] = {
 
 Blockly.JavaScript["google-spreadsheet.deleteSheet"] = function (block) {
     var dropdown_instance = block.getFieldValue("INSTANCE");
-    var data = Blockly.JavaScript.valueToCode(block, "SHEETNAME", Blockly.JavaScript.ORDER_ATOMIC);
+    var data = Blockly.JavaScript.valueToCode(block, "SHEET_NAME", Blockly.JavaScript.ORDER_ATOMIC);
 
     return 'sendTo("google-spreadsheet' + dropdown_instance + '", "deleteSheet", ' + data + ");\n";
+};
+Blockly.Blocks["google-spreadsheet.duplicateSheet"] = {
+    init: function () {
+        var options = [[Blockly.Translate("google-spreadsheet_anyInstance"), ""]];
+        if (typeof main !== "undefined" && main.instances) {
+            for (var i = 0; i < main.instances.length; i++) {
+                var m = main.instances[i].match(/^system.adapter.google-spreadsheet.(\d+)$/);
+                if (m) {
+                    var n = parseInt(m[1], 10);
+                    options.push(["google-spreadsheet." + n, "." + n]);
+                }
+            }
+        }
+
+        if (!options.length) {
+            for (var u = 0; u <= 4; u++) {
+                options.push(["google-spreadsheet." + u, "." + u]);
+            }
+        }
+
+        this.appendDummyInput("NAME")
+            .appendField(Blockly.Translate("google-spreadsheet_duplicateSheet"));
+
+        this.appendDummyInput("INSTANCE")
+            .appendField(Blockly.Translate("google-spreadsheet_instance"))
+            .appendField(new Blockly.FieldDropdown(options), "INSTANCE");
+
+            this.appendValueInput("SHEET_NAME").appendField(Blockly.Translate("google-spreadsheet_sheetName"));
+            this.appendValueInput("NEW_SHEET_NAME").appendField(Blockly.Translate("google-spreadsheet_newSheetName"));
+
+       /* if (input && input.connection) {
+            input.connection._optional = true;
+        }*/
+
+        this.setInputsInline(false);
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+
+        this.setColour(Blockly.Sendto.HUE);
+        this.setTooltip(Blockly.Translate("google-spreadsheet_tooltip"));
+        this.setHelpUrl(Blockly.Translate("google-spreadsheet_help"));
+    },
+};
+
+Blockly.JavaScript["google-spreadsheet.duplicateSheet"] = function (block) {
+    var dropdown_instance = block.getFieldValue("INSTANCE");
+    var source = Blockly.JavaScript.valueToCode(block, "SHEET_NAME", Blockly.JavaScript.ORDER_ATOMIC);
+    var target = Blockly.JavaScript.valueToCode(block, "NEW_SHEET_NAME", Blockly.JavaScript.ORDER_ATOMIC);
+
+    return 'sendTo("google-spreadsheet' + dropdown_instance + '", "duplicateSheet", {"source": '+source+', "target": '+target+'}' + ");\n";
 };

@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "google-spreadsheet",
-        "version": "0.0.3",
+        "version": "0.0.4",
         "news": {
             "0.0.1": {
                 "en": "initial release",
@@ -41,6 +41,19 @@
                 "pl": "dodano „dodaj arkusz” i „usuń arkusz”",
                 "uk": "додано \"додати аркуш\" і \"видалити аркуш\"",
                 "zh-cn": "添加了“添加工作表”和“删除工作表”"
+            },
+            "0.0.4": {
+                "en": "added 'duplicate sheet'",
+                "de": "'Blatt duplizieren' hinzugefügt",
+                "ru": "добавлен «дубликат листа»",
+                "pt": "adicionado 'folha duplicada'",
+                "nl": "toegevoegd 'duplicaat blad'",
+                "fr": "'feuille en double' ajoutée",
+                "it": "aggiunto \"foglio duplicato\"",
+                "es": "agregó 'hoja duplicada'",
+                "pl": "dodano „duplikat arkusza”",
+                "uk": "додано \"дублікат аркуша\"",
+                "zh-cn": "添加了“重复表”"
             }
         },
         "titleLang": {
@@ -107,7 +120,6 @@
     },
     "native": {
         "spreadsheetId": "",
-        "sheetName": "",
         "serviceAccountEmail": "",
         "privateKey": ""
     },

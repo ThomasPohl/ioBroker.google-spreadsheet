@@ -67,6 +67,9 @@ Use the available blocks to automatically interact with your spreadsheet.
 * (Thomas Pohl) Added "add Sheet"
 * (Thomas Pohl) Added "remove Sheet"
 
+### 0.0.4
+
+* (Thomas Pohl) Added "duplicate Sheet"
 <!--
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
