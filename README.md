@@ -73,7 +73,7 @@ Use the available blocks to automatically interact with your spreadsheet.
 
 ### 0.0.5
 
-* (Thomas Pohl) Position for "suplicate sheet"
+* (Thomas Pohl) Position for "duplicate sheet"
 
 <!--
     Placeholder for the next version (at the beginning of the line):
