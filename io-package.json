@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "google-spreadsheet",
-        "version": "0.0.4",
+        "version": "0.0.5",
         "news": {
             "0.0.1": {
                 "en": "initial release",
@@ -54,6 +54,19 @@
                 "pl": "dodano „duplikat arkusza”",
                 "uk": "додано \"дублікат аркуша\"",
                 "zh-cn": "添加了“重复表”"
+            },
+            "0.0.5": {
+                "en": "added position for 'duplicate sheet'",
+                "de": "Position für „doppeltes Blatt“ hinzugefügt",
+                "ru": "добавлена ​​позиция для «дубликата листа»",
+                "pt": "posição adicionada para 'folha duplicada'",
+                "nl": "positie toegevoegd voor 'blad dupliceren'",
+                "fr": "position ajoutée pour 'feuille en double'",
+                "it": "aggiunta posizione per 'foglio duplicato'",
+                "es": "posición añadida para 'hoja duplicada'",
+                "pl": "dodano pozycję dla „duplikatu arkusza”",
+                "uk": "додано позицію для «дублікату аркуша»",
+                "zh-cn": "为“重复表”添加位置"
             }
         },
         "titleLang": {

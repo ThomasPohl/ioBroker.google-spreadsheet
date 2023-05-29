@@ -187,6 +187,10 @@ class GoogleSpreadsheet extends utils.Adapter {
       if (spreadsheet && spreadsheet.data.sheets) {
         const sheet = spreadsheet.data.sheets.find((sheet2) => sheet2.properties && sheet2.properties.title == messageData["source"]);
         if (sheet && sheet.properties) {
+          let insertIndex = messageData["index"];
+          if (insertIndex == -1 || insertIndex == void 0) {
+            insertIndex = spreadsheet.data.sheets.length;
+          }
           sheets.spreadsheets.batchUpdate({
             spreadsheetId: this.config.spreadsheetId,
             requestBody: {
@@ -194,7 +198,7 @@ class GoogleSpreadsheet extends utils.Adapter {
                 duplicateSheet: {
                   sourceSheetId: sheet.properties.sheetId,
                   newSheetName: messageData["target"],
-                  insertSheetIndex: spreadsheet.data.sheets.length
+                  insertSheetIndex: insertIndex
                 }
               }]
             }

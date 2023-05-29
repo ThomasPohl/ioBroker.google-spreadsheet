@@ -70,6 +70,11 @@ Use the available blocks to automatically interact with your spreadsheet.
 ### 0.0.4
 
 * (Thomas Pohl) Added "duplicate Sheet"
+
+### 0.0.5
+
+* (Thomas Pohl) Position for "suplicate sheet"
+
 <!--
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
