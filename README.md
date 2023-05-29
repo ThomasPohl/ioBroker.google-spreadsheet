@@ -20,6 +20,7 @@ This adapter can be used to automatically interact with google spreadsheets.
 * Delete rows from a spreadsheet
 * Add sheets
 * Delete sheets
+* Duplicate sheets
 
 ## Usage
 
