@@ -76,6 +76,10 @@ Use the available blocks to automatically interact with your spreadsheet.
 
 * (Thomas Pohl) Position for "duplicate sheet"
 
+### 0.0.6
+
+* (Thomas Pohl) Parameter validation
+
 <!--
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**

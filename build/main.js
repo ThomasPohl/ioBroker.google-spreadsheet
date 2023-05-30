@@ -20,6 +20,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 var utils = __toESM(require("@iobroker/adapter-core"));
 var import_googleapis = require("googleapis");
 var import_google_auth_library = require("google-auth-library");
+var import_fs = __toESM(require("fs"));
 class GoogleSpreadsheet extends utils.Adapter {
   constructor(options = {}) {
     super({
@@ -67,12 +68,22 @@ class GoogleSpreadsheet extends utils.Adapter {
         this.duplicateSheet(this.config, obj);
         if (obj.callback)
           this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+      } else if (obj.command === "upload") {
+        this.log.info("upload file");
+        this.upload(this.config, obj);
+        if (obj.callback)
+          this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+      } else {
+        this.log.warn("unknown command: " + obj.command);
       }
     }
   }
   append(config, message) {
     const sheets = this.init();
     const messageData = message.message;
+    if (this.missingParameters(["sheetName", "data"], messageData)) {
+      return;
+    }
     sheets.spreadsheets.values.append({
       range: messageData["sheetName"],
       spreadsheetId: this.config.spreadsheetId,
@@ -95,10 +106,23 @@ class GoogleSpreadsheet extends utils.Adapter {
       return [[message]];
     }
   }
+  missingParameters(neededParameters, messageData) {
+    let result = false;
+    for (const parameter of neededParameters) {
+      if (Object.keys(messageData).indexOf(parameter) == -1) {
+        result = true;
+        this.log.error("The parameter '" + parameter + "' is required but was not passed!");
+      }
+    }
+    return result;
+  }
   deleteRows(config, message) {
     this.log.info("Message: " + JSON.stringify(message));
     const sheets = this.init();
     const messageData = message.message;
+    if (this.missingParameters(["sheetName", "start", "end"], messageData)) {
+      return;
+    }
     sheets.spreadsheets.get({ spreadsheetId: this.config.spreadsheetId }).then((spreadsheet) => {
       if (spreadsheet && spreadsheet.data.sheets) {
         const sheet = spreadsheet.data.sheets.find((sheet2) => sheet2.properties && sheet2.properties.title == messageData["sheetName"]);
@@ -183,6 +207,9 @@ class GoogleSpreadsheet extends utils.Adapter {
   duplicateSheet(config, message) {
     const sheets = this.init();
     const messageData = message.message;
+    if (this.missingParameters(["source", "target", "index"], messageData)) {
+      return;
+    }
     sheets.spreadsheets.get({ spreadsheetId: this.config.spreadsheetId }).then((spreadsheet) => {
       if (spreadsheet && spreadsheet.data.sheets) {
         const sheet = spreadsheet.data.sheets.find((sheet2) => sheet2.properties && sheet2.properties.title == messageData["source"]);
@@ -213,6 +240,33 @@ class GoogleSpreadsheet extends utils.Adapter {
       }
     }).catch((error) => {
       this.log.error("Error while sending data to Google Spreadsheet:" + error);
+    });
+  }
+  upload(config, message) {
+    const auth = new import_google_auth_library.JWT({
+      email: this.config.serviceAccountEmail,
+      key: this.config.privateKey,
+      scopes: ["https://www.googleapis.com/auth/drive.file"]
+    });
+    const driveapi = import_googleapis.google.drive({ version: "v3", auth });
+    const messageData = message.message;
+    if (this.missingParameters(["source", "target", "parentFolder"], messageData)) {
+      return;
+    }
+    driveapi.files.create({
+      requestBody: {
+        parents: [messageData["parentFolder"]],
+        name: messageData["target"]
+      },
+      media: {
+        mimeType: "application/octet-stream",
+        body: import_fs.default.createReadStream(messageData["source"])
+      },
+      fields: "id"
+    }).then(() => {
+      this.log.info("Data successfully uploaded to google spreadsheet");
+    }).catch((error) => {
+      this.log.error("Error while uploading data to Google Spreadsheet:" + error);
     });
   }
 }

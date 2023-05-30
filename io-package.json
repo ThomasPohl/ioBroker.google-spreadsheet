@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "google-spreadsheet",
-        "version": "0.0.5",
+        "version": "0.0.6",
         "news": {
             "0.0.1": {
                 "en": "initial release",
@@ -67,6 +67,19 @@
                 "pl": "dodano pozycję dla „duplikatu arkusza”",
                 "uk": "додано позицію для «дублікату аркуша»",
                 "zh-cn": "为“重复表”添加位置"
+            },
+            "0.0.6": {
+                "en": "added parameter validation",
+                "de": "Parametervalidierung hinzugefügt",
+                "ru": "добавлена ​​проверка параметров",
+                "pt": "validação de parâmetro adicionado",
+                "nl": "parametervalidatie toegevoegd",
+                "fr": "validation des paramètres ajoutés",
+                "it": "aggiunta la convalida dei parametri",
+                "es": "validación de parámetros añadidos",
+                "pl": "dodano walidację parametrów",
+                "uk": "додана перевірка параметрів",
+                "zh-cn": "添加参数验证"
             }
         },
         "titleLang": {

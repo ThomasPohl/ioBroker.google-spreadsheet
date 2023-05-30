@@ -2,11 +2,10 @@
  * Created with @iobroker/create-adapter v2.4.0
  */
 
-// The adapter-core module gives you access to the core ioBroker functions
-// you need to create an adapter
 import * as utils from "@iobroker/adapter-core";
 import { google, sheets_v4 } from "googleapis";
 import { JWT } from "google-auth-library";
+import fs from "fs";
 
 
 class GoogleSpreadsheet extends utils.Adapter {
@@ -76,12 +75,20 @@ class GoogleSpreadsheet extends utils.Adapter {
 
                 // Send response in callback if required
                 if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-            }else if (obj.command === "duplicateSheet") {
+            } else if (obj.command === "duplicateSheet") {
                 this.log.info("duplicate sheet");
                 this.duplicateSheet(this.config, obj);
 
                 // Send response in callback if required
                 if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+            } else if (obj.command === "upload") {
+                this.log.info("upload file");
+                this.upload(this.config, obj);
+
+                // Send response in callback if required
+                if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+            } else {
+                this.log.warn("unknown command: "+ obj.command);
             }
         }
     }
@@ -89,6 +96,9 @@ class GoogleSpreadsheet extends utils.Adapter {
     private append(config: ioBroker.AdapterConfig, message: ioBroker.Message): void{
         const sheets = this.init();
         const messageData: Record<string, any> = message.message as Record<string, any>;
+        if (this.missingParameters(["sheetName", "data"], messageData)){
+            return;
+        }
 
         sheets.spreadsheets.values.append({
             // The [A1 notation](/sheets/api/guides/concepts#cell) of a range to search for a logical table of data. Values are appended after the last row of the table.
@@ -119,11 +129,27 @@ class GoogleSpreadsheet extends utils.Adapter {
 
     }
 
+    private missingParameters( neededParameters: string[], messageData: Record<string, any>): boolean {
+
+        let result = false;
+        for (const parameter of neededParameters){
+            if (Object.keys(messageData).indexOf(parameter)==-1){
+                result=true;
+                this.log.error("The parameter '" + parameter + "' is required but was not passed!");
+            }
+        }
+
+        return result;
+    }
+
     private deleteRows(config: ioBroker.AdapterConfig, message: ioBroker.Message): void {
         this.log.info("Message: " + JSON.stringify(message));
         const sheets = this.init();
 
         const messageData: Record<string, any> = message.message as Record<string, any>;
+        if (this.missingParameters(["sheetName", "start", "end"], messageData)){
+            return;
+        }
 
         sheets.spreadsheets.get({spreadsheetId: this.config.spreadsheetId}).then(spreadsheet => {
             if (spreadsheet && spreadsheet.data.sheets) {
@@ -224,6 +250,9 @@ class GoogleSpreadsheet extends utils.Adapter {
     private duplicateSheet(config: ioBroker.AdapterConfig, message: ioBroker.Message): void {
         const sheets = this.init();
         const messageData: Record<string, any> = message.message as Record<string, any>;
+        if (this.missingParameters(["source", "target", "index"], messageData)){
+            return;
+        }
 
         sheets.spreadsheets.get({ spreadsheetId: this.config.spreadsheetId as string }).then(spreadsheet => {
             if (spreadsheet && spreadsheet.data.sheets) {
@@ -259,6 +288,36 @@ class GoogleSpreadsheet extends utils.Adapter {
         });
 
 
+    }
+    private upload(config: ioBroker.AdapterConfig, message: ioBroker.Message): void {
+
+
+        const auth = new JWT({
+            email: this.config.serviceAccountEmail,
+            key: this.config.privateKey,
+            scopes: ["https://www.googleapis.com/auth/drive.file"]
+        });
+        const driveapi = google.drive({ version: "v3", auth });
+
+        const messageData: Record<string, any> = message.message as Record<string, any>;
+        if (this.missingParameters(["source", "target", "parentFolder"], messageData)){
+            return;
+        }
+        driveapi.files.create({
+            requestBody:{
+                parents: [messageData["parentFolder"]],
+                name: messageData["target"]
+            },
+            media:{
+                mimeType: "application/octet-stream",
+                body: fs.createReadStream(messageData["source"])
+            },
+            fields: "id"
+        }).then(() => {
+            this.log.info("Data successfully uploaded to google spreadsheet");
+        }).catch(error => {
+            this.log.error("Error while uploading data to Google Spreadsheet:" + error);
+        });
     }
 }
 
