@@ -55,30 +55,30 @@ Use the available blocks to automatically interact with your spreadsheet.
 ![Blockly](img/blockly-append.png)
 
 ## Changelog
-### 0.0.1
+### 0.0.6
 
-* (Thomas Pohl) initial release
+* (Thomas Pohl) Parameter validation
 
-### 0.0.2
+### 0.0.5
 
-* (Thomas Pohl) Added "delete rows"
+* (Thomas Pohl) Position for "duplicate sheet"
+
+### 0.0.4
+
+* (Thomas Pohl) Added "duplicate Sheet"
 
 ### 0.0.3
 
 * (Thomas Pohl) Added "add Sheet"
 * (Thomas Pohl) Added "remove Sheet"
 
-### 0.0.4
+### 0.0.2
 
-* (Thomas Pohl) Added "duplicate Sheet"
+* (Thomas Pohl) Added "delete rows"
 
-### 0.0.5
+### 0.0.1
 
-* (Thomas Pohl) Position for "duplicate sheet"
-
-### 0.0.6
-
-* (Thomas Pohl) Parameter validation
+* (Thomas Pohl) initial release
 
 <!--
     Placeholder for the next version (at the beginning of the line):
