@@ -119,11 +119,9 @@ class GoogleSpreadsheet extends utils.Adapter {
 
     private prepareValues(message: any) : any{
         if (Array.isArray(message)){
-            this.log.info("is Array");
             return [message];
 
         } else {
-            this.log.info("Message: "+ JSON.stringify(message));
             return [[message]];
         }
 
@@ -143,7 +141,7 @@ class GoogleSpreadsheet extends utils.Adapter {
     }
 
     private deleteRows(config: ioBroker.AdapterConfig, message: ioBroker.Message): void {
-        this.log.info("Message: " + JSON.stringify(message));
+        this.log.debug("Message: " + JSON.stringify(message));
         const sheets = this.init();
 
         const messageData: Record<string, any> = message.message as Record<string, any>;
