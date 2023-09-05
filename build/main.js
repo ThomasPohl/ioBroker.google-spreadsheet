@@ -99,10 +99,8 @@ class GoogleSpreadsheet extends utils.Adapter {
   }
   prepareValues(message) {
     if (Array.isArray(message)) {
-      this.log.info("is Array");
       return [message];
     } else {
-      this.log.info("Message: " + JSON.stringify(message));
       return [[message]];
     }
   }
@@ -117,7 +115,7 @@ class GoogleSpreadsheet extends utils.Adapter {
     return result;
   }
   deleteRows(config, message) {
-    this.log.info("Message: " + JSON.stringify(message));
+    this.log.debug("Message: " + JSON.stringify(message));
     const sheets = this.init();
     const messageData = message.message;
     if (this.missingParameters(["sheetName", "start", "end"], messageData)) {
