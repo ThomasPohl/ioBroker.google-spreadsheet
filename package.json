@@ -17,7 +17,7 @@
     "url": "https://github.com/ThomasPohl/ioBroker.google-spreadsheet.git"
   },
   "engines": {
-    "node": ">= 14"
+    "node": ">= 16"
   },
   "dependencies": {
     "@iobroker/adapter-core": "^3.0.3",
