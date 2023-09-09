@@ -3,5 +3,8 @@
     "privateKey": "私钥",
     "serviceAccountEmail": "服务帐号",
     "sheetName": "工作表名称",
-    "spreadsheetId": "电子表格编号"
+    "spreadsheetId": "电子表格编号",
+    "privateKeyHelp": "打开下载的私钥文件并仅复制以 -----BEGIN PRIVATE KEY----- 开头的密钥",
+    "serviceAccountEmailHelp": "服务帐户的电子邮件地址",
+    "spreadsheetIdHelp": "您可以在电子表格的 URL 中找到该 ID。"
 }

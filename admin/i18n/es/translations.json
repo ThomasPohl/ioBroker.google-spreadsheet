@@ -3,5 +3,8 @@
     "privateKey": "llave privada",
     "serviceAccountEmail": "cuenta de servicio",
     "sheetName": "nombre de la hoja",
-    "spreadsheetId": "identificación de la hoja de cálculo"
+    "spreadsheetId": "identificación de la hoja de cálculo",
+    "privateKeyHelp": "Abra el archivo de clave privada descargado y copie solo la clave que comienza con -----BEGIN PRIVATE KEY-----",
+    "serviceAccountEmailHelp": "la dirección de correo electrónico de la cuenta de servicio",
+    "spreadsheetIdHelp": "Puede encontrar la identificación en la URL de su hoja de cálculo."
 }

@@ -3,5 +3,8 @@
     "privateKey": "prywatny klucz",
     "serviceAccountEmail": "konto usługi",
     "sheetName": "nazwa arkusza",
-    "spreadsheetId": "identyfikator arkusza kalkulacyjnego"
+    "spreadsheetId": "identyfikator arkusza kalkulacyjnego",
+    "privateKeyHelp": "Otwórz pobrany plik klucza prywatnego i skopiuj sam klucz, zaczynając od -----BEGIN PRIVATE KEY-----",
+    "serviceAccountEmailHelp": "adres e-mail konta usługi",
+    "spreadsheetIdHelp": "Identyfikator znajdziesz w adresie URL swojego arkusza kalkulacyjnego."
 }

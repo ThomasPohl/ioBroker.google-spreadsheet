@@ -1,7 +1,10 @@
 {
     "google-spreadsheet adapter settings": "Adapter settings for google-spreadsheet",
     "privateKey": "private key",
+    "privateKeyHelp": "Open the downloaded private key file and copy just the key starting with -----BEGIN PRIVATE KEY-----",
     "serviceAccountEmail": "service account email",
+    "serviceAccountEmailHelp": "the emailaddress of the service account",
     "sheetName": "sheet name",
-    "spreadsheetId": "spreadsheet id"
+    "spreadsheetId": "spreadsheet id",
+    "spreadsheetIdHelp": "You can find the id in the URL of your spreadsheet."
 }

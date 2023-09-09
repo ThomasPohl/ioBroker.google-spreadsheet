@@ -3,5 +3,8 @@
     "privateKey": "Privater Schlüssel",
     "serviceAccountEmail": "E-Mail-Adresse des Dienstkontos",
     "sheetName": "Blattname",
-    "spreadsheetId": "Tabellenkalkulations-ID"
+    "spreadsheetId": "Tabellenkalkulations-ID",
+    "spreadsheetIdHelp": "Sie finden die ID in der URL Ihrer Tabelle.",
+    "privateKeyHelp": "Öffnen Sie die heruntergeladene private Schlüsseldatei und kopieren Sie nur den Schlüssel, der mit -----BEGIN PRIVATE KEY----- beginnt.",
+    "serviceAccountEmailHelp": "die E-Mail-Adresse des Dienstkontos"
 }

@@ -3,5 +3,8 @@
     "privateKey": "prive sleutel",
     "serviceAccountEmail": "service rekening",
     "sheetName": "blad naam",
-    "spreadsheetId": "spreadsheet-id"
+    "spreadsheetId": "spreadsheet-id",
+    "privateKeyHelp": "Open het gedownloade privésleutelbestand en kopieer alleen de sleutel die begint met -----BEGIN PRIVATE KEY-----",
+    "serviceAccountEmailHelp": "het e-mailadres van het serviceaccount",
+    "spreadsheetIdHelp": "U vindt de ID in de URL van uw spreadsheet."
 }

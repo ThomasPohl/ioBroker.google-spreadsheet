@@ -44,7 +44,6 @@ Open the Spreadsheet you want to interact with and share it with the emailaddres
 Add the following data to the configuration of your adapter instance in iobroker.
 
 * spreadsheet ID - You can find the id in the URL of your spreadsheet.
-* sheet name - The name of the tab of the spreadhseet.
 * service account - the emailaddress of the service account
 * privateKey - Open the downloaded private key file and copy just the key starting with -----BEGIN PRIVATE KEY-----
 
