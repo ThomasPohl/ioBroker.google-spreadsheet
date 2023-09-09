@@ -21,7 +21,8 @@
   },
   "dependencies": {
     "@iobroker/adapter-core": "^3.0.3",
-    "googleapis": "^126.0.1"
+    "googleapis": "^126.0.1",
+    "@types/gapi": "^0.0.44"
   },
   "devDependencies": {
     "@alcalzone/release-script": "^3.6.0",

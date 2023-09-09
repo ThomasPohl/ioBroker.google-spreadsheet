@@ -18,9 +18,8 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 var utils = __toESM(require("@iobroker/adapter-core"));
-var import_googleapis = require("googleapis");
-var import_google_auth_library = require("google-auth-library");
 var import_fs = __toESM(require("fs"));
+var import_google = require("./lib/google");
 class GoogleSpreadsheet extends utils.Adapter {
   constructor(options = {}) {
     super({
@@ -30,9 +29,11 @@ class GoogleSpreadsheet extends utils.Adapter {
     this.on("ready", this.onReady.bind(this));
     this.on("message", this.onMessage.bind(this));
     this.on("unload", this.onUnload.bind(this));
+    this.spreadsheet = new import_google.SpreadsheetUtils(this.config, this.log);
   }
   async onReady() {
     this.log.debug("config spreadsheetId: " + this.config.spreadsheetId);
+    this.spreadsheet = new import_google.SpreadsheetUtils(this.config, this.log);
   }
   onUnload(callback) {
     try {
@@ -43,66 +44,90 @@ class GoogleSpreadsheet extends utils.Adapter {
   }
   onMessage(obj) {
     if (typeof obj === "object" && obj.message) {
-      if (obj.command === "append") {
-        this.log.debug("append to spreadsheet");
-        this.append(this.config, obj);
-        if (obj.callback)
-          this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-      } else if (obj.command === "deleteRows") {
-        this.log.debug("delete rows from spreadsheet");
-        this.deleteRows(this.config, obj);
-        if (obj.callback)
-          this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-      } else if (obj.command === "createSheet") {
-        this.log.debug("create sheet");
-        this.createSheet(this.config, obj);
-        if (obj.callback)
-          this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-      } else if (obj.command === "deleteSheet") {
-        this.log.debug("delete sheet");
-        this.deleteSheet(this.config, obj);
-        if (obj.callback)
-          this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-      } else if (obj.command === "duplicateSheet") {
-        this.log.debug("duplicate sheet");
-        this.duplicateSheet(this.config, obj);
-        if (obj.callback)
-          this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-      } else if (obj.command === "upload") {
-        this.log.debug("upload file");
-        this.upload(this.config, obj);
-        if (obj.callback)
-          this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-      } else {
-        this.log.warn("unknown command: " + obj.command);
+      this.log.warn("switching command: " + obj.command);
+      switch (obj.command) {
+        case "append": {
+          this.log.debug("append to spreadsheet");
+          this.append(obj);
+          if (obj.callback)
+            this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+          break;
+        }
+        case "deleteRows": {
+          this.log.debug("delete rows from spreadsheet");
+          this.deleteRows(obj);
+          if (obj.callback)
+            this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+          break;
+        }
+        case "createSheet": {
+          this.log.debug("create sheet");
+          this.createSheet(obj);
+          if (obj.callback)
+            this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+          break;
+        }
+        case "deleteSheet": {
+          this.log.debug("delete sheet");
+          this.deleteSheet(obj);
+          if (obj.callback)
+            this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+          break;
+        }
+        case "duplicateSheet": {
+          this.log.debug("duplicate sheet");
+          this.duplicateSheet(obj);
+          if (obj.callback)
+            this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+          break;
+        }
+        case "upload": {
+          this.log.debug("upload file");
+          this.upload(obj);
+          if (obj.callback)
+            this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+          break;
+        }
+        default: {
+          this.log.warn("unknown command: " + obj.command);
+          break;
+        }
       }
     }
   }
-  append(config, message) {
-    const sheets = this.init();
+  upload(message) {
+    const messageData = message.message;
+    if (this.missingParameters(["source", "target", "parentFolder"], messageData)) {
+      return;
+    }
+    this.spreadsheet.upload(messageData["source"], messageData["target"], messageData["parentFolder"], import_fs.default.createReadStream(messageData["source"]));
+  }
+  append(message) {
     const messageData = message.message;
     if (this.missingParameters(["sheetName", "data"], messageData)) {
       return;
     }
-    sheets.spreadsheets.values.append({
-      range: messageData["sheetName"],
-      spreadsheetId: this.config.spreadsheetId,
-      valueInputOption: "USER_ENTERED",
-      requestBody: {
-        values: this.prepareValues(messageData["data"])
-      }
-    }).then(() => {
-      this.log.debug("Data successfully sent to google spreadsheet");
-    }).catch((error) => {
-      this.log.error("Error while sending data to Google Spreadsheet:" + error);
-    });
+    this.spreadsheet.append(messageData["sheetName"], messageData["data"]);
   }
-  prepareValues(message) {
-    if (Array.isArray(message)) {
-      return [message];
-    } else {
-      return [[message]];
+  deleteRows(message) {
+    const messageData = message.message;
+    if (this.missingParameters(["sheetName", "start", "end"], messageData)) {
+      return;
     }
+    this.spreadsheet.deleteRows(messageData["sheetName"], messageData["start"], messageData["end"]);
+  }
+  createSheet(message) {
+    this.spreadsheet.createSheet(message.message);
+  }
+  deleteSheet(message) {
+    this.spreadsheet.deleteSheet(message.message);
+  }
+  duplicateSheet(message) {
+    const messageData = message.message;
+    if (this.missingParameters(["source", "target", "index"], messageData)) {
+      return;
+    }
+    this.spreadsheet.duplicateSheet(messageData["source"], messageData["target"], messageData["index"]);
   }
   missingParameters(neededParameters, messageData) {
     let result = false;
@@ -113,159 +138,6 @@ class GoogleSpreadsheet extends utils.Adapter {
       }
     }
     return result;
-  }
-  deleteRows(config, message) {
-    this.log.debug("Message: " + JSON.stringify(message));
-    const sheets = this.init();
-    const messageData = message.message;
-    if (this.missingParameters(["sheetName", "start", "end"], messageData)) {
-      return;
-    }
-    sheets.spreadsheets.get({ spreadsheetId: this.config.spreadsheetId }).then((spreadsheet) => {
-      if (spreadsheet && spreadsheet.data.sheets) {
-        const sheet = spreadsheet.data.sheets.find((sheet2) => sheet2.properties && sheet2.properties.title == messageData["sheetName"]);
-        if (sheet && sheet.properties) {
-          const sheetId = sheet.properties.sheetId;
-          sheets.spreadsheets.batchUpdate(
-            {
-              spreadsheetId: this.config.spreadsheetId,
-              requestBody: {
-                requests: [{
-                  deleteDimension: {
-                    range: {
-                      dimension: "ROWS",
-                      endIndex: messageData["end"],
-                      sheetId,
-                      startIndex: messageData["start"] - 1
-                    }
-                  }
-                }]
-              }
-            }
-          ).then(() => {
-            this.log.debug("Rows successfully deleted from google spreadsheet");
-          }).catch((error) => {
-            this.log.error("Error while deleting rows from Google Spreadsheet:" + error);
-          });
-        }
-      }
-    });
-  }
-  init() {
-    const auth = new import_google_auth_library.JWT({
-      email: this.config.serviceAccountEmail,
-      key: this.config.privateKey,
-      scopes: ["https://www.googleapis.com/auth/spreadsheets"]
-    });
-    return import_googleapis.google.sheets({ version: "v4", auth });
-  }
-  createSheet(config, message) {
-    const sheets = this.init();
-    sheets.spreadsheets.batchUpdate({
-      spreadsheetId: this.config.spreadsheetId,
-      requestBody: {
-        requests: [{ addSheet: {
-          properties: {
-            title: message.message
-          }
-        } }]
-      }
-    }).then(() => {
-      this.log.debug("Sheet created successfully");
-    }).catch((error) => {
-      this.log.error("Error while creating sheet:" + error);
-    });
-  }
-  deleteSheet(config, message) {
-    const sheets = this.init();
-    sheets.spreadsheets.get({ spreadsheetId: this.config.spreadsheetId }).then((spreadsheet) => {
-      if (spreadsheet && spreadsheet.data.sheets) {
-        const sheet = spreadsheet.data.sheets.find((sheet2) => sheet2.properties && sheet2.properties.title == message.message);
-        if (sheet && sheet.properties) {
-          sheets.spreadsheets.batchUpdate({
-            spreadsheetId: this.config.spreadsheetId,
-            requestBody: {
-              requests: [{
-                deleteSheet: {
-                  sheetId: sheet.properties.sheetId
-                }
-              }]
-            }
-          }).then(() => {
-            this.log.debug("Data successfully sent to google spreadsheet");
-          }).catch((error) => {
-            this.log.error("Error while sending data to Google Spreadsheet:" + error);
-          });
-        }
-      }
-    }).catch((error) => {
-      this.log.error("Error while sending data to Google Spreadsheet:" + error);
-    });
-  }
-  duplicateSheet(config, message) {
-    const sheets = this.init();
-    const messageData = message.message;
-    if (this.missingParameters(["source", "target", "index"], messageData)) {
-      return;
-    }
-    sheets.spreadsheets.get({ spreadsheetId: this.config.spreadsheetId }).then((spreadsheet) => {
-      if (spreadsheet && spreadsheet.data.sheets) {
-        const sheet = spreadsheet.data.sheets.find((sheet2) => sheet2.properties && sheet2.properties.title == messageData["source"]);
-        if (sheet && sheet.properties) {
-          let insertIndex = messageData["index"];
-          if (insertIndex == -1 || insertIndex == void 0) {
-            insertIndex = spreadsheet.data.sheets.length;
-          }
-          sheets.spreadsheets.batchUpdate({
-            spreadsheetId: this.config.spreadsheetId,
-            requestBody: {
-              requests: [{
-                duplicateSheet: {
-                  sourceSheetId: sheet.properties.sheetId,
-                  newSheetName: messageData["target"],
-                  insertSheetIndex: insertIndex
-                }
-              }]
-            }
-          }).then(() => {
-            this.log.debug("Data successfully sent to google spreadsheet");
-          }).catch((error) => {
-            this.log.error("Error while sending data to Google Spreadsheet:" + error);
-          });
-        } else {
-          this.log.warn("Cannot find sheet: " + messageData["source"]);
-        }
-      }
-    }).catch((error) => {
-      this.log.error("Error while sending data to Google Spreadsheet:" + error);
-    });
-  }
-  upload(config, message) {
-    const auth = new import_google_auth_library.JWT({
-      email: this.config.serviceAccountEmail,
-      key: this.config.privateKey,
-      scopes: ["https://www.googleapis.com/auth/drive.file"]
-    });
-    const driveapi = import_googleapis.google.drive({ version: "v3", auth });
-    const messageData = message.message;
-    if (this.missingParameters(["source", "target", "parentFolder"], messageData)) {
-      return;
-    }
-    driveapi.files.create({
-      requestBody: {
-        parents: [messageData["parentFolder"]],
-        name: messageData["target"]
-      },
-      media: {
-        mimeType: "application/octet-stream",
-        body: import_fs.default.createReadStream(messageData["source"])
-      },
-      fields: "id"
-    }).then(() => {
-      this.log.debug("Data successfully uploaded to google spreadsheet");
-    }).catch((error) => {
-      this.log.error("Error while uploading data to Google Spreadsheet:" + error);
-    });
   }
 }
 if (require.main !== module) {

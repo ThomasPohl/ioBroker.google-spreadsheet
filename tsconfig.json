@@ -34,6 +34,9 @@
         "sourceMap": true,
         "inlineSourceMap": false
     },
+    "types":[
+        "googleapis"
+    ],
     "include": [
         "src/**/*.ts"
     ],

@@ -2,13 +2,18 @@
  * Created with @iobroker/create-adapter v2.4.0
  */
 
+
+
+
 import * as utils from "@iobroker/adapter-core";
-import { google, sheets_v4 } from "googleapis";
-import { JWT } from "google-auth-library";
+
 import fs from "fs";
+import { SpreadsheetUtils } from "./lib/google";
 
 
 class GoogleSpreadsheet extends utils.Adapter {
+
+    private spreadsheet: SpreadsheetUtils;
 
     public constructor(options: Partial<utils.AdapterOptions> = {}) {
         super({
@@ -18,6 +23,7 @@ class GoogleSpreadsheet extends utils.Adapter {
         this.on("ready", this.onReady.bind(this));
         this.on("message", this.onMessage.bind(this));
         this.on("unload", this.onUnload.bind(this));
+        this.spreadsheet = new SpreadsheetUtils(this.config, this.log);
     }
 
     /**
@@ -29,6 +35,7 @@ class GoogleSpreadsheet extends utils.Adapter {
         // The adapters config (in the instance object everything under the attribute "native") is accessible via
         // this.config:
         this.log.debug("config spreadsheetId: " + this.config.spreadsheetId);
+        this.spreadsheet = new SpreadsheetUtils(this.config, this.log);
 
     }
 
@@ -51,88 +58,98 @@ class GoogleSpreadsheet extends utils.Adapter {
     //  */
     private onMessage(obj: ioBroker.Message): void {
         if (typeof obj === "object" && obj.message) {
-            if (obj.command === "append") {
-                this.log.debug("append to spreadsheet");
-                this.append(this.config, obj);
+            switch (obj.command) {
+                case "append": {
+                    this.log.debug("append to spreadsheet");
+                    this.append(obj);
 
-                // Send response in callback if required
-                if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-            } else if (obj.command === "deleteRows") {
-                this.log.debug("delete rows from spreadsheet");
-                this.deleteRows(this.config, obj);
+                    if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+                    break; 
+                }
+                case "deleteRows": {
+                    this.log.debug("delete rows from spreadsheet");
+                    this.deleteRows(obj);
 
-                // Send response in callback if required
-                if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-            } else if (obj.command === "createSheet") {
-                this.log.debug("create sheet");
-                this.createSheet(this.config, obj);
+                    if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+                    break; 
+                }
+                case "createSheet": {
+                    this.log.debug("create sheet");
+                    this.createSheet(obj);
 
-                // Send response in callback if required
-                if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-            } else if (obj.command === "deleteSheet") {
-                this.log.debug("delete sheet");
-                this.deleteSheet(this.config, obj);
+                    if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+                    break; 
+                }
+                case "deleteSheet": {
+                    this.log.debug("delete sheet");
+                    this.deleteSheet(obj);
 
-                // Send response in callback if required
-                if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-            } else if (obj.command === "duplicateSheet") {
-                this.log.debug("duplicate sheet");
-                this.duplicateSheet(this.config, obj);
+                    if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+                    break; 
+                }
+                case "duplicateSheet": {
+                    this.log.debug("duplicate sheet");
+                    this.duplicateSheet(obj);
 
-                // Send response in callback if required
-                if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-            } else if (obj.command === "upload") {
-                this.log.debug("upload file");
-                this.upload(this.config, obj);
+                    if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+                    break; 
+                }
+                case "upload": {
+                    this.log.debug("upload file");
+                    this.upload(obj);
 
-                // Send response in callback if required
-                if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-            } else {
-                this.log.warn("unknown command: "+ obj.command);
+                    if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+                    break; 
+                }
+                default: {
+                    this.log.warn("unknown command: " + obj.command);
+                    break; 
+                }
             }
         }
     }
 
-    private append(config: ioBroker.AdapterConfig, message: ioBroker.Message): void{
-        const sheets = this.init();
+    private upload(message: Record<string, any>): void {
         const messageData: Record<string, any> = message.message as Record<string, any>;
-        if (this.missingParameters(["sheetName", "data"], messageData)){
+        if (this.missingParameters(["source", "target", "parentFolder"], messageData)) {
             return;
         }
-
-        sheets.spreadsheets.values.append({
-            // The [A1 notation](/sheets/api/guides/concepts#cell) of a range to search for a logical table of data. Values are appended after the last row of the table.
-            range: messageData["sheetName"],
-            spreadsheetId: this.config.spreadsheetId,
-            valueInputOption: "USER_ENTERED",
-            // Request body metadata
-            requestBody: {
-                values: this.prepareValues(messageData["data"])
-            },
-        }).then(() => {
-            this.log.debug("Data successfully sent to google spreadsheet");
-        }).catch(error => {
-            this.log.error("Error while sending data to Google Spreadsheet:"+ error);
-        });
-
+        this.spreadsheet.upload(messageData["source"], messageData["target"], messageData["parentFolder"], fs.createReadStream(messageData["source"]));
     }
-
-    private prepareValues(message: any) : any{
-        if (Array.isArray(message)){
-            return [message];
-
-        } else {
-            return [[message]];
+    private append(message: Record<string, any>): void {
+        const messageData: Record<string, any> = message.message as Record<string, any>;
+        if (this.missingParameters(["sheetName", "data"], messageData)) {
+            return;
         }
-
+        this.spreadsheet.append(messageData["sheetName"], messageData["data"]);
+    }
+    public deleteRows(message: ioBroker.Message): void {
+        const messageData: Record<string, any> = message.message as Record<string, any>;
+        if (this.missingParameters(["sheetName", "start", "end"], messageData)) {
+            return;
+        }
+        this.spreadsheet.deleteRows(messageData["sheetName"], messageData["start"], messageData["end"]);
+    }
+    public createSheet(message: ioBroker.Message): void {
+        this.spreadsheet.createSheet(message.message as string);
+    }
+    public deleteSheet(message: ioBroker.Message): void {
+        this.spreadsheet.deleteSheet(message.message as string);
+    }
+    public duplicateSheet(message: ioBroker.Message): void {
+        const messageData: Record<string, any> = message.message as Record<string, any>;
+        if (this.missingParameters(["source", "target", "index"], messageData)) {
+            return;
+        }
+        this.spreadsheet.duplicateSheet(messageData["source"], messageData["target"], messageData["index"]);
     }
 
-    private missingParameters( neededParameters: string[], messageData: Record<string, any>): boolean {
+    private missingParameters(neededParameters: string[], messageData: Record<string, any>): boolean {
 
         let result = false;
-        for (const parameter of neededParameters){
-            if (Object.keys(messageData).indexOf(parameter)==-1){
-                result=true;
+        for (const parameter of neededParameters) {
+            if (Object.keys(messageData).indexOf(parameter) == -1) {
+                result = true;
                 this.log.error("The parameter '" + parameter + "' is required but was not passed!");
             }
         }
@@ -140,183 +157,6 @@ class GoogleSpreadsheet extends utils.Adapter {
         return result;
     }
 
-    private deleteRows(config: ioBroker.AdapterConfig, message: ioBroker.Message): void {
-        this.log.debug("Message: " + JSON.stringify(message));
-        const sheets = this.init();
-
-        const messageData: Record<string, any> = message.message as Record<string, any>;
-        if (this.missingParameters(["sheetName", "start", "end"], messageData)){
-            return;
-        }
-
-        sheets.spreadsheets.get({spreadsheetId: this.config.spreadsheetId}).then(spreadsheet => {
-            if (spreadsheet && spreadsheet.data.sheets) {
-                const sheet = spreadsheet.data.sheets
-                    .find(sheet => sheet.properties && sheet.properties.title == messageData["sheetName"]);
-                if (sheet && sheet.properties) {
-                    const sheetId = sheet.properties.sheetId;
-                    sheets.spreadsheets.batchUpdate(
-                        {
-                            spreadsheetId: this.config.spreadsheetId,
-                            requestBody: {
-                                requests: [{
-                                    deleteDimension: {
-                                        range: {
-                                            dimension: "ROWS",
-                                            endIndex: messageData["end"],
-                                            sheetId: sheetId,
-                                            startIndex: messageData["start"]-1
-                                        }
-
-                                    }
-                                }]
-                            }
-                        }
-
-                    ).then(() => {
-                        this.log.debug("Rows successfully deleted from google spreadsheet");
-                    }).catch(error => {
-                        this.log.error("Error while deleting rows from Google Spreadsheet:" + error);
-                    });
-                }
-            }
-        });
-
-
-    }
-
-    private init(): sheets_v4.Sheets{
-        const auth = new JWT({
-            email: this.config.serviceAccountEmail,
-            key: this.config.privateKey,
-            scopes: ["https://www.googleapis.com/auth/spreadsheets"]
-        });
-        return google.sheets({ version: "v4", auth });
-    }
-
-    private createSheet(config: ioBroker.AdapterConfig, message: ioBroker.Message): void{
-        const sheets = this.init();
-
-        sheets.spreadsheets.batchUpdate({
-            spreadsheetId: this.config.spreadsheetId,
-            requestBody: {
-                requests:[{addSheet:{
-                    properties:{
-                        title: message.message as string
-                    }
-                }}]
-            }
-        }).then(() => {
-            this.log.debug("Sheet created successfully");
-        }).catch(error => {
-            this.log.error("Error while creating sheet:"+ error);
-        });
-
-    }
-
-    private deleteSheet(config: ioBroker.AdapterConfig, message: ioBroker.Message): void {
-        const sheets = this.init();
-
-        sheets.spreadsheets.get({ spreadsheetId: this.config.spreadsheetId as string }).then(spreadsheet => {
-            if (spreadsheet && spreadsheet.data.sheets) {
-                const sheet = spreadsheet.data.sheets
-                    .find(sheet => sheet.properties && sheet.properties.title == message.message);
-                if (sheet && sheet.properties) {
-                    sheets.spreadsheets.batchUpdate({
-                        spreadsheetId: this.config.spreadsheetId,
-                        requestBody: {
-                            requests: [{
-                                deleteSheet: {
-                                    sheetId: sheet.properties.sheetId
-                                }
-                            }]
-                        }
-                    }).then(() => {
-                        this.log.debug("Data successfully sent to google spreadsheet");
-                    }).catch(error => {
-                        this.log.error("Error while sending data to Google Spreadsheet:" + error);
-                    });
-                }
-            }
-        }).catch(error => {
-            this.log.error("Error while sending data to Google Spreadsheet:" + error);
-        });
-
-
-    }
-
-    private duplicateSheet(config: ioBroker.AdapterConfig, message: ioBroker.Message): void {
-        const sheets = this.init();
-        const messageData: Record<string, any> = message.message as Record<string, any>;
-        if (this.missingParameters(["source", "target", "index"], messageData)){
-            return;
-        }
-
-        sheets.spreadsheets.get({ spreadsheetId: this.config.spreadsheetId as string }).then(spreadsheet => {
-            if (spreadsheet && spreadsheet.data.sheets) {
-                const sheet = spreadsheet.data.sheets
-                    .find(sheet => sheet.properties && sheet.properties.title == messageData["source"]);
-                if (sheet && sheet.properties) {
-                    let insertIndex = messageData["index"];
-                    if (insertIndex==-1 || insertIndex == undefined){
-                        insertIndex = spreadsheet.data.sheets.length;
-                    }
-                    sheets.spreadsheets.batchUpdate({
-                        spreadsheetId: this.config.spreadsheetId,
-                        requestBody: {
-                            requests: [{
-                                duplicateSheet: {
-                                    sourceSheetId: sheet.properties.sheetId,
-                                    newSheetName: messageData["target"],
-                                    insertSheetIndex: insertIndex
-                                }
-                            }]
-                        }
-                    }).then(() => {
-                        this.log.debug("Data successfully sent to google spreadsheet");
-                    }).catch(error => {
-                        this.log.error("Error while sending data to Google Spreadsheet:" + error);
-                    });
-                } else {
-                    this.log.warn("Cannot find sheet: " + messageData["source"]);
-                }
-            }
-        }).catch(error => {
-            this.log.error("Error while sending data to Google Spreadsheet:" + error);
-        });
-
-
-    }
-    private upload(config: ioBroker.AdapterConfig, message: ioBroker.Message): void {
-
-
-        const auth = new JWT({
-            email: this.config.serviceAccountEmail,
-            key: this.config.privateKey,
-            scopes: ["https://www.googleapis.com/auth/drive.file"]
-        });
-        const driveapi = google.drive({ version: "v3", auth });
-
-        const messageData: Record<string, any> = message.message as Record<string, any>;
-        if (this.missingParameters(["source", "target", "parentFolder"], messageData)){
-            return;
-        }
-        driveapi.files.create({
-            requestBody:{
-                parents: [messageData["parentFolder"]],
-                name: messageData["target"]
-            },
-            media:{
-                mimeType: "application/octet-stream",
-                body: fs.createReadStream(messageData["source"])
-            },
-            fields: "id"
-        }).then(() => {
-            this.log.debug("Data successfully uploaded to google spreadsheet");
-        }).catch(error => {
-            this.log.error("Error while uploading data to Google Spreadsheet:" + error);
-        });
-    }
 }
 
 
