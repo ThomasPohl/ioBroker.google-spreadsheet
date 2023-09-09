@@ -131,7 +131,7 @@
         "blockly": true,
         "messagebox": true,
         "adminUI": {
-            "config": "materialize"
+            "config": "json"
         },
         "dependencies": [
             {

@@ -32,7 +32,7 @@ class GoogleSpreadsheet extends utils.Adapter {
     this.on("unload", this.onUnload.bind(this));
   }
   async onReady() {
-    this.log.info("config spreadsheetId: " + this.config.spreadsheetId);
+    this.log.debug("config spreadsheetId: " + this.config.spreadsheetId);
   }
   onUnload(callback) {
     try {
@@ -44,32 +44,32 @@ class GoogleSpreadsheet extends utils.Adapter {
   onMessage(obj) {
     if (typeof obj === "object" && obj.message) {
       if (obj.command === "append") {
-        this.log.info("append to spreadsheet");
+        this.log.debug("append to spreadsheet");
         this.append(this.config, obj);
         if (obj.callback)
           this.sendTo(obj.from, obj.command, "Message received", obj.callback);
       } else if (obj.command === "deleteRows") {
-        this.log.info("delete rows from spreadsheet");
+        this.log.debug("delete rows from spreadsheet");
         this.deleteRows(this.config, obj);
         if (obj.callback)
           this.sendTo(obj.from, obj.command, "Message received", obj.callback);
       } else if (obj.command === "createSheet") {
-        this.log.info("create sheet");
+        this.log.debug("create sheet");
         this.createSheet(this.config, obj);
         if (obj.callback)
           this.sendTo(obj.from, obj.command, "Message received", obj.callback);
       } else if (obj.command === "deleteSheet") {
-        this.log.info("delete sheet");
+        this.log.debug("delete sheet");
         this.deleteSheet(this.config, obj);
         if (obj.callback)
           this.sendTo(obj.from, obj.command, "Message received", obj.callback);
       } else if (obj.command === "duplicateSheet") {
-        this.log.info("duplicate sheet");
+        this.log.debug("duplicate sheet");
         this.duplicateSheet(this.config, obj);
         if (obj.callback)
           this.sendTo(obj.from, obj.command, "Message received", obj.callback);
       } else if (obj.command === "upload") {
-        this.log.info("upload file");
+        this.log.debug("upload file");
         this.upload(this.config, obj);
         if (obj.callback)
           this.sendTo(obj.from, obj.command, "Message received", obj.callback);
@@ -92,7 +92,7 @@ class GoogleSpreadsheet extends utils.Adapter {
         values: this.prepareValues(messageData["data"])
       }
     }).then(() => {
-      this.log.info("Data successfully sent to google spreadsheet");
+      this.log.debug("Data successfully sent to google spreadsheet");
     }).catch((error) => {
       this.log.error("Error while sending data to Google Spreadsheet:" + error);
     });
@@ -143,7 +143,7 @@ class GoogleSpreadsheet extends utils.Adapter {
               }
             }
           ).then(() => {
-            this.log.info("Rows successfully deleted from google spreadsheet");
+            this.log.debug("Rows successfully deleted from google spreadsheet");
           }).catch((error) => {
             this.log.error("Error while deleting rows from Google Spreadsheet:" + error);
           });
@@ -171,7 +171,7 @@ class GoogleSpreadsheet extends utils.Adapter {
         } }]
       }
     }).then(() => {
-      this.log.info("Sheet created successfully");
+      this.log.debug("Sheet created successfully");
     }).catch((error) => {
       this.log.error("Error while creating sheet:" + error);
     });
@@ -192,7 +192,7 @@ class GoogleSpreadsheet extends utils.Adapter {
               }]
             }
           }).then(() => {
-            this.log.info("Data successfully sent to google spreadsheet");
+            this.log.debug("Data successfully sent to google spreadsheet");
           }).catch((error) => {
             this.log.error("Error while sending data to Google Spreadsheet:" + error);
           });
@@ -228,7 +228,7 @@ class GoogleSpreadsheet extends utils.Adapter {
               }]
             }
           }).then(() => {
-            this.log.info("Data successfully sent to google spreadsheet");
+            this.log.debug("Data successfully sent to google spreadsheet");
           }).catch((error) => {
             this.log.error("Error while sending data to Google Spreadsheet:" + error);
           });
@@ -262,7 +262,7 @@ class GoogleSpreadsheet extends utils.Adapter {
       },
       fields: "id"
     }).then(() => {
-      this.log.info("Data successfully uploaded to google spreadsheet");
+      this.log.debug("Data successfully uploaded to google spreadsheet");
     }).catch((error) => {
       this.log.error("Error while uploading data to Google Spreadsheet:" + error);
     });

@@ -1,0 +1,38 @@
+{
+    "i18n": true,
+    "type": "tabs",
+    "items": {
+        "_options": {
+            "type": "panel",
+            "label": "Main settings",
+            "items": {
+                "spreadsheetId": {
+                    "newLine": true,
+                    "type": "text",
+                    "sm": 12,
+                    "md": 8,
+                    "lg": 8,
+                    "label": "spreadsheetId"
+                },
+                "serviceAccountEmail": {
+                    "newLine": true,
+                    "type": "text",
+                    "sm": 12,
+                    "md": 8,
+                    "lg": 8,
+                    "label": "serviceAccountEmail"
+                },
+                "privateKey": {
+                    "newLine": true,
+                    "type": "text",
+                    "sm": 12,
+                    "md": 8,
+                    "lg": 8,
+                    "label": "privateKey",
+                    "minRows": 20,
+                    "help": "Check README"
+                }
+            }
+        }
+    }
+}
