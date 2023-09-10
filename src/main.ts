@@ -64,46 +64,46 @@ class GoogleSpreadsheet extends utils.Adapter {
                     this.append(obj);
 
                     if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-                    break; 
+                    break;
                 }
                 case "deleteRows": {
                     this.log.debug("delete rows from spreadsheet");
                     this.deleteRows(obj);
 
                     if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-                    break; 
+                    break;
                 }
                 case "createSheet": {
                     this.log.debug("create sheet");
                     this.createSheet(obj);
 
                     if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-                    break; 
+                    break;
                 }
                 case "deleteSheet": {
                     this.log.debug("delete sheet");
                     this.deleteSheet(obj);
 
                     if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-                    break; 
+                    break;
                 }
                 case "duplicateSheet": {
                     this.log.debug("duplicate sheet");
                     this.duplicateSheet(obj);
 
                     if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-                    break; 
+                    break;
                 }
                 case "upload": {
                     this.log.debug("upload file");
                     this.upload(obj);
 
                     if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-                    break; 
+                    break;
                 }
                 default: {
                     this.log.warn("unknown command: " + obj.command);
-                    break; 
+                    break;
                 }
             }
         }
