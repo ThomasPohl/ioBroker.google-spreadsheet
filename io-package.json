@@ -109,17 +109,17 @@
             "zh-cn": "谷歌电子表格"
         },
         "desc": {
-            "en": "Append data to google spreadsheets",
-            "de": "Daten an Google-Tabellen anhängen",
-            "ru": "Добавить данные в таблицы Google",
-            "pt": "Anexar dados às planilhas do Google",
-            "nl": "Voeg gegevens toe aan Google-spreadsheets",
-            "fr": "Ajouter des données aux feuilles de calcul Google",
-            "it": "Aggiungi dati ai fogli di lavoro di Google",
-            "es": "Agregar datos a las hojas de cálculo de Google",
-            "pl": "Dołącz dane do arkuszy kalkulacyjnych Google",
-            "uk": "Додавання даних до електронних таблиць Google",
-            "zh-cn": "将数据附加到谷歌电子表格"
+            "en": "This adapter can uplaod data to google spreadsheets",
+            "de": "Dieser Adapter kann Daten in Google-Tabellen hochladen",
+            "ru": "Этот адаптер может загружать данные в таблицы Google.",
+            "pt": "Este adaptador pode enviar dados para planilhas do Google",
+            "nl": "Deze adapter kan gegevens uploaden naar Google Spreadsheets",
+            "fr": "Cet adaptateur peut télécharger des données sur des feuilles de calcul Google",
+            "it": "Questo adattatore può caricare dati su fogli di calcolo Google",
+            "es": "Este adaptador puede cargar datos en hojas de cálculo de Google.",
+            "pl": "Ten adapter może przesyłać dane do arkuszy kalkulacyjnych Google",
+            "uk": "Цей адаптер може завантажувати дані в електронні таблиці Google",
+            "zh-cn": "该适配器可以将数据上传到谷歌电子表格"
         },
         "authors": [
             "Thomas Pohl <post@thomaspohl.net>"
