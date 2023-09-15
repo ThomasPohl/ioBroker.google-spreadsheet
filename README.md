@@ -54,6 +54,10 @@ Use the available blocks to automatically interact with your spreadsheet.
 ![Blockly](img/blockly-append.png)
 
 ## Changelog
+### 0.1.0
+* (Thomas Pohl) Preparation for first stable release
+* (Thomas Pohl) Improve logging + Code cleanup
+
 ### 0.0.6
 
 * (Thomas Pohl) Parameter validation

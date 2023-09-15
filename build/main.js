@@ -44,7 +44,6 @@ class GoogleSpreadsheet extends utils.Adapter {
   }
   onMessage(obj) {
     if (typeof obj === "object" && obj.message) {
-      this.log.warn("switching command: " + obj.command);
       switch (obj.command) {
         case "append": {
           this.log.debug("append to spreadsheet");

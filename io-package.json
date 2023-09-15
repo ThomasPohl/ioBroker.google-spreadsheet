@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "google-spreadsheet",
-        "version": "0.0.6",
+        "version": "0.1.0",
         "news": {
             "0.0.1": {
                 "en": "initial release",
@@ -80,6 +80,19 @@
                 "pl": "dodano walidację parametrów",
                 "uk": "додана перевірка параметрів",
                 "zh-cn": "添加参数验证"
+            },
+            "0.1.0": {
+                "en": "Improved logging and code cleanup",
+                "de": "Verbesserte Protokollierung und Codebereinigung",
+                "ru": "Улучшено ведение журнала и очистка кода.",
+                "pt": "Registro aprimorado e limpeza de código",
+                "nl": "Verbeterde logboekregistratie en opschoning van de code",
+                "fr": "Journalisation et nettoyage du code améliorés",
+                "it": "Registrazione e pulizia del codice migliorate",
+                "es": "Registro mejorado y limpieza de código",
+                "pl": "Ulepszone rejestrowanie i czyszczenie kodu",
+                "uk": "Покращено журналювання та очищення коду",
+                "zh-cn": "改进的日志记录和代码清理"
             }
         },
         "titleLang": {

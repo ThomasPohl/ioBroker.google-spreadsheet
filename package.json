@@ -1,6 +1,6 @@
 {
   "name": "iobroker.google-spreadsheet",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "description": "Append data to google spreadsheets",
   "author": {
     "name": "Thomas Pohl",
@@ -21,8 +21,8 @@
   },
   "dependencies": {
     "@iobroker/adapter-core": "^3.0.3",
-    "googleapis": "^126.0.1",
-    "@types/gapi": "^0.0.44"
+    "@types/gapi": "^0.0.44",
+    "googleapis": "^126.0.1"
   },
   "devDependencies": {
     "@alcalzone/release-script": "^3.6.0",
