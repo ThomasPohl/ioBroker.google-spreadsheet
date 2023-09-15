@@ -26,26 +26,61 @@ This adapter can be used to automatically interact with google spreadsheets.
 
 ### Setup
 
-#### Enable API access
-To use the google spreadsheet api aou need to enable it in a Google cloud project.
-https://console.cloud.google.com/flows/enableapi?apiid=sheets.googleapis.com
+#### Enable API Access
+1. Visit the [Google Cloud Console](https://console.cloud.google.com/flows/enableapi?apiid=sheets.googleapis.com).
 
-#### Create a service account
+2. Create or select an existing project that you wish to use with the API.
 
-For the project you used in the last step create a new service account in Google Cloud IAM. 
-On the tab Key, create and download a private key for the service account
+3. Enable the Google Spreadsheet API for your project.
 
-#### Give access to the spreadsheet
+#### Create a Service Account
 
-Open the Spreadsheet you want to interact with and share it with the emailaddress of your newly created service account.
+For the project you selected in the previous step, create a new service account in Google Cloud IAM by following these steps:
 
-#### Configure adapter instance
+1. Navigate to the IAM & Admin page in the [Google Cloud Console](https://console.cloud.google.com/iam-admin/iam).
 
-Add the following data to the configuration of your adapter instance in iobroker.
+2. Click on "Service accounts" and then "Create Service Account."
 
-* spreadsheet ID - You can find the id in the URL of your spreadsheet.
-* service account - the emailaddress of the service account
-* privateKey - Open the downloaded private key file and copy just the key starting with -----BEGIN PRIVATE KEY-----
+3. Provide a name for the service account and select the role "Project" > "Editor."
+
+4. Click "Continue" to proceed to the next step.
+
+5. On the "Keys" tab, click "Create Key" and choose the format as "JSON." Then click "Continue."
+
+6. Your private key will be generated and automatically downloaded. Keep this file secure as you will need it later.
+
+#### Grant Access to the Spreadsheet
+
+Open the spreadsheet you want to interact with and share it with the email address of your newly created service account:
+
+1. Open the desired spreadsheet in Google Sheets.
+
+2. Click "Share" in the upper right corner.
+
+3. Enter the email address of the service account in the "Add people" field and grant it the necessary permissions (e.g., "Edit" or "View").
+
+4. Click "Send" to complete the sharing process.
+
+#### Configure the Adapter Instance
+
+Add the following information to the configuration of your adapter instance in ioBroker:
+
+- **Spreadsheet ID** - You can find the ID in the URL of your spreadsheet.
+- **Service Account** - The email address of the service account you created.
+- **Private Key** - Open the downloaded JSON file, and locate the private key within the file. Copy only the part starting with "-----BEGIN PRIVATE KEY-----."
+
+
+#### Find the Spreadsheet ID in the URL
+
+To locate the "Spreadsheet ID" in the URL of your Google Sheets document, follow these steps:
+
+1. When you open your Google Sheets document in a web browser, the URL in the address bar will look something like this:
+
+```
+https://docs.google.com/spreadsheets/d/SPREADSHEET_ID/edit
+```
+2. The "SPREADSHEET_ID" is the long string of characters and numbers between the "/d/" and "/edit" parts of the URL.
+
 
 ### Blockly
 
