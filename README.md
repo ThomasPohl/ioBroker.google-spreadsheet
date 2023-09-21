@@ -88,6 +88,15 @@ Use the available blocks to automatically interact with your spreadsheet.
 
 ![Blockly](img/blockly-append.png)
 
+## Troubleshooting
+
+### Error while sending data to Google Spreadsheet:Error: error:0909006C:PEM routines:get_name:no start line
+When copying the private key into the configuration, make sure there are no \n. If there are \n in the key, please replace the with normal line breaks
+
+### Error while sending data to Google Spreadsheet:Error: The caller does not have permission
+Make sure the Service Account has adequate permissions to write to the spreadsheet. Refer to the "Grant Access to the Spreadsheet" section above.
+
+
 ## Changelog
 ### 0.1.0
 * (Thomas Pohl) Preparation for first stable release
