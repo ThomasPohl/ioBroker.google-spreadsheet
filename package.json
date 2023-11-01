@@ -20,7 +20,7 @@
     "node": ">= 16"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^3.0.3",
+    "@iobroker/adapter-core": "^3.0.4",
     "@types/gapi": "^0.0.44",
     "googleapis": "^126.0.1"
   },
