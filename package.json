@@ -1,6 +1,6 @@
 {
   "name": "iobroker.google-spreadsheet",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Append data to google spreadsheets",
   "author": {
     "name": "Thomas Pohl",
