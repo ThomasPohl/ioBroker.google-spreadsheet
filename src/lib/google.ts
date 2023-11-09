@@ -47,7 +47,7 @@ export class SpreadsheetUtils {
     private init(): sheets_v4.Sheets{
         const auth = new JWT({
             email: this.config.serviceAccountEmail,
-            key: this.config.privateKey,
+            key: this.formatPrivateKey(this.config.privateKey),
             scopes: ["https://www.googleapis.com/auth/spreadsheets"]
         });
         return google.sheets({ version: "v4", auth });
@@ -207,5 +207,15 @@ export class SpreadsheetUtils {
         }
 
     }
+    private formatPrivateKey(privateKey: string): string | undefined {
+        //replace all \n with line breaks
+        if (privateKey) {
+            return privateKey.replace(/\\n/g, "\n");
+        } else {
+            return undefined;
+        }
+    }
 
 }
+
+

@@ -63,7 +63,7 @@ class SpreadsheetUtils {
   init() {
     const auth = new import_google_auth_library.JWT({
       email: this.config.serviceAccountEmail,
-      key: this.config.privateKey,
+      key: this.formatPrivateKey(this.config.privateKey),
       scopes: ["https://www.googleapis.com/auth/spreadsheets"]
     });
     return import_googleapis.google.sheets({ version: "v4", auth });
@@ -188,6 +188,13 @@ class SpreadsheetUtils {
       return [message];
     } else {
       return [[message]];
+    }
+  }
+  formatPrivateKey(privateKey) {
+    if (privateKey) {
+      return privateKey.replace(/\\n/g, "\n");
+    } else {
+      return void 0;
     }
   }
 }

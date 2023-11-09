@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "google-spreadsheet",
-        "version": "0.1.0",
+        "version": "0.2.0",
         "news": {
             "0.0.1": {
                 "en": "initial release",
@@ -93,6 +93,19 @@
                 "pl": "Ulepszone rejestrowanie i czyszczenie kodu",
                 "uk": "Покращено журналювання та очищення коду",
                 "zh-cn": "改进的日志记录和代码清理"
+            },
+            "0.2.0": {
+                "en": "Parsing of private key is more robust",
+                "de": "Das Parsen des privaten Schlüssels ist robuster",
+                "ru": "Анализ закрытого ключа стал более надежным.",
+                "pt": "A análise da chave privada é mais robusta",
+                "nl": "Het parseren van de privésleutel is robuuster",
+                "fr": "L'analyse de la clé privée est plus robuste",
+                "it": "L'analisi della chiave privata è più solida",
+                "es": "El análisis de la clave privada es más sólido",
+                "pl": "Analiza klucza prywatnego jest bardziej niezawodna",
+                "uk": "Розбір закритого ключа більш надійний",
+                "zh-cn": "私钥解析更加稳健"
             }
         },
         "titleLang": {
