@@ -14,7 +14,7 @@ In Blockly, the parameter sheetname is always passed as the range-parameter to t
 
 ## Javascript
 
-he given code snippet adds a new row to the spreadsheet. Each of the three array values will create a distinct cell in the spreadsheet.
+The given code snippet adds a new row to the spreadsheet. Each of the three array values will create a distinct cell in the spreadsheet.
 
 ```javascript
 
