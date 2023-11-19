@@ -16,11 +16,11 @@ This adapter can be used to automatically interact with google spreadsheets.
 
 ## Features
 
-* [Append data to spreadsheet](features/append)
-* [Delete rows from a spreadsheet](features/delete-rows)
-* [Add sheets](features/add-sheet)
-* [Delete sheets](features/delete-sheet)
-* [Duplicate sheets](features/duplicate-sheet)
+* [Append data to spreadsheet](features/append.md)
+* [Delete rows from a spreadsheet](features/delete-rows.md)
+* [Add sheets](features/add-sheet.md)
+* [Delete sheets](features/delete-sheet.md)
+* [Duplicate sheets](features/duplicate-sheet.md)
 
 ## Usage
 
