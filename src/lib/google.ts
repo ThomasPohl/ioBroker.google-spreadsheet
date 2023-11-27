@@ -198,6 +198,47 @@ export class SpreadsheetUtils {
 
     }
 
+    public write(sheetName:string, cell:string, data:any): void{
+        const sheets = this.init();
+
+
+        sheets.spreadsheets.values.update({
+            range: sheetName+"!"+cell,
+            spreadsheetId: this.config.spreadsheetId,
+            valueInputOption: "USER_ENTERED",
+            // Request body metadata
+            requestBody: {
+                values: this.prepareValues(data)
+            },
+        }).then(() => {
+            this.log.debug("Data successfully sent to google spreadsheet");
+        }).catch(error => {
+            this.log.error("Error while sending data to Google Spreadsheet:"+ error);
+        });
+
+    }
+    public async read(sheetName:string, cell:string): Promise<any>{
+        const sheets = this.init();
+        return new Promise<any>((resolve, reject) => {
+
+            sheets.spreadsheets.values.get({
+                range: sheetName+"!"+cell,
+                spreadsheetId: this.config.spreadsheetId,
+            })
+            .then((response) => {
+                this.log.debug("Data successfully retrieved from google spreadsheet");
+                if (response.data.values && response.data.values.length>0){
+                    resolve(response.data.values[0][0]);
+                } else {
+                    reject("No data found");
+                }
+            }).catch(error => {
+                this.log.error("Error while retrieving data from Google Spreadsheet:"+ error);
+                reject(error);
+            });
+        });
+
+    }
     private prepareValues(message: any) : any{
         if (Array.isArray(message)){
             return [message];

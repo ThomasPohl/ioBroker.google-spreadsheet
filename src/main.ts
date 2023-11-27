@@ -101,6 +101,23 @@ class GoogleSpreadsheet extends utils.Adapter {
                     if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
                     break;
                 }
+                case "write": {
+                    this.log.debug("write single cell");
+                    this.write(obj);
+
+                    if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+                    break;
+                }
+                case "read": {
+                    this.log.debug("read single cell");
+                    this.read(obj)
+                    .then((result) => {
+                        if (obj.callback) this.sendTo(obj.from, obj.command, result, obj.callback);
+                    });
+
+
+                    break;
+                }
                 default: {
                     this.log.warn("unknown command: " + obj.command);
                     break;
@@ -122,6 +139,32 @@ class GoogleSpreadsheet extends utils.Adapter {
             return;
         }
         this.spreadsheet.append(messageData["sheetName"], messageData["data"]);
+    }
+    private write(message: Record<string, any>): void {
+        const messageData: Record<string, any> = message.message as Record<string, any>;
+        if (this.missingParameters(["sheetName", "range", "data"], messageData)) {
+            return;
+        }
+        //Check that range is a valid pattern
+        const rangePattern = new RegExp("[A-Z]+[0-9]+():[A-Z]+[0-9]+)?");
+        if (!rangePattern.test(messageData["range"])) {
+            this.log.error("Invalid range pattern "+messageData["range"]+". Expected: A1:B2 or A1");
+            return;
+        }
+        this.spreadsheet.write(messageData["sheetName"], messageData["range"], messageData["data"]);
+    }
+    private async read(message: Record<string, any>): Promise<any> {
+        const messageData: Record<string, any> = message.message as Record<string, any>;
+        if (this.missingParameters(["sheetName", "range"], messageData)) {
+            return;
+        }
+        //Check that range is a valid pattern
+        const rangePattern = new RegExp("[A-Z]+[0-9]+()");
+        if (!rangePattern.test(messageData["range"])) {
+            this.log.error("Invalid range pattern "+messageData["range"]+". Expected: A1");
+            return;
+        }
+        return await this.spreadsheet.read(messageData["sheetName"], messageData["range"]);
     }
     public deleteRows(message: ioBroker.Message): void {
         const messageData: Record<string, any> = message.message as Record<string, any>;
