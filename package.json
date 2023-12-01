@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@iobroker/adapter-core": "^3.0.4",
-    "@types/gapi": "^0.0.44",
+    "@types/gapi": "^0.0.47",
     "googleapis": "^126.0.1"
   },
   "devDependencies": {
