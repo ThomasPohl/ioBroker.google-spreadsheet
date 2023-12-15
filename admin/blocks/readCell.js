@@ -46,7 +46,7 @@ Blockly.Sendto.blocks["google-spreadsheet.read"] =
     
             this.setInputsInline(true);
             this.setPreviousStatement(false, null);
-            this.setNextStatement(falsr, null);
+            this.setNextStatement(false, null);
     
             this.setColour(Blockly.Sendto.HUE);
 

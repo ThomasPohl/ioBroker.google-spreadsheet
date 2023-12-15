@@ -87,6 +87,21 @@ class GoogleSpreadsheet extends utils.Adapter {
             this.sendTo(obj.from, obj.command, "Message received", obj.callback);
           break;
         }
+        case "write": {
+          this.log.debug("write single cell");
+          this.write(obj);
+          if (obj.callback)
+            this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+          break;
+        }
+        case "read": {
+          this.log.debug("read single cell");
+          this.read(obj).then((result) => {
+            if (obj.callback)
+              this.sendTo(obj.from, obj.command, result, obj.callback);
+          });
+          break;
+        }
         default: {
           this.log.warn("unknown command: " + obj.command);
           break;
@@ -107,6 +122,30 @@ class GoogleSpreadsheet extends utils.Adapter {
       return;
     }
     this.spreadsheet.append(messageData["sheetName"], messageData["data"]);
+  }
+  write(message) {
+    const messageData = message.message;
+    if (this.missingParameters(["sheetName", "range", "data"], messageData)) {
+      return;
+    }
+    const rangePattern = new RegExp("[A-Z]+[0-9]+():[A-Z]+[0-9]+)?");
+    if (!rangePattern.test(messageData["range"])) {
+      this.log.error("Invalid range pattern " + messageData["range"] + ". Expected: A1:B2 or A1");
+      return;
+    }
+    this.spreadsheet.write(messageData["sheetName"], messageData["range"], messageData["data"]);
+  }
+  async read(message) {
+    const messageData = message.message;
+    if (this.missingParameters(["sheetName", "range"], messageData)) {
+      return;
+    }
+    const rangePattern = new RegExp("[A-Z]+[0-9]+()");
+    if (!rangePattern.test(messageData["range"])) {
+      this.log.error("Invalid range pattern " + messageData["range"] + ". Expected: A1");
+      return;
+    }
+    return await this.spreadsheet.read(messageData["sheetName"], messageData["range"]);
   }
   deleteRows(message) {
     const messageData = message.message;

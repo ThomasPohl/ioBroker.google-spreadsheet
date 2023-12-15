@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "google-spreadsheet",
-        "version": "0.2.0",
+        "version": "0.3.0",
         "news": {
             "0.0.1": {
                 "en": "initial release",
@@ -106,6 +106,9 @@
                 "pl": "Analiza klucza prywatnego jest bardziej niezawodna",
                 "uk": "Розбір закритого ключа більш надійний",
                 "zh-cn": "私钥解析更加稳健"
+            },
+            "0.3.0": {
+                "en": "Added setting of single cells"
             }
         },
         "titleLang": {
