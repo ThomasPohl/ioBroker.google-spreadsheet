@@ -197,6 +197,26 @@ export class SpreadsheetUtils {
         });
 
     }
+    public writeCell(sheetName:string, cell:string, data:any): void{
+        const sheets = this.init();
+
+
+        sheets.spreadsheets.values.batchUpdate({
+            spreadsheetId: this.config.spreadsheetId,
+            requestBody: {
+                valueInputOption: "USER_ENTERED",
+                data: [{
+                    range: sheetName + "!" + cell,
+                    values: this.prepareValues(data)
+                }]
+            },
+        }).then(() => {
+            this.log.debug("Data successfully sent to google spreadsheet");
+        }).catch(error => {
+            this.log.error("Error while sending data to Google Spreadsheet:"+ error);
+        });
+
+    }
 
     private prepareValues(message: any) : any{
         if (Array.isArray(message)){

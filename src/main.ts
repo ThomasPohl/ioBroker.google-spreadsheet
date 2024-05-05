@@ -66,6 +66,13 @@ class GoogleSpreadsheet extends utils.Adapter {
                     if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
                     break;
                 }
+                case "writeCell": {
+                    this.log.debug("write data to cell");
+                    this.writeCelll(obj);
+
+                    if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+                    break;
+                }
                 case "deleteRows": {
                     this.log.debug("delete rows from spreadsheet");
                     this.deleteRows(obj);
@@ -122,6 +129,13 @@ class GoogleSpreadsheet extends utils.Adapter {
             return;
         }
         this.spreadsheet.append(messageData["sheetName"], messageData["data"]);
+    }
+    private writeCell(message: Record<string, any>): void {
+        const messageData: Record<string, any> = message.message as Record<string, any>;
+        if (this.missingParameters(["sheetName", "cell", "data"], messageData)) {
+            return;
+        }
+        this.spreadsheet.writeCell(messageData["sheetName"], messageData["cell"], messageData["data"]);
     }
     public deleteRows(message: ioBroker.Message): void {
         const messageData: Record<string, any> = message.message as Record<string, any>;
