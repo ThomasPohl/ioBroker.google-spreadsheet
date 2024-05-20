@@ -68,7 +68,7 @@ class GoogleSpreadsheet extends utils.Adapter {
                 }
                 case "writeCell": {
                     this.log.debug("write data to cell");
-                    this.writeCelll(obj);
+                    this.writeCell(obj);
 
                     if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
                     break;
