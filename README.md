@@ -99,6 +99,9 @@ Make sure the Service Account has adequate permissions to write to the spreadshe
 
 
 ## Changelog
+### 0.3.0
+* (Thomas Pohl) Added setting of single cells
+* (Thomas Pohl) Documentation for all features
 ### 0.2.0
 * (Thomas Pohl) Parsing of private keys is now more robust
 

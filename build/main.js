@@ -67,13 +67,6 @@ class GoogleSpreadsheet extends utils.Adapter {
             this.sendTo(obj.from, obj.command, "Message received", obj.callback);
           break;
         }
-        case "writeCell": {
-          this.log.debug("write data to cell");
-          this.writeCell(obj);
-          if (obj.callback)
-            this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-          break;
-        }
         case "deleteRows": {
           this.log.debug("delete rows from spreadsheet");
           this.deleteRows(obj);
@@ -109,6 +102,21 @@ class GoogleSpreadsheet extends utils.Adapter {
             this.sendTo(obj.from, obj.command, "Message received", obj.callback);
           break;
         }
+        case "writeCell": {
+          this.log.debug("write data to single cell");
+          this.writeCell(obj);
+          if (obj.callback)
+            this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+          break;
+        }
+        case "readCell": {
+          this.log.debug("read single cell");
+          this.readCell(obj).then((result) => {
+            if (obj.callback)
+              this.sendTo(obj.from, obj.command, result, obj.callback);
+          });
+          break;
+        }
         default: {
           this.log.warn("unknown command: " + obj.command);
           break;
@@ -135,7 +143,24 @@ class GoogleSpreadsheet extends utils.Adapter {
     if (this.missingParameters(["sheetName", "cell", "data"], messageData)) {
       return;
     }
+    const cellPattern = new RegExp("[A-Z]+[0-9]+()");
+    if (!cellPattern.test(messageData["cell"])) {
+      this.log.error("Invalid cell pattern " + messageData["cell"] + ". Expected: A1");
+      return;
+    }
     this.spreadsheet.writeCell(messageData["sheetName"], messageData["cell"], messageData["data"]);
+  }
+  async readCell(message) {
+    const messageData = message.message;
+    if (this.missingParameters(["sheetName", "cell"], messageData)) {
+      return;
+    }
+    const cellPattern = new RegExp("[A-Z]+[0-9]+()");
+    if (!cellPattern.test(messageData["cell"])) {
+      this.log.error("Invalid cell pattern " + messageData["cell"] + ". Expected: A1");
+      return;
+    }
+    return await this.spreadsheet.readCell(messageData["sheetName"], messageData["cell"]);
   }
   deleteRows(message) {
     const messageData = message.message;

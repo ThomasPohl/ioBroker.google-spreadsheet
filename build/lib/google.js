@@ -202,6 +202,25 @@ class SpreadsheetUtils {
       this.log.error("Error while sending data to Google Spreadsheet:" + error);
     });
   }
+  async readCell(sheetName, cell) {
+    const sheets = this.init();
+    return new Promise((resolve, reject) => {
+      sheets.spreadsheets.values.get({
+        range: sheetName + "!" + cell,
+        spreadsheetId: this.config.spreadsheetId
+      }).then((response) => {
+        this.log.debug("Data successfully retrieved from google spreadsheet");
+        if (response.data.values && response.data.values.length > 0) {
+          resolve(response.data.values[0][0]);
+        } else {
+          reject("No data found");
+        }
+      }).catch((error) => {
+        this.log.error("Error while retrieving data from Google Spreadsheet:" + error);
+        reject(error);
+      });
+    });
+  }
   prepareValues(message) {
     if (Array.isArray(message)) {
       return [message];
