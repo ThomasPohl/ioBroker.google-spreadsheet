@@ -171,9 +171,11 @@ class SpreadsheetUtils {
   append(sheetName, data) {
     const sheets = this.init();
     sheets.spreadsheets.values.append({
+      // The [A1 notation](/sheets/api/guides/concepts#cell) of a range to search for a logical table of data. Values are appended after the last row of the table.
       range: sheetName,
       spreadsheetId: this.config.spreadsheetId,
       valueInputOption: "USER_ENTERED",
+      // Request body metadata
       requestBody: {
         values: this.prepareValues(data)
       }
@@ -181,6 +183,42 @@ class SpreadsheetUtils {
       this.log.debug("Data successfully sent to google spreadsheet");
     }).catch((error) => {
       this.log.error("Error while sending data to Google Spreadsheet:" + error);
+    });
+  }
+  writeCell(sheetName, cell, data) {
+    const sheets = this.init();
+    sheets.spreadsheets.values.batchUpdate({
+      spreadsheetId: this.config.spreadsheetId,
+      requestBody: {
+        valueInputOption: "USER_ENTERED",
+        data: [{
+          range: sheetName + "!" + cell,
+          values: this.prepareValues(data)
+        }]
+      }
+    }).then(() => {
+      this.log.debug("Data successfully sent to google spreadsheet");
+    }).catch((error) => {
+      this.log.error("Error while sending data to Google Spreadsheet:" + error);
+    });
+  }
+  async readCell(sheetName, cell) {
+    const sheets = this.init();
+    return new Promise((resolve, reject) => {
+      sheets.spreadsheets.values.get({
+        range: sheetName + "!" + cell,
+        spreadsheetId: this.config.spreadsheetId
+      }).then((response) => {
+        this.log.debug("Data successfully retrieved from google spreadsheet");
+        if (response.data.values && response.data.values.length > 0) {
+          resolve(response.data.values[0][0]);
+        } else {
+          reject("No data found");
+        }
+      }).catch((error) => {
+        this.log.error("Error while retrieving data from Google Spreadsheet:" + error);
+        reject(error);
+      });
     });
   }
   prepareValues(message) {

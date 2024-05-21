@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "google-spreadsheet",
-        "version": "0.2.0",
+        "version": "0.3.0",
         "news": {
             "0.0.1": {
                 "en": "initial release",
@@ -106,6 +106,19 @@
                 "pl": "Analiza klucza prywatnego jest bardziej niezawodna",
                 "uk": "Розбір закритого ключа більш надійний",
                 "zh-cn": "私钥解析更加稳健"
+            },
+            "0.3.0": {
+                "en": "Added reading and writing of single cells",
+                "de": "Lesen und Schreiben einzelner Zellen hinzugefügt",
+                "ru": "Добавлено чтение и запись отдельных ячеек.",
+                "pt": "Adicionada leitura e escrita de células únicas",
+                "nl": "Lezen en schrijven van afzonderlijke cellen toegevoegd",
+                "fr": "Ajout de la lecture et de l'écriture de cellules individuelles",
+                "it": "Aggiunta lettura e scrittura di singole celle",
+                "es": "Se agregó lectura y escritura de celdas individuales.",
+                "pl": "Dodano odczyt i zapis pojedynczych komórek",
+                "uk": "Додано читання та запис окремих клітинок",
+                "zh-cn": "增加单细胞的读写"
             }
         },
         "titleLang": {

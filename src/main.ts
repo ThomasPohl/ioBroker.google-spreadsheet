@@ -101,6 +101,22 @@ class GoogleSpreadsheet extends utils.Adapter {
                     if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
                     break;
                 }
+                case "writeCell": {
+                    this.log.debug("write data to single cell");
+                    this.writeCell(obj);
+
+                    if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+                    break;
+                }
+                case "readCell": {
+                    this.log.debug("read single cell");
+                    this.readCell(obj)
+                        .then((result: any) => {
+                            if (obj.callback) this.sendTo(obj.from, obj.command, result, obj.callback);
+                        });
+
+                    break;
+                }
                 default: {
                     this.log.warn("unknown command: " + obj.command);
                     break;
@@ -122,6 +138,32 @@ class GoogleSpreadsheet extends utils.Adapter {
             return;
         }
         this.spreadsheet.append(messageData["sheetName"], messageData["data"]);
+    }
+    private writeCell(message: Record<string, any>): void {
+        const messageData: Record<string, any> = message.message as Record<string, any>;
+        if (this.missingParameters(["sheetName", "cell", "data"], messageData)) {
+            return;
+        }
+        //Check that cell is a valid pattern
+        const cellPattern = new RegExp("[A-Z]+[0-9]+()");
+        if (!cellPattern.test(messageData["cell"])) {
+            this.log.error("Invalid cell pattern "+messageData["cell"]+". Expected: A1");
+            return;
+        }
+        this.spreadsheet.writeCell(messageData["sheetName"], messageData["cell"], messageData["data"]);
+    }
+    private async readCell(message: Record<string, any>): Promise<any> {
+        const messageData: Record<string, any> = message.message as Record<string, any>;
+        if (this.missingParameters(["sheetName", "cell"], messageData)) {
+            return;
+        }
+        //Check that cell is a valid pattern
+        const cellPattern = new RegExp("[A-Z]+[0-9]+()");
+        if (!cellPattern.test(messageData["cell"])) {
+            this.log.error("Invalid cell pattern "+messageData["cell"]+". Expected: A1");
+            return;
+        }
+        return await this.spreadsheet.readCell(messageData["sheetName"], messageData["cell"]);
     }
     public deleteRows(message: ioBroker.Message): void {
         const messageData: Record<string, any> = message.message as Record<string, any>;

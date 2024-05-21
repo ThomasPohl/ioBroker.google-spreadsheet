@@ -8,8 +8,11 @@ if (typeof goog !== "undefined") {
 
 Blockly.Words["google-spreadsheet_anyInstance"] = { en: "all instances", de: "allen Instanzen" };
 
-function getInstances(){
-    var options = [[Blockly.Translate("google-spreadsheet_anyInstance"), ""]];
+function getInstances(withAny=true){
+    var options = [];
+    if (withAny){
+        options.push([Blockly.Translate("google-spreadsheet_anyInstance"), ""]);
+    }
     if (typeof main !== "undefined" && main.instances) {
         for (var i = 0; i < main.instances.length; i++) {
             var m = main.instances[i].match(/^system.adapter.google-spreadsheet.(\d+)$/);
@@ -45,5 +48,7 @@ loadJS("../google-spreadsheet/blocks/deleteRows.js");
 loadJS("../google-spreadsheet/blocks/createSheet.js");
 loadJS("../google-spreadsheet/blocks/deleteSheet.js");
 loadJS("../google-spreadsheet/blocks/duplicateSheet.js");
+loadJS("../google-spreadsheet/blocks/readCell.js");
+loadJS("../google-spreadsheet/blocks/writeCell.js");
 
 
