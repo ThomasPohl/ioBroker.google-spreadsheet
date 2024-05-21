@@ -108,7 +108,17 @@
                 "zh-cn": "私钥解析更加稳健"
             },
             "0.3.0": {
-                "en": "Added setting of single cells"
+                "en": "Added reading and writing of single cells",
+                "de": "Lesen und Schreiben einzelner Zellen hinzugefügt",
+                "ru": "Добавлено чтение и запись отдельных ячеек.",
+                "pt": "Adicionada leitura e escrita de células únicas",
+                "nl": "Lezen en schrijven van afzonderlijke cellen toegevoegd",
+                "fr": "Ajout de la lecture et de l'écriture de cellules individuelles",
+                "it": "Aggiunta lettura e scrittura di singole celle",
+                "es": "Se agregó lectura y escritura de celdas individuales.",
+                "pl": "Dodano odczyt i zapis pojedynczych komórek",
+                "uk": "Додано читання та запис окремих клітинок",
+                "zh-cn": "增加单细胞的读写"
             }
         },
         "titleLang": {
