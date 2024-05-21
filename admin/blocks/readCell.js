@@ -25,7 +25,7 @@ Blockly.Sendto.blocks["google-spreadsheet.read"] =
 
     Blockly.Blocks["google-spreadsheet.read"] = {
         init: function () {
-            const instances = getInstances();
+            const instances = getInstances(false);
     
             this.appendDummyInput("NAME")
                 .appendField(Blockly.Translate("google-spreadsheet_read_read-from"))
@@ -58,6 +58,6 @@ Blockly.Sendto.blocks["google-spreadsheet.read"] =
         var sheetName = Blockly.JavaScript.valueToCode(block, "SHEET_NAME", Blockly.JavaScript.ORDER_ATOMIC);
         var cell = Blockly.JavaScript.valueToCode(block, "CELL", Blockly.JavaScript.ORDER_ATOMIC);
     
-        return ['sendTo("google-spreadsheet' + dropdown_instance + '", "readCell", {"sheetName":'+sheetName+', "cell":'+cell+'})', 0];
+        return ['await new Promise((resolve)=>{sendTo("google-spreadsheet' + dropdown_instance + '", "readCell", {"sheetName":"'+sheetName+'", "cell":"'+cell+'"}, (response)=>{resolve(response)}); })', 0];
     };
 
