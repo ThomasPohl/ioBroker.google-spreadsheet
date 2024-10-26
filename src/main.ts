@@ -9,8 +9,6 @@ import * as utils from "@iobroker/adapter-core";
 
 import fs from "fs";
 import { SpreadsheetUtils } from "./lib/google";
-import { rejects } from "assert";
-import { error } from "console";
 
 
 class GoogleSpreadsheet extends utils.Adapter {
