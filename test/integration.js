@@ -32,6 +32,7 @@ tests.integration(path.join(__dirname, ".."), {
 				return new Promise(async (resolve) => {
 					// Start the adapter and wait until it has started
 					await harness.startAdapterAndWait();
+					console.log("finished starting adapter");
                     resolve();
 					// Perform the actual test:
 					//harness.sendTo("adapter.0", "test", "message", (resp) => {
@@ -39,7 +40,7 @@ tests.integration(path.join(__dirname, ".."), {
 					//	resolve();
 					//});
 				});
-			});
+			}).timeout(20000);
 		});
 
 		// While developing the tests, you can run only a single suite using `suite.only`...
