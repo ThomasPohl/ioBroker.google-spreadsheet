@@ -71,6 +71,7 @@ Add the following information to the configuration of your adapter instance in i
 - **Service Account** - The email address of the service account you created.
 - **Private Key** - Open the downloaded JSON file, and locate the private key within the file. Copy only the part starting with "-----BEGIN PRIVATE KEY-----."
 
+![Settings](img/settings.png)
 
 #### Find the Spreadsheet ID in the URL
 
@@ -100,6 +101,8 @@ Make sure the Service Account has adequate permissions to write to the spreadshe
 
 
 ## Changelog
+### 0.3.1
+* (Thomas Pohl) Fixed reading cells and added error handling
 ### 0.3.0
 * (Thomas Pohl) Added writing of single cells
 * (Thomas Pohl) Added reading of single cells
@@ -331,7 +334,7 @@ Make sure the Service Account has adequate permissions to write to the spreadshe
       same "printed page" as the copyright notice for easier
       identification within third-party archives.
 
-   Copyright 2023 Thomas Pohl
+   Copyright 2024 Thomas Pohl
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.

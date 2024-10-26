@@ -1,6 +1,6 @@
 {
   "name": "iobroker.google-spreadsheet",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Adapter for io broker to work with google spreadsheets",
   "author": {
     "name": "Thomas Pohl",
@@ -10,14 +10,15 @@
   "license": "Apache-2.0",
   "keywords": [
     "google",
-    "spreadsheet"
+    "spreadsheet",
+    "ioBroker"
   ],
   "repository": {
     "type": "git",
     "url": "https://github.com/ThomasPohl/ioBroker.google-spreadsheet.git"
   },
   "engines": {
-    "node": ">= 16"
+    "node": ">= 18"
   },
   "dependencies": {
     "@iobroker/adapter-core": "^3.1.6",

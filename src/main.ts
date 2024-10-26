@@ -113,7 +113,8 @@ class GoogleSpreadsheet extends utils.Adapter {
                     this.readCell(obj)
                         .then((result: any) => {
                             if (obj.callback) this.sendTo(obj.from, obj.command, result, obj.callback);
-                        });
+                        })
+                        .catch(error=>this.log.error("Cannot read cell: "+error));
 
                     break;
                 }
@@ -153,17 +154,21 @@ class GoogleSpreadsheet extends utils.Adapter {
         this.spreadsheet.writeCell(messageData["sheetName"], messageData["cell"], messageData["data"]);
     }
     private async readCell(message: Record<string, any>): Promise<any> {
-        const messageData: Record<string, any> = message.message as Record<string, any>;
-        if (this.missingParameters(["sheetName", "cell"], messageData)) {
-            return;
-        }
-        //Check that cell is a valid pattern
-        const cellPattern = new RegExp("[A-Z]+[0-9]+()");
-        if (!cellPattern.test(messageData["cell"])) {
-            this.log.error("Invalid cell pattern "+messageData["cell"]+". Expected: A1");
-            return;
-        }
-        return await this.spreadsheet.readCell(messageData["sheetName"], messageData["cell"]);
+        return new Promise<any>((resolve, reject) => {
+            const messageData: Record<string, any> = message.message as Record<string, any>;
+            if (this.missingParameters(["sheetName", "cell"], messageData)) {
+                return;
+            }
+            //Check that cell is a valid pattern
+            const cellPattern = new RegExp("[A-Z]+[0-9]+()");
+            if (!cellPattern.test(messageData["cell"])) {
+                this.log.error("Invalid cell pattern "+messageData["cell"]+". Expected: A1");
+                return;
+            }
+            this.spreadsheet.readCell(messageData["sheetName"], messageData["cell"])
+                .then(result=>resolve(result))
+                .catch(error=>reject(error));
+        });
     }
     public deleteRows(message: ioBroker.Message): void {
         const messageData: Record<string, any> = message.message as Record<string, any>;
