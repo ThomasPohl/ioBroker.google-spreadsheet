@@ -199,7 +199,9 @@ export class SpreadsheetUtils {
     }
     public writeCell(sheetName:string, cell:string, data:any): void{
         const sheets = this.init();
-
+        if (cell.startsWith("'") && cell.endsWith("'")){
+            cell=cell.substring(1, cell.length-1);
+        }
 
         sheets.spreadsheets.values.batchUpdate({
             spreadsheetId: this.config.spreadsheetId,
