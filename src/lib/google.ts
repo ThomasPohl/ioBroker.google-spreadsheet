@@ -221,7 +221,9 @@ export class SpreadsheetUtils {
     public async readCell(sheetName:string, cell:string): Promise<any>{
         const sheets = this.init();
         return new Promise<any>((resolve, reject) => {
-
+            if (cell.startsWith("'") && cell.endsWith("'")){
+                cell=cell.substring(1, cell.length-1);
+            }
             sheets.spreadsheets.values.get({
                 range: sheetName+"!"+cell,
                 spreadsheetId: this.config.spreadsheetId,

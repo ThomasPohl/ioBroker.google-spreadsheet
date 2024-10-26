@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "google-spreadsheet",
-        "version": "0.3.0",
+        "version": "0.3.1",
         "news": {
             "0.0.3": {
                 "en": "added 'add sheet' and 'delete sheet'",
@@ -93,6 +93,19 @@
                 "pl": "Dodano odczyt i zapis pojedynczych komórek",
                 "uk": "Додано читання та запис окремих клітинок",
                 "zh-cn": "增加单细胞的读写"
+            },
+            "0.3.1": {
+                "en": "Fixed reading cells and added error handling",
+                "de": "Das Lesen von Zellen wurde korrigiert und die Fehlerbehandlung hinzugefügt",
+                "ru": "Исправлено чтение ячеек и добавлена ​​обработка ошибок.",
+                "pt": "Células de leitura corrigidas e tratamento de erros adicionado",
+                "nl": "Vaste leescellen en toegevoegde foutafhandeling",
+                "fr": "Correction des cellules de lecture et ajout de la gestion des erreurs",
+                "it": "Risolte le celle di lettura e aggiunta la gestione degli errori",
+                "es": "Se corrigieron las celdas de lectura y se agregó manejo de errores.",
+                "pl": "Naprawiono odczytywanie komórek i dodano obsługę błędów",
+                "uk": "Виправлено читання клітинок і додано обробку помилок",
+                "zh-cn": "修复了读取单元并添加了错误处理"
             }
         },
         "titleLang": {
@@ -129,7 +142,7 @@
             "spreadsheet"
         ],
         "licenseInformation": {
-            "license":"Apache-2.0",
+            "license": "Apache-2.0",
             "type": "free"
         },
         "platform": "Javascript/Node.js",

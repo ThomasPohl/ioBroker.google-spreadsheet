@@ -171,11 +171,9 @@ class SpreadsheetUtils {
   append(sheetName, data) {
     const sheets = this.init();
     sheets.spreadsheets.values.append({
-      // The [A1 notation](/sheets/api/guides/concepts#cell) of a range to search for a logical table of data. Values are appended after the last row of the table.
       range: sheetName,
       spreadsheetId: this.config.spreadsheetId,
       valueInputOption: "USER_ENTERED",
-      // Request body metadata
       requestBody: {
         values: this.prepareValues(data)
       }
@@ -205,6 +203,11 @@ class SpreadsheetUtils {
   async readCell(sheetName, cell) {
     const sheets = this.init();
     return new Promise((resolve, reject) => {
+      this.log.info("sheetName" + sheetName);
+      this.log.info("cell" + cell);
+      if (cell.startsWith("'") && cell.endsWith("'")) {
+        cell = cell.substring(1, cell.length - 1);
+      }
       sheets.spreadsheets.values.get({
         range: sheetName + "!" + cell,
         spreadsheetId: this.config.spreadsheetId
