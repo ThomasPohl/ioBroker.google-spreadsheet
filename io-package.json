@@ -96,17 +96,17 @@
             "zh-cn": "谷歌电子表格"
         },
         "desc": {
-            "en": "This adapter can uplaod data to google spreadsheets",
-            "de": "Dieser Adapter kann Daten in Google-Tabellen hochladen",
-            "ru": "Этот адаптер может загружать данные в таблицы Google.",
-            "pt": "Este adaptador pode enviar dados para planilhas do Google",
-            "nl": "Deze adapter kan gegevens uploaden naar Google Spreadsheets",
-            "fr": "Cet adaptateur peut télécharger des données sur des feuilles de calcul Google",
-            "it": "Questo adattatore può caricare dati su fogli di calcolo Google",
-            "es": "Este adaptador puede cargar datos en hojas de cálculo de Google.",
-            "pl": "Ten adapter może przesyłać dane do arkuszy kalkulacyjnych Google",
-            "uk": "Цей адаптер може завантажувати дані в електронні таблиці Google",
-            "zh-cn": "该适配器可以将数据上传到谷歌电子表格"
+            "en": "This adapter can be used to interact with google spreadsheets.",
+            "de": "Dieser Adapter kann zur Interaktion mit Google-Tabellen verwendet werden.",
+            "ru": "Этот адаптер можно использовать для взаимодействия с электронными таблицами Google.",
+            "pt": "Este adaptador pode ser usado para interagir com planilhas do Google.",
+            "nl": "Deze adapter kan worden gebruikt voor interactie met Google Spreadsheets.",
+            "fr": "Cet adaptateur peut être utilisé pour interagir avec les feuilles de calcul Google.",
+            "it": "Questo adattatore può essere utilizzato per interagire con i fogli di calcolo Google.",
+            "es": "Este adaptador se puede utilizar para interactuar con las hojas de cálculo de Google.",
+            "pl": "Ten adapter może być używany do interakcji z arkuszami kalkulacyjnymi Google.",
+            "uk": "Цей адаптер можна використовувати для взаємодії з електронними таблицями Google.",
+            "zh-cn": "该适配器可用于与谷歌电子表格交互。"
         },
         "authors": [
             "Thomas Pohl <post@thomaspohl.net>"
@@ -132,6 +132,7 @@
         "dataSource": "push",
         "blockly": true,
         "messagebox": true,
+        "tier": 2,
         "adminUI": {
             "config": "json"
         },
