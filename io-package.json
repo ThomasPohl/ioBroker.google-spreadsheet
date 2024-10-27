@@ -132,6 +132,7 @@
         "dataSource": "push",
         "blockly": true,
         "messagebox": true,
+        "tier": 2,
         "adminUI": {
             "config": "json"
         },
