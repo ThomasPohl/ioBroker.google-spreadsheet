@@ -101,6 +101,10 @@ Make sure the Service Account has adequate permissions to write to the spreadshe
 
 
 ## Changelog
+<!--
+    Placeholder for the next version (at the beginning of the line):
+    ### **WORK IN PROGRESS**
+-->
 ### 0.3.1
 * (Thomas Pohl) Fixed reading cells and added error handling
 ### 0.3.0
@@ -114,35 +118,8 @@ Make sure the Service Account has adequate permissions to write to the spreadshe
 * (Thomas Pohl) Preparation for first stable release
 * (Thomas Pohl) Improve logging + Code cleanup
 
-### 0.0.6
 
-* (Thomas Pohl) Parameter validation
 
-### 0.0.5
-
-* (Thomas Pohl) Position for "duplicate sheet"
-
-### 0.0.4
-
-* (Thomas Pohl) Added "duplicate Sheet"
-
-### 0.0.3
-
-* (Thomas Pohl) Added "add Sheet"
-* (Thomas Pohl) Added "remove Sheet"
-
-### 0.0.2
-
-* (Thomas Pohl) Added "delete rows"
-
-### 0.0.1
-
-* (Thomas Pohl) initial release
-
-<!--
-    Placeholder for the next version (at the beginning of the line):
-    ### **WORK IN PROGRESS**
--->
 
 
 ## License
