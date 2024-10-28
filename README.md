@@ -105,6 +105,9 @@ Make sure the Service Account has adequate permissions to write to the spreadshe
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### 0.4.0
+* (Thomas Pohl) The privateKey is saved now encrypted
+* (Thomas Pohl) Support for node.js 22
 ### 0.3.1
 * (Thomas Pohl) Fixed reading cells and added error handling
 ### 0.3.0

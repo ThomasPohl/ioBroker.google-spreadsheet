@@ -1,8 +1,21 @@
 {
     "common": {
         "name": "google-spreadsheet",
-        "version": "0.3.1",
+        "version": "0.4.0",
         "news": {
+            "0.4.0": {
+                "en": "The private key is saved now encrypted",
+                "de": "Der private Schlüssel wird nun verschlüsselt gespeichert",
+                "ru": "Закрытый ключ сохранен и теперь зашифрован.",
+                "pt": "A chave privada é salva agora criptografada",
+                "nl": "De privésleutel wordt nu gecodeerd opgeslagen",
+                "fr": "La clé privée est enregistrée maintenant cryptée",
+                "it": "La chiave privata viene salvata ora crittografata",
+                "es": "La clave privada se guarda ahora cifrada.",
+                "pl": "Klucz prywatny jest zapisany i teraz zaszyfrowany",
+                "uk": "Приватний ключ збережено в зашифрованому вигляді",
+                "zh-cn": "私钥现已加密保存"
+            },
             "0.3.1": {
                 "en": "Fixed reading cells and added error handling",
                 "de": "Das Lesen von Zellen wurde korrigiert und die Fehlerbehandlung hinzugefügt",
