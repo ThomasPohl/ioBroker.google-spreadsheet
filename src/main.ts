@@ -77,6 +77,7 @@ class GoogleSpreadsheet extends utils.Adapter {
 
             callback();
         } catch (e) {
+            this.log.error("Error during unload: " + JSON.stringify(e));
             callback();
         }
     }

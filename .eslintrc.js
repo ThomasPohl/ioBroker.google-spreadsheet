@@ -11,14 +11,6 @@ module.exports = {
     ],
     plugins: [],
     rules: {
-        "indent": "off",
-        "@typescript-eslint/indent": [
-            "error",
-            4,
-            {
-                "SwitchCase": 1
-            }
-        ],
         "quotes": [
             "error",
             "double",
