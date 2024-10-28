@@ -14,6 +14,10 @@ var __copyProps = (to, from, except, desc) => {
   return to;
 };
 var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
   isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
   mod
 ));
@@ -31,10 +35,31 @@ class GoogleSpreadsheet extends utils.Adapter {
     this.on("unload", this.onUnload.bind(this));
     this.spreadsheet = new import_google.SpreadsheetUtils(this.config, this.log);
   }
+  /**
+   * Is called when databases are connected and adapter received configuration.
+   */
   async onReady() {
     this.log.debug("config spreadsheetId: " + this.config.spreadsheetId);
+    this.encryptPrivateKeyIfNeeded();
     this.spreadsheet = new import_google.SpreadsheetUtils(this.config, this.log);
   }
+  encryptPrivateKeyIfNeeded() {
+    if (this.config.privateKey && this.config.privateKey.length > 0) {
+      this.getForeignObjectAsync(`system.adapter.${this.name}.${this.instance}`).then(
+        (data) => {
+          if (data && data.native && data.native.privateKey && !data.native.privateKey.startsWith("$/aes")) {
+            this.config.privateKey = data.native.privateKey;
+            data.native.privateKey = this.encrypt(data.native.privateKey);
+            this.extendForeignObjectAsync(`system.adapter.${this.name}.${this.instance}`, data);
+            this.log.info("privateKey is stored now encrypted");
+          }
+        }
+      );
+    }
+  }
+  /**
+   * Is called when adapter shuts down - callback has to be called under any circumstances!
+   */
   onUnload(callback) {
     try {
       callback();
@@ -42,6 +67,11 @@ class GoogleSpreadsheet extends utils.Adapter {
       callback();
     }
   }
+  // If you need to accept messages in your adapter, uncomment the following block and the corresponding line in the constructor.
+  // /**
+  //  * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...
+  //  * Using this method requires "common.messagebox" property to be set to true in io-package.json
+  //  */
   onMessage(obj) {
     if (typeof obj === "object" && obj.message) {
       switch (obj.command) {
@@ -99,7 +129,7 @@ class GoogleSpreadsheet extends utils.Adapter {
           this.readCell(obj).then((result) => {
             if (obj.callback)
               this.sendTo(obj.from, obj.command, result, obj.callback);
-          }).catch((error2) => this.log.error("Cannot read cell: " + error2));
+          }).catch((error) => this.log.error("Cannot read cell: " + error));
           break;
         }
         default: {
@@ -146,7 +176,7 @@ class GoogleSpreadsheet extends utils.Adapter {
         this.log.error("Invalid cell pattern " + messageData["cell"] + ". Expected: A1");
         return;
       }
-      this.spreadsheet.readCell(messageData["sheetName"], messageData["cell"]).then((result) => resolve(result)).catch((error2) => reject(error2));
+      this.spreadsheet.readCell(messageData["sheetName"], messageData["cell"]).then((result) => resolve(result)).catch((error) => reject(error));
     });
   }
   deleteRows(message) {

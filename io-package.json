@@ -152,6 +152,12 @@
         "serviceAccountEmail": "",
         "privateKey": ""
     },
+    "protectedNative": [
+        "privateKey"
+    ],
+    "encryptedNative": [
+        "privateKey"
+    ],
     "objects": [],
     "instanceObjects": []
 }

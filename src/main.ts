@@ -35,8 +35,32 @@ class GoogleSpreadsheet extends utils.Adapter {
         // The adapters config (in the instance object everything under the attribute "native") is accessible via
         // this.config:
         this.log.debug("config spreadsheetId: " + this.config.spreadsheetId);
+
+        this.encryptPrivateKeyIfNeeded();
+
         this.spreadsheet = new SpreadsheetUtils(this.config, this.log);
 
+    }
+
+    private encryptPrivateKeyIfNeeded(): void{
+        if (this.config.privateKey
+            && this.config.privateKey.length>0
+        ){
+            this.getForeignObjectAsync(`system.adapter.${this.name}.${this.instance}`).then(
+                data=>{
+                    if (data
+                            && data.native
+                            && data.native.privateKey
+                            && !data.native.privateKey.startsWith("$/aes")){
+                        this.config.privateKey=data.native.privateKey;
+                        data.native.privateKey=this.encrypt(data.native.privateKey);
+                        this.extendForeignObjectAsync(`system.adapter.${this.name}.${this.instance}`, data).then(()=>
+                            this.log.info("privateKey is stored now encrypted")
+                        );
+                    }
+                }
+            );
+        }
     }
 
     /**
