@@ -40,6 +40,13 @@ class GoogleSpreadsheet extends utils.Adapter {
    */
   async onReady() {
     this.log.debug("config spreadsheetId: " + this.config.spreadsheetId);
+    if (this.config.privateKey && this.config.serviceAccountEmail && this.config.spreadsheetId) {
+      this.setState("info.connection", true, true);
+      this.log.info("Google-spreadsheet adapter configured");
+    } else {
+      this.setState("info.connection", false, true);
+      this.log.warn("Google-spreadsheet adapter not configured");
+    }
     this.encryptPrivateKeyIfNeeded();
     this.spreadsheet = new import_google.SpreadsheetUtils(this.config, this.log);
   }
@@ -50,8 +57,9 @@ class GoogleSpreadsheet extends utils.Adapter {
           if (data && data.native && data.native.privateKey && !data.native.privateKey.startsWith("$/aes")) {
             this.config.privateKey = data.native.privateKey;
             data.native.privateKey = this.encrypt(data.native.privateKey);
-            this.extendForeignObjectAsync(`system.adapter.${this.name}.${this.instance}`, data);
-            this.log.info("privateKey is stored now encrypted");
+            this.extendForeignObjectAsync(`system.adapter.${this.name}.${this.instance}`, data).then(
+              () => this.log.info("privateKey is stored now encrypted")
+            );
           }
         }
       );

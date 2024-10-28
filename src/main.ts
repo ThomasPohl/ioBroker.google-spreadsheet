@@ -35,7 +35,13 @@ class GoogleSpreadsheet extends utils.Adapter {
         // The adapters config (in the instance object everything under the attribute "native") is accessible via
         // this.config:
         this.log.debug("config spreadsheetId: " + this.config.spreadsheetId);
-
+        if (this.config.privateKey && this.config.serviceAccountEmail && this.config.spreadsheetId) {
+            this.setState("info.connection", true, true);
+            this.log.info("Google-spreadsheet adapter configured");
+        } else {
+            this.setState("info.connection", false, true);
+            this.log.warn("Google-spreadsheet adapter not configured");
+        }
         this.encryptPrivateKeyIfNeeded();
 
         this.spreadsheet = new SpreadsheetUtils(this.config, this.log);
