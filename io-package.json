@@ -172,5 +172,29 @@
         "privateKey"
     ],
     "objects": [],
-    "instanceObjects": []
+    "instanceObjects": [
+        {
+            "_id": "info.connection",
+            "type": "state",
+            "common": {
+                "name": {
+                    "en": "Connected to Google server",
+                    "de": "Verbindung mit Google Server",
+                    "ru": "Подключен к серверу Google",
+                    "pt": "Conectado ao servidor Google",
+                    "nl": "Verbinding met Google server",
+                    "fr": "Connecté au serveur Google",
+                    "it": "Collegato al server Google",
+                    "es": "Conectado al servidor Google",
+                    "pl": "Łączy się z serwerem Google"
+                },
+                "type": "boolean",
+                "role": "indicator.connected",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {}
+        }
+    ]
 }
