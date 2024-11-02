@@ -1,5 +1,6 @@
 import { google, sheets_v4 } from "googleapis";
 import { JWT } from "google-auth-library";
+import fs from "fs";
 
 export class SpreadsheetUtils {
 
@@ -114,7 +115,7 @@ export class SpreadsheetUtils {
 
 
     }
-    public upload(source:string, target:string, parentFolder:string, filecontent:any): void {
+    public upload(source:string, target:string, parentFolder:string, filecontent:fs.ReadStream): void {
 
 
         const auth = new JWT({
