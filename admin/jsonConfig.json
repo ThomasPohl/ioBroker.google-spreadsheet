@@ -12,27 +12,33 @@
                 "spreadsheetId": {
                     "newLine": true,
                     "type": "text",
+                    "xs": 12,
                     "sm": 12,
                     "md": 8,
                     "lg": 8,
+                    "xl": 8,
                     "label": "spreadsheetId",
                     "help": "spreadsheetIdHelp"
                 },
                 "serviceAccountEmail": {
                     "newLine": true,
                     "type": "text",
+                    "xs": 12,
                     "sm": 12,
                     "md": 8,
                     "lg": 8,
+                    "xl": 8,
                     "label": "serviceAccountEmail",
                     "help": "serviceAccountEmailHelp"
                 },
                 "privateKey": {
                     "newLine": true,
                     "type": "text",
+                    "xs": 12,
                     "sm": 12,
                     "md": 8,
                     "lg": 8,
+                    "xl": 8,
                     "label": "privateKey",
                     "minRows": 20,
                     "help": "privateKeyHelp"
