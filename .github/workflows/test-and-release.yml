@@ -46,7 +46,7 @@ jobs:
 
     steps:
       # - uses: ioBroker/testing-action-adapter@v1
-      - uses: mcm1957/testing-action-adapter@db3ed63cdb31e108983e8c75adc3148e5d890395
+      - uses: mcm1957/testing-action-adapter@d7b600e2138e3227dfe7f613dab14c4d0209d004
         with:
           node-version: ${{ matrix.node-version }}
           os: ${{ matrix.os }}
