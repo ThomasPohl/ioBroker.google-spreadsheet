@@ -45,7 +45,8 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
-      - uses: ioBroker/testing-action-adapter@v1
+      # - uses: ioBroker/testing-action-adapter@v1
+      - uses: mcm1957/testing-action-adapter@3a3265beda06eeda685b068bdcd3a12f48ee167b
         with:
           node-version: ${{ matrix.node-version }}
           os: ${{ matrix.os }}
