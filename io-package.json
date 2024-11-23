@@ -1,8 +1,21 @@
 {
     "common": {
         "name": "google-spreadsheet",
-        "version": "0.4.0",
+        "version": "0.5.0",
         "news": {
+            "0.5.0": {
+                "en": "Minimum node.js version is now 20, connection state can now be displayed",
+                "de": "Die Mindestversion von node.js ist jetzt 20, der Verbindungsstatus kann jetzt angezeigt werden",
+                "ru": "Минимальная версия node.js теперь равна 20, теперь можно отображать состояние соединения.",
+                "pt": "A versão mínima do node.js agora é 20, o estado da conexão agora pode ser exibido",
+                "nl": "De minimale node.js-versie is nu 20, de verbindingsstatus kan nu worden weergegeven",
+                "fr": "La version minimale de node.js est désormais de 20, l'état de la connexion peut désormais être affiché",
+                "it": "La versione minima di node.js ora è 20, lo stato della connessione ora può essere visualizzato",
+                "es": "La versión mínima de node.js ahora es 20, ahora se puede mostrar el estado de la conexión",
+                "pl": "Minimalna wersja node.js to teraz 20, można teraz wyświetlić stan połączenia",
+                "uk": "Мінімальна версія node.js тепер становить 20, тепер можна відображати стан підключення",
+                "zh-cn": "最低 Node.js 版本现在为 20，现在可以显示连接状态"
+            },
             "0.4.0": {
                 "en": "The private key is saved now encrypted",
                 "de": "Der private Schlüssel wird nun verschlüsselt gespeichert",
@@ -67,32 +80,6 @@
                 "pl": "Ulepszone rejestrowanie i czyszczenie kodu",
                 "uk": "Покращено журналювання та очищення коду",
                 "zh-cn": "改进的日志记录和代码清理"
-            },
-            "0.0.6": {
-                "en": "added parameter validation",
-                "de": "Parametervalidierung hinzugefügt",
-                "ru": "добавлена ​​проверка параметров",
-                "pt": "validação de parâmetro adicionado",
-                "nl": "parametervalidatie toegevoegd",
-                "fr": "validation des paramètres ajoutés",
-                "it": "aggiunta la convalida dei parametri",
-                "es": "validación de parámetros añadidos",
-                "pl": "dodano walidację parametrów",
-                "uk": "додана перевірка параметрів",
-                "zh-cn": "添加参数验证"
-            },
-            "0.0.5": {
-                "en": "added position for 'duplicate sheet'",
-                "de": "Position für „doppeltes Blatt“ hinzugefügt",
-                "ru": "добавлена ​​позиция для «дубликата листа»",
-                "pt": "posição adicionada para 'folha duplicada'",
-                "nl": "positie toegevoegd voor 'blad dupliceren'",
-                "fr": "position ajoutée pour 'feuille en double'",
-                "it": "aggiunta posizione per 'foglio duplicato'",
-                "es": "posición añadida para 'hoja duplicada'",
-                "pl": "dodano pozycję dla „duplikatu arkusza”",
-                "uk": "додано позицію для «дублікату аркуша»",
-                "zh-cn": "为“重复表”添加位置"
             }
         },
         "titleLang": {
