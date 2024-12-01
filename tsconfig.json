@@ -39,7 +39,7 @@
     ],
     "include": [
         "src/**/*.ts"
-    ],
+, "src/main.test.mts"    ],
     "exclude": [
         "build/**",
         "node_modules/**",

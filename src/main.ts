@@ -2,27 +2,22 @@
  * Created with @iobroker/create-adapter v2.4.0
  */
 
+import * as utils from '@iobroker/adapter-core';
 
-
-
-import * as utils from "@iobroker/adapter-core";
-
-import fs from "fs";
-import { SpreadsheetUtils } from "./lib/google";
-
+import fs from 'fs';
+import { SpreadsheetUtils } from './lib/google';
 
 class GoogleSpreadsheet extends utils.Adapter {
-
     private spreadsheet: SpreadsheetUtils;
 
     public constructor(options: Partial<utils.AdapterOptions> = {}) {
         super({
             ...options,
-            name: "google-spreadsheet",
+            name: 'google-spreadsheet',
         });
-        this.on("ready", this.onReady.bind(this));
-        this.on("message", this.onMessage.bind(this));
-        this.on("unload", this.onUnload.bind(this));
+        this.on('ready', this.onReady.bind(this));
+        this.on('message', this.onMessage.bind(this));
+        this.on('unload', this.onUnload.bind(this));
         this.spreadsheet = new SpreadsheetUtils(this.config, this.log);
     }
 
@@ -34,50 +29,42 @@ class GoogleSpreadsheet extends utils.Adapter {
 
         // The adapters config (in the instance object everything under the attribute "native") is accessible via
         // this.config:
-        this.log.debug("config spreadsheetId: " + this.config.spreadsheetId);
+        this.log.debug(`config spreadsheetId: ${this.config.spreadsheetId}`);
         if (this.config.privateKey && this.config.serviceAccountEmail && this.config.spreadsheetId) {
-            this.setState("info.connection", true, true);
-            this.log.info("Google-spreadsheet adapter configured");
+            await this.setState('info.connection', true, true);
+            this.log.info('Google-spreadsheet adapter configured');
         } else {
-            this.setState("info.connection", false, true);
-            this.log.warn("Google-spreadsheet adapter not configured");
+            await this.setState('info.connection', false, true);
+            this.log.warn('Google-spreadsheet adapter not configured');
         }
-        this.encryptPrivateKeyIfNeeded();
+        await this.encryptPrivateKeyIfNeeded();
 
         this.spreadsheet = new SpreadsheetUtils(this.config, this.log);
-
     }
 
-    private encryptPrivateKeyIfNeeded(): void{
-        if (this.config.privateKey
-            && this.config.privateKey.length>0
-        ){
-            this.getForeignObjectAsync(`system.adapter.${this.name}.${this.instance}`).then(
-                data=>{
-                    if (data
-                            && data.native
-                            && data.native.privateKey
-                            && !data.native.privateKey.startsWith("$/aes")){
-                        this.config.privateKey=data.native.privateKey;
-                        data.native.privateKey=this.encrypt(data.native.privateKey);
-                        this.extendForeignObjectAsync(`system.adapter.${this.name}.${this.instance}`, data).then(()=>
-                            this.log.info("privateKey is stored now encrypted")
-                        );
-                    }
+    private async encryptPrivateKeyIfNeeded(): Promise<void> {
+        if (this.config.privateKey && this.config.privateKey.length > 0) {
+            await this.getForeignObjectAsync(`system.adapter.${this.name}.${this.instance}`).then(data => {
+                if (data && data.native && data.native.privateKey && !data.native.privateKey.startsWith('$/aes')) {
+                    this.config.privateKey = data.native.privateKey;
+                    data.native.privateKey = this.encrypt(data.native.privateKey);
+                    this.extendForeignObject(`system.adapter.${this.name}.${this.instance}`, data);
+                    this.log.info('privateKey is stored now encrypted');
                 }
-            );
+            });
         }
     }
 
     /**
      * Is called when adapter shuts down - callback has to be called under any circumstances!
+     *
+     * @param callback Callback so the adapter can shut down
      */
     private onUnload(callback: () => void): void {
         try {
-
             callback();
         } catch (e) {
-            this.log.error("Error during unload: " + JSON.stringify(e));
+            this.log.error(`Error during unload: ${JSON.stringify(e)}`);
             callback();
         }
     }
@@ -88,69 +75,85 @@ class GoogleSpreadsheet extends utils.Adapter {
     //  * Using this method requires "common.messagebox" property to be set to true in io-package.json
     //  */
     private onMessage(obj: ioBroker.Message): void {
-        if (typeof obj === "object" && obj.message) {
+        if (typeof obj === 'object' && obj.message) {
             switch (obj.command) {
-                case "append": {
-                    this.log.debug("append to spreadsheet");
+                case 'append': {
+                    this.log.debug('append to spreadsheet');
                     this.append(obj);
 
-                    if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+                    if (obj.callback) {
+                        this.sendTo(obj.from, obj.command, 'Message received', obj.callback);
+                    }
                     break;
                 }
-                case "deleteRows": {
-                    this.log.debug("delete rows from spreadsheet");
+                case 'deleteRows': {
+                    this.log.debug('delete rows from spreadsheet');
                     this.deleteRows(obj);
 
-                    if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+                    if (obj.callback) {
+                        this.sendTo(obj.from, obj.command, 'Message received', obj.callback);
+                    }
                     break;
                 }
-                case "createSheet": {
-                    this.log.debug("create sheet");
+                case 'createSheet': {
+                    this.log.debug('create sheet');
                     this.createSheet(obj);
 
-                    if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+                    if (obj.callback) {
+                        this.sendTo(obj.from, obj.command, 'Message received', obj.callback);
+                    }
                     break;
                 }
-                case "deleteSheet": {
-                    this.log.debug("delete sheet");
+                case 'deleteSheet': {
+                    this.log.debug('delete sheet');
                     this.deleteSheet(obj);
 
-                    if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+                    if (obj.callback) {
+                        this.sendTo(obj.from, obj.command, 'Message received', obj.callback);
+                    }
                     break;
                 }
-                case "duplicateSheet": {
-                    this.log.debug("duplicate sheet");
+                case 'duplicateSheet': {
+                    this.log.debug('duplicate sheet');
                     this.duplicateSheet(obj);
 
-                    if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+                    if (obj.callback) {
+                        this.sendTo(obj.from, obj.command, 'Message received', obj.callback);
+                    }
                     break;
                 }
-                case "upload": {
-                    this.log.debug("upload file");
+                case 'upload': {
+                    this.log.debug('upload file');
                     this.upload(obj);
 
-                    if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+                    if (obj.callback) {
+                        this.sendTo(obj.from, obj.command, 'Message received', obj.callback);
+                    }
                     break;
                 }
-                case "writeCell": {
-                    this.log.debug("write data to single cell");
+                case 'writeCell': {
+                    this.log.debug('write data to single cell');
                     this.writeCell(obj);
 
-                    if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+                    if (obj.callback) {
+                        this.sendTo(obj.from, obj.command, 'Message received', obj.callback);
+                    }
                     break;
                 }
-                case "readCell": {
-                    this.log.debug("read single cell");
+                case 'readCell': {
+                    this.log.debug('read single cell');
                     this.readCell(obj)
                         .then((result: any) => {
-                            if (obj.callback) this.sendTo(obj.from, obj.command, result, obj.callback);
+                            if (obj.callback) {
+                                this.sendTo(obj.from, obj.command, result, obj.callback);
+                            }
                         })
-                        .catch(error=>this.log.error("Cannot read cell: "+error));
+                        .catch(error => this.log.error(`Cannot read cell: ${error}`));
 
                     break;
                 }
                 default: {
-                    this.log.warn("unknown command: " + obj.command);
+                    this.log.warn(`unknown command: ${obj.command}`);
                     break;
                 }
             }
@@ -159,54 +162,55 @@ class GoogleSpreadsheet extends utils.Adapter {
 
     private upload(message: Record<string, any>): void {
         const messageData: Record<string, any> = message.message as Record<string, any>;
-        if (this.missingParameters(["source", "target", "parentFolder"], messageData)) {
+        if (this.missingParameters(['target', 'parentFolder'], messageData)) {
             return;
         }
-        this.spreadsheet.upload(messageData["source"], messageData["target"], messageData["parentFolder"], fs.createReadStream(messageData["source"]));
+        this.spreadsheet.upload(messageData.target, messageData.parentFolder, fs.createReadStream(messageData.source));
     }
     private append(message: Record<string, any>): void {
         const messageData: Record<string, any> = message.message as Record<string, any>;
-        if (this.missingParameters(["sheetName", "data"], messageData)) {
+        if (this.missingParameters(['sheetName', 'data'], messageData)) {
             return;
         }
-        this.spreadsheet.append(messageData["sheetName"], messageData["data"]);
+        this.spreadsheet.append(messageData.sheetName, messageData.data);
     }
     private writeCell(message: Record<string, any>): void {
         const messageData: Record<string, any> = message.message as Record<string, any>;
-        if (this.missingParameters(["sheetName", "cell", "data"], messageData)) {
+        if (this.missingParameters(['sheetName', 'cell', 'data'], messageData)) {
             return;
         }
         //Check that cell is a valid pattern
-        const cellPattern = new RegExp("[A-Z]+[0-9]+()");
-        if (!cellPattern.test(messageData["cell"])) {
-            this.log.error("Invalid cell pattern "+messageData["cell"]+". Expected: A1");
+        const cellPattern = new RegExp('[A-Z]+[0-9]+()');
+        if (!cellPattern.test(messageData.cell)) {
+            this.log.error(`Invalid cell pattern ${messageData.cell}. Expected: A1`);
             return;
         }
-        this.spreadsheet.writeCell(messageData["sheetName"], messageData["cell"], messageData["data"]);
+        this.spreadsheet.writeCell(messageData.sheetName, messageData.cell, messageData.data);
     }
     private async readCell(message: Record<string, any>): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             const messageData: Record<string, any> = message.message as Record<string, any>;
-            if (this.missingParameters(["sheetName", "cell"], messageData)) {
+            if (this.missingParameters(['sheetName', 'cell'], messageData)) {
                 return;
             }
             //Check that cell is a valid pattern
-            const cellPattern = new RegExp("[A-Z]+[0-9]+()");
-            if (!cellPattern.test(messageData["cell"])) {
-                this.log.error("Invalid cell pattern "+messageData["cell"]+". Expected: A1");
+            const cellPattern = new RegExp('[A-Z]+[0-9]+()');
+            if (!cellPattern.test(messageData.cell)) {
+                this.log.error(`Invalid cell pattern ${messageData.cell}. Expected: A1`);
                 return;
             }
-            this.spreadsheet.readCell(messageData["sheetName"], messageData["cell"])
-                .then(result=>resolve(result))
-                .catch(error=>reject(error));
+            this.spreadsheet
+                .readCell(messageData.sheetName, messageData.cell)
+                .then(result => resolve(result))
+                .catch(error => reject(new Error(error)));
         });
     }
     public deleteRows(message: ioBroker.Message): void {
         const messageData: Record<string, any> = message.message as Record<string, any>;
-        if (this.missingParameters(["sheetName", "start", "end"], messageData)) {
+        if (this.missingParameters(['sheetName', 'start', 'end'], messageData)) {
             return;
         }
-        this.spreadsheet.deleteRows(messageData["sheetName"], messageData["start"], messageData["end"]);
+        this.spreadsheet.deleteRows(messageData.sheetName, messageData.start, messageData.end);
     }
     public createSheet(message: ioBroker.Message): void {
         this.spreadsheet.createSheet(message.message as string);
@@ -216,27 +220,24 @@ class GoogleSpreadsheet extends utils.Adapter {
     }
     public duplicateSheet(message: ioBroker.Message): void {
         const messageData: Record<string, any> = message.message as Record<string, any>;
-        if (this.missingParameters(["source", "target", "index"], messageData)) {
+        if (this.missingParameters(['source', 'target', 'index'], messageData)) {
             return;
         }
-        this.spreadsheet.duplicateSheet(messageData["source"], messageData["target"], messageData["index"]);
+        this.spreadsheet.duplicateSheet(messageData.source, messageData.target, messageData.index);
     }
 
     private missingParameters(neededParameters: string[], messageData: Record<string, any>): boolean {
-
         let result = false;
         for (const parameter of neededParameters) {
             if (Object.keys(messageData).indexOf(parameter) == -1) {
                 result = true;
-                this.log.error("The parameter '" + parameter + "' is required but was not passed!");
+                this.log.error(`The parameter '${parameter}' is required but was not passed!`);
             }
         }
 
         return result;
     }
-
 }
-
 
 if (require.main !== module) {
     // Export the constructor in compact mode
