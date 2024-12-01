@@ -48,9 +48,8 @@ class GoogleSpreadsheet extends utils.Adapter {
                 if (data && data.native && data.native.privateKey && !data.native.privateKey.startsWith('$/aes')) {
                     this.config.privateKey = data.native.privateKey;
                     data.native.privateKey = this.encrypt(data.native.privateKey);
-                    this.extendForeignObject(`system.adapter.${this.name}.${this.instance}`, data).then(() =>
-                        this.log.info('privateKey is stored now encrypted'),
-                    );
+                    this.extendForeignObject(`system.adapter.${this.name}.${this.instance}`, data);
+                    this.log.info('privateKey is stored now encrypted');
                 }
             });
         }
