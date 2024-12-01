@@ -1,5 +1,6 @@
 'use strict';
 var Blockly = Blockly || undefined;
+var getInstances = getInstances || undefined;
 
 Blockly.Words['google-spreadsheet_duplicate-sheet_duplicate-in'] = { en: 'duplicate in ', de: 'dupliziere in' };
 Blockly.Words['google-spreadsheet_duplicate-sheet_sheetName'] = {

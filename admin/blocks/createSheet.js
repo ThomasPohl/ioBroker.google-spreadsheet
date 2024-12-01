@@ -1,5 +1,6 @@
 'use strict';
 var Blockly = Blockly || undefined;
+var getInstances = getInstances || undefined;
 
 /// ---Create sheet  --------------------------------------------------
 Blockly.Words['google-spreadsheet_create-sheet_create-in'] = { en: 'create in', de: 'erstelle in' };

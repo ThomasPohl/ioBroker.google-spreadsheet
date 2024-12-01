@@ -2,6 +2,8 @@
 
 var goog = goog || undefined;
 var Blockly = Blockly || undefined;
+var main = main || undefined;
+var document = document || undefined;
 
 if (typeof goog !== 'undefined') {
     goog.provide('Blockly.JavaScript.Sendto');
@@ -11,6 +13,7 @@ if (typeof goog !== 'undefined') {
 
 Blockly.Words['google-spreadsheet_anyInstance'] = { en: 'all instances', de: 'allen Instanzen' };
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 function getInstances(withAny = true) {
     var options = [];
     if (withAny) {
@@ -33,6 +36,7 @@ function getInstances(withAny = true) {
     }
     return options;
 }
+/* eslint-enable @typescript-eslint/no-unused-vars */
 
 function loadJS(filename) {
     console.log(`Loading ${filename}`);

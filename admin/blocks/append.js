@@ -1,8 +1,8 @@
 'use strict';
 var Blockly = Blockly || undefined;
+var getInstances = getInstances || undefined;
 
 /// --- Append  --------------------------------------------------
-
 Blockly.Words['google-spreadsheet_append_add-to'] = { en: 'append to', de: 'füge zu' };
 Blockly.Words['google-spreadsheet_append_on-sheetName'] = { en: 'on sheet', de: 'auf Tabellenblatt' };
 Blockly.Words['google-spreadsheet_append_data'] = { en: 'the data', de: 'die Daten' };

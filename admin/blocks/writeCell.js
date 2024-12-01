@@ -1,5 +1,6 @@
 'use strict';
 var Blockly = Blockly || undefined;
+var getInstances = getInstances || undefined;
 
 /// --- Write Cell  --------------------------------------------------
 
