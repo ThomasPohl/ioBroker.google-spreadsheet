@@ -1,9 +1,9 @@
 'use strict';
 
-var goog = goog || undefined;
-var Blockly = Blockly || undefined;
-var main = main || undefined;
-var document = document || undefined;
+/*global goog:true */
+/*global Blockly:true */
+/*global main:true */
+/*global document:true */
 
 if (typeof goog !== 'undefined') {
     goog.provide('Blockly.JavaScript.Sendto');

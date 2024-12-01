@@ -1,6 +1,6 @@
 'use strict';
-var Blockly = Blockly || undefined;
-var getInstances = getInstances || undefined;
+/*global Blockly:true */
+/*global getInstances:true */
 
 /// --- Delete rows  --------------------------------------------------
 

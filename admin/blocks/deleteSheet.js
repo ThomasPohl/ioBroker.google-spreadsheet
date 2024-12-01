@@ -1,6 +1,6 @@
 'use strict';
-var Blockly = Blockly || undefined;
-var getInstances = getInstances || undefined;
+/*global Blockly:true */
+/*global getInstances:true */
 
 Blockly.Words['google-spreadsheet_delete-sheet_delete-on'] = { en: 'delete in', de: 'lösche in' };
 Blockly.Words['google-spreadsheet_delete-sheet_sheetName'] = {
