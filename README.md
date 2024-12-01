@@ -1,14 +1,23 @@
 ![Logo](admin/google-spreadsheet.png)
 # ioBroker.google-spreadsheet
 
-[![NPM version](https://img.shields.io/npm/v/iobroker.google-spreadsheet.svg)](https://www.npmjs.com/package/iobroker.google-spreadsheet)
+[![GitHub license](https://img.shields.io/github/license/ThomasPohl/ioBroker.google-spreadsheet)](https://github.com/ThomasPohl/ioBroker.google-spreadsheet/blob/master/LICENSE)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.google-spreadsheet.svg)](https://www.npmjs.com/package/iobroker.google-spreadsheet)
-![Number of Installations](https://iobroker.live/badges/google-spreadsheet-installed.svg)
+![GitHub repo size](https://img.shields.io/github/repo-size/ThomasPohl/ioBroker.google-spreadsheet)
+[![Translation status](https://weblate.iobroker.net/widgets/adapters/-/google-spreadsheet/svg-badge.svg)](https://weblate.iobroker.net/engage/adapters/?utm_source=widget)</br>
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/ThomasPohl/ioBroker.google-spreadsheet)
+![GitHub commits since latest release (by date)](https://img.shields.io/github/commits-since/ThomasPohl/ioBroker.google-spreadsheet/latest)
+![GitHub last commit](https://img.shields.io/github/last-commit/ThomasPohl/ioBroker.google-spreadsheet)
+![GitHub issues](https://img.shields.io/github/issues/ThomasPohl/ioBroker.google-spreadsheet)
+</br>
+**Version:** </br>
+[![NPM version](https://img.shields.io/npm/v/iobroker.google-spreadsheet.svg)](https://www.npmjs.com/package/iobroker.google-spreadsheet)
 ![Current version in stable repository](https://iobroker.live/badges/google-spreadsheet-stable.svg)
-
-[![NPM](https://nodei.co/npm/iobroker.google-spreadsheet.png?downloads=true)](https://nodei.co/npm/iobroker.google-spreadsheet/)
-
-**Tests:** ![Test and Release](https://github.com/ThomasPohl/ioBroker.google-spreadsheet/workflows/Test%20and%20Release/badge.svg)
+![Number of Installations](https://iobroker.live/badges/google-spreadsheet-installed.svg)
+</br>
+**Tests:** </br>
+[![Test and Release](https://github.com/ThomasPohl/ioBroker.google-spreadsheet/actions/workflows/test-and-release.yml/badge.svg)](https://github.com/ThomasPohl/ioBroker.google-spreadsheet/actions/workflows/test-and-release.yml)
+[![CodeQL](https://github.com/ThomasPohl/ioBroker.google-spreadsheet/actions/workflows/codeql.yml/badge.svg)](https://github.com/ThomasPohl/ioBroker.google-spreadsheet/actions/workflows/codeql.yml)
 
 ## google-spreadsheet adapter for ioBroker
 
