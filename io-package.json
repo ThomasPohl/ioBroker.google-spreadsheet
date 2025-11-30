@@ -176,7 +176,6 @@
                     "pl": "Łączy się z serwerem Google"
                 },
                 "type": "boolean",
-                "role": "indicator.connected",
                 "read": true,
                 "write": false,
                 "def": false
