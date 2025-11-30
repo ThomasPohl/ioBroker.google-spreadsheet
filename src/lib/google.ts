@@ -1,6 +1,5 @@
 import { google } from 'googleapis';
 import type { sheets_v4 } from 'googleapis/build/src/apis/sheets/v4';
-import { JWT } from 'google-auth-library';
 /**
  * This class provides utility functions to interact with Google Sheets
  *
