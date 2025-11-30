@@ -39,39 +39,39 @@ class GoogleSpreadsheet extends utils.Adapter {
    * Is called when databases are connected and adapter received configuration.
    */
   async onReady() {
-    this.log.debug("config spreadsheetId: " + this.config.spreadsheetId);
+    this.log.debug(`config spreadsheetId: ${this.config.spreadsheetId}`);
     if (this.config.privateKey && this.config.serviceAccountEmail && this.config.spreadsheetId) {
-      this.setState("info.connection", true, true);
+      await this.setState("info.connection", true, true);
       this.log.info("Google-spreadsheet adapter configured");
     } else {
-      this.setState("info.connection", false, true);
+      await this.setState("info.connection", false, true);
       this.log.warn("Google-spreadsheet adapter not configured");
     }
-    this.encryptPrivateKeyIfNeeded();
+    await this.encryptPrivateKeyIfNeeded();
     this.spreadsheet = new import_google.SpreadsheetUtils(this.config, this.log);
   }
-  encryptPrivateKeyIfNeeded() {
+  async encryptPrivateKeyIfNeeded() {
     if (this.config.privateKey && this.config.privateKey.length > 0) {
-      this.getForeignObjectAsync(`system.adapter.${this.name}.${this.instance}`).then(
-        (data) => {
-          if (data && data.native && data.native.privateKey && !data.native.privateKey.startsWith("$/aes")) {
-            this.config.privateKey = data.native.privateKey;
-            data.native.privateKey = this.encrypt(data.native.privateKey);
-            this.extendForeignObjectAsync(`system.adapter.${this.name}.${this.instance}`, data).then(
-              () => this.log.info("privateKey is stored now encrypted")
-            );
-          }
+      await this.getForeignObjectAsync(`system.adapter.${this.name}.${this.instance}`).then((data) => {
+        if (data && data.native && data.native.privateKey && !data.native.privateKey.startsWith("$/aes")) {
+          this.config.privateKey = data.native.privateKey;
+          data.native.privateKey = this.encrypt(data.native.privateKey);
+          this.extendForeignObject(`system.adapter.${this.name}.${this.instance}`, data);
+          this.log.info("privateKey is stored now encrypted");
         }
-      );
+      });
     }
   }
   /**
    * Is called when adapter shuts down - callback has to be called under any circumstances!
+   *
+   * @param callback Callback so the adapter can shut down
    */
   onUnload(callback) {
     try {
       callback();
     } catch (e) {
+      this.log.error(`Error during unload: ${JSON.stringify(e)}`);
       callback();
     }
   }
@@ -86,62 +86,70 @@ class GoogleSpreadsheet extends utils.Adapter {
         case "append": {
           this.log.debug("append to spreadsheet");
           this.append(obj);
-          if (obj.callback)
+          if (obj.callback) {
             this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+          }
           break;
         }
         case "deleteRows": {
           this.log.debug("delete rows from spreadsheet");
           this.deleteRows(obj);
-          if (obj.callback)
+          if (obj.callback) {
             this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+          }
           break;
         }
         case "createSheet": {
           this.log.debug("create sheet");
           this.createSheet(obj);
-          if (obj.callback)
+          if (obj.callback) {
             this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+          }
           break;
         }
         case "deleteSheet": {
           this.log.debug("delete sheet");
           this.deleteSheet(obj);
-          if (obj.callback)
+          if (obj.callback) {
             this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+          }
           break;
         }
         case "duplicateSheet": {
           this.log.debug("duplicate sheet");
           this.duplicateSheet(obj);
-          if (obj.callback)
+          if (obj.callback) {
             this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+          }
           break;
         }
         case "upload": {
           this.log.debug("upload file");
           this.upload(obj);
-          if (obj.callback)
+          if (obj.callback) {
             this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+          }
           break;
         }
         case "writeCell": {
           this.log.debug("write data to single cell");
           this.writeCell(obj);
-          if (obj.callback)
+          if (obj.callback) {
             this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+          }
           break;
         }
         case "readCell": {
           this.log.debug("read single cell");
           this.readCell(obj).then((result) => {
-            if (obj.callback)
+            if (obj.callback) {
               this.sendTo(obj.from, obj.command, result, obj.callback);
-          }).catch((error) => this.log.error("Cannot read cell: " + error));
+            }
+          }).catch((error) => this.log.error(`Cannot read cell: ${error}`));
           break;
         }
         default: {
-          this.log.warn("unknown command: " + obj.command);
+          this.log.warn(`unknown command: ${obj.command}`);
           break;
         }
       }
@@ -149,17 +157,17 @@ class GoogleSpreadsheet extends utils.Adapter {
   }
   upload(message) {
     const messageData = message.message;
-    if (this.missingParameters(["source", "target", "parentFolder"], messageData)) {
+    if (this.missingParameters(["target", "parentFolder"], messageData)) {
       return;
     }
-    this.spreadsheet.upload(messageData["source"], messageData["target"], messageData["parentFolder"], import_fs.default.createReadStream(messageData["source"]));
+    this.spreadsheet.upload(messageData.target, messageData.parentFolder, import_fs.default.createReadStream(messageData.source));
   }
   append(message) {
     const messageData = message.message;
     if (this.missingParameters(["sheetName", "data"], messageData)) {
       return;
     }
-    this.spreadsheet.append(messageData["sheetName"], messageData["data"]);
+    this.spreadsheet.append(messageData.sheetName, messageData.data);
   }
   writeCell(message) {
     const messageData = message.message;
@@ -167,11 +175,11 @@ class GoogleSpreadsheet extends utils.Adapter {
       return;
     }
     const cellPattern = new RegExp("[A-Z]+[0-9]+()");
-    if (!cellPattern.test(messageData["cell"])) {
-      this.log.error("Invalid cell pattern " + messageData["cell"] + ". Expected: A1");
+    if (!cellPattern.test(messageData.cell)) {
+      this.log.error(`Invalid cell pattern ${messageData.cell}. Expected: A1`);
       return;
     }
-    this.spreadsheet.writeCell(messageData["sheetName"], messageData["cell"], messageData["data"]);
+    this.spreadsheet.writeCell(messageData.sheetName, messageData.cell, messageData.data);
   }
   async readCell(message) {
     return new Promise((resolve, reject) => {
@@ -180,11 +188,11 @@ class GoogleSpreadsheet extends utils.Adapter {
         return;
       }
       const cellPattern = new RegExp("[A-Z]+[0-9]+()");
-      if (!cellPattern.test(messageData["cell"])) {
-        this.log.error("Invalid cell pattern " + messageData["cell"] + ". Expected: A1");
+      if (!cellPattern.test(messageData.cell)) {
+        this.log.error(`Invalid cell pattern ${messageData.cell}. Expected: A1`);
         return;
       }
-      this.spreadsheet.readCell(messageData["sheetName"], messageData["cell"]).then((result) => resolve(result)).catch((error) => reject(error));
+      this.spreadsheet.readCell(messageData.sheetName, messageData.cell).then((result) => resolve(result)).catch((error) => reject(new Error(error)));
     });
   }
   deleteRows(message) {
@@ -192,7 +200,7 @@ class GoogleSpreadsheet extends utils.Adapter {
     if (this.missingParameters(["sheetName", "start", "end"], messageData)) {
       return;
     }
-    this.spreadsheet.deleteRows(messageData["sheetName"], messageData["start"], messageData["end"]);
+    this.spreadsheet.deleteRows(messageData.sheetName, messageData.start, messageData.end);
   }
   createSheet(message) {
     this.spreadsheet.createSheet(message.message);
@@ -205,14 +213,14 @@ class GoogleSpreadsheet extends utils.Adapter {
     if (this.missingParameters(["source", "target", "index"], messageData)) {
       return;
     }
-    this.spreadsheet.duplicateSheet(messageData["source"], messageData["target"], messageData["index"]);
+    this.spreadsheet.duplicateSheet(messageData.source, messageData.target, messageData.index);
   }
   missingParameters(neededParameters, messageData) {
     let result = false;
     for (const parameter of neededParameters) {
       if (Object.keys(messageData).indexOf(parameter) == -1) {
         result = true;
-        this.log.error("The parameter '" + parameter + "' is required but was not passed!");
+        this.log.error(`The parameter '${parameter}' is required but was not passed!`);
       }
     }
     return result;

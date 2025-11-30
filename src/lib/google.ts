@@ -1,6 +1,5 @@
 import { google } from 'googleapis';
 import type { sheets_v4 } from 'googleapis/build/src/apis/sheets/v4';
-import { JWT } from 'google-auth-library';
 /**
  * This class provides utility functions to interact with Google Sheets
  *
@@ -71,9 +70,11 @@ export class SpreadsheetUtils {
     }
 
     private init(): sheets_v4.Sheets {
-        const auth = new JWT({
-            email: this.config.serviceAccountEmail,
-            key: this.formatPrivateKey(this.config.privateKey),
+        const auth = new google.auth.GoogleAuth({
+            credentials: {
+                client_email: this.config.serviceAccountEmail,
+                private_key: this.formatPrivateKey(this.config.privateKey),
+            },
             scopes: ['https://www.googleapis.com/auth/spreadsheets'],
         });
         return google.sheets({ version: 'v4', auth });
@@ -171,10 +172,12 @@ export class SpreadsheetUtils {
      * @param filecontent Data of the file
      */
     public upload(target: string, parentFolder: string, filecontent: any): void {
-        const auth = new JWT({
-            email: this.config.serviceAccountEmail,
-            key: this.config.privateKey,
-            scopes: ['https://www.googleapis.com/auth/drive.file'],
+        const auth = new google.auth.GoogleAuth({
+            credentials: {
+                client_email: this.config.serviceAccountEmail,
+                private_key: this.formatPrivateKey(this.config.privateKey),
+            },
+            scopes: ['https://www.googleapis.com/auth/spreadsheets'],
         });
         const driveapi = google.drive({ version: 'v3', auth });
 
