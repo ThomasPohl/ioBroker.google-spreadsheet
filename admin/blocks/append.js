@@ -10,10 +10,7 @@ Blockly.Words['google-spreadsheet_append_add-to-suffix'] = { en: '', de: 'hinzu'
 
 Blockly.Sendto.blocks['google-spreadsheet.append'] =
     '<block type="google-spreadsheet.append">' +
-    '     <value name="NAME">' +
-    '     </value>' +
-    '     <value name="INSTANCE">' +
-    '     </value>' +
+    '     <field name="INSTANCE"></field>' +
     '     <value name="SHEET_NAME">' +
     '         <shadow type="text">' +
     '             <field name="TEXT">text</field>' +
@@ -45,13 +42,13 @@ Blockly.Blocks['google-spreadsheet.append'] = {
     },
 };
 
-Blockly.JavaScript['google-spreadsheet.append'] = function (block) {
-    var dropdown_instance = block.getFieldValue('INSTANCE');
-    var data = Blockly.JavaScript.valueToCode(block, 'DATA', Blockly.JavaScript.ORDER_ATOMIC);
+Blockly.JavaScript.forBlock['google-spreadsheet.append'] = function (block) {
+    const dropdown_instance = block.getFieldValue('INSTANCE');
+    let data = Blockly.JavaScript.valueToCode(block, 'DATA', Blockly.JavaScript.ORDER_ATOMIC);
     if (!data) {
         data = '{}';
     }
-    var sheetName = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
+    const sheetName = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
 
     return `sendTo("google-spreadsheet${dropdown_instance}", "append", {"sheetName":${sheetName}, "data":${data}});\n`;
 };

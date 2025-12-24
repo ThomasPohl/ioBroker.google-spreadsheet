@@ -307,6 +307,48 @@ export class SpreadsheetUtils {
     }
 
     /**
+     * Write multiple cells in a Google Spreadsheet
+     *
+     * @param cells Array of objects: { sheetName, cell, data }
+     */
+    public writeCells(cells: Array<{ sheetName: string; cell: string; data: any }>): void {
+        const sheets = this.init();
+        // Gruppiere nach sheetName, da batchUpdate mehrere Bereiche pro Sheet erlaubt
+        const grouped: { [sheet: string]: Array<{ cell: string; data: any }> } = {};
+        for (const cellObj of cells) {
+            if (!grouped[cellObj.sheetName]) grouped[cellObj.sheetName] = [];
+            grouped[cellObj.sheetName].push({ cell: cellObj.cell, data: cellObj.data });
+        }
+        const data: Array<{ range: string; values: any[][] }> = [];
+        for (const sheetName in grouped) {
+            for (const entry of grouped[sheetName]) {
+                let cell = entry.cell;
+                if (cell.startsWith("'") && cell.endsWith("'")) {
+                    cell = cell.substring(1, cell.length - 1);
+                }
+                data.push({
+                    range: `${sheetName}!${cell}`,
+                    values: this.prepareValues(entry.data),
+                });
+            }
+        }
+        sheets.spreadsheets.values
+            .batchUpdate({
+                spreadsheetId: this.config.spreadsheetId,
+                requestBody: {
+                    valueInputOption: 'USER_ENTERED',
+                    data,
+                },
+            })
+            .then(() => {
+                this.log.debug('Cells successfully written to google spreadsheet');
+            })
+            .catch(error => {
+                this.log.error(`Error while writing cells to Google Spreadsheet:${error}`);
+            });
+    }
+
+    /**
      * Read data from a cell in a Google Spreadsheet
      *
      * @param sheetName Name of the sheet

@@ -11,10 +11,7 @@ Blockly.Words['google-spreadsheet_create-sheet_sheet-name'] = {
 
 Blockly.Sendto.blocks['google-spreadsheet.createSheet'] =
     '<block type="google-spreadsheet.createSheet">' +
-    '     <value name="NAME">' +
-    '     </value>' +
-    '     <value name="INSTANCE">' +
-    '     </value>' +
+    '     <field name="INSTANCE"></field>' +
     '     <value name="SHEET_NAME">' +
     '         <shadow type="text">' +
     '             <field name="TEXT">text</field>' +
@@ -44,9 +41,9 @@ Blockly.Blocks['google-spreadsheet.createSheet'] = {
     },
 };
 
-Blockly.JavaScript['google-spreadsheet.createSheet'] = function (block) {
-    var dropdown_instance = block.getFieldValue('INSTANCE');
-    var data = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
+Blockly.JavaScript.forBlock['google-spreadsheet.createSheet'] = function (block) {
+    const dropdown_instance = block.getFieldValue('INSTANCE');
+    const data = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
 
     return `sendTo("google-spreadsheet${dropdown_instance}", "createSheet", ${data});\n`;
 };

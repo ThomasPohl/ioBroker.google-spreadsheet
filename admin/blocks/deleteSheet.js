@@ -10,8 +10,7 @@ Blockly.Words['google-spreadsheet_delete-sheet_sheetName'] = {
 
 Blockly.Sendto.blocks['google-spreadsheet.deleteSheet'] =
     '<block type="google-spreadsheet.deleteSheet">' +
-    '     <value name="INSTANCE">' +
-    '     </value>' +
+    '     <field name="INSTANCE"></field>' +
     '     <value name="SHEET_NAME">' +
     '         <shadow type="text">' +
     '             <field name="TEXT">text</field>' +
@@ -21,7 +20,7 @@ Blockly.Sendto.blocks['google-spreadsheet.deleteSheet'] =
 
 Blockly.Blocks['google-spreadsheet.deleteSheet'] = {
     init: function () {
-        var instances = getInstances();
+        const instances = getInstances();
 
         this.appendDummyInput('INSTANCE')
             .appendField(Blockly.Translate('google-spreadsheet_delete-sheet_delete-on'))
@@ -39,9 +38,9 @@ Blockly.Blocks['google-spreadsheet.deleteSheet'] = {
     },
 };
 
-Blockly.JavaScript['google-spreadsheet.deleteSheet'] = function (block) {
-    var dropdown_instance = block.getFieldValue('INSTANCE');
-    var data = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
+Blockly.JavaScript.forBlock['google-spreadsheet.deleteSheet'] = function (block) {
+    const dropdown_instance = block.getFieldValue('INSTANCE');
+    const data = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
 
     return `sendTo("google-spreadsheet${dropdown_instance}", "deleteSheet", ${data});\n`;
 };
