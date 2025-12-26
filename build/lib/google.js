@@ -225,10 +225,10 @@ class SpreadsheetUtils {
     });
   }
   /**
-  * Delete multiple sheets from the Google Spreadsheet
-  *
-  * @param titles The titles of the sheets to delete
-  */
+   * Delete multiple sheets from the Google Spreadsheet
+   *
+   * @param titles The titles of the sheets to delete
+   */
   deleteSheets(titles) {
     const sheets = this.init();
     sheets.spreadsheets.get({ spreadsheetId: this.config.spreadsheetId }).then((spreadsheet) => {

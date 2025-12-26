@@ -1,13 +1,12 @@
 'use strict';
-/*global Blockly:true */
-/*global getInstances:true */
+/*global Blockly */
+/*global getInstances */
 
 Blockly.Words['google-spreadsheet_delete-sheets_delete-on'] = { en: 'delete sheets in', de: 'lösche Blätter in' };
 Blockly.Words['google-spreadsheet_delete-sheets_sheetNames'] = {
     en: 'the sheets with names (array)',
     de: 'die Blätter mit Namen (Array)',
 };
-
 
 Blockly.Sendto.blocks['google-spreadsheet.deleteSheets'] =
     '<block type="google-spreadsheet.deleteSheets">' +
@@ -16,7 +15,6 @@ Blockly.Sendto.blocks['google-spreadsheet.deleteSheets'] =
     '         <shadow type="lists_create_with"></shadow>' +
     '     </value>' +
     '</block>';
-
 
 Blockly.Blocks['google-spreadsheet.deleteSheets'] = {
     init: function () {
@@ -40,22 +38,7 @@ Blockly.Blocks['google-spreadsheet.deleteSheets'] = {
     },
 };
 
-Blockly.Extensions.registerMutator('google-spreadsheet_deleteSheets_mutator', {
-    mutationToDom: function () {
-        const container = document.createElement('mutation');
-        container.setAttribute('items', this.itemCount_);
-        return container;
-    },
-    domToMutation: function (xmlElement) {
-        this.itemCount_ = parseInt(xmlElement.getAttribute('items'), 10) || 1;
-        this.updateShape_();
-    },
-    updateShape_: Blockly.Blocks['google-spreadsheet.deleteSheets'].updateShape_
-}, undefined, ['']);
-
-
 Blockly.Blocks['google-spreadsheet.deleteSheets'].mutator = 'google-spreadsheet_deleteSheets_mutator';
-
 
 Blockly.JavaScript.forBlock['google-spreadsheet.deleteSheets'] = function (block) {
     const dropdown_instance = block.getFieldValue('INSTANCE');

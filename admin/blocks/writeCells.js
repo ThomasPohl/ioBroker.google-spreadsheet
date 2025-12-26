@@ -7,7 +7,6 @@
 Blockly.Words['google-spreadsheet_writeCells_write-to'] = { en: 'write cells to', de: 'Schreibe Zellen in ' };
 Blockly.Words['google-spreadsheet_writeCells_cells'] = { en: 'cells', de: 'Zellen' };
 
-
 Blockly.Sendto.blocks['google-spreadsheet.writeCells'] =
     '<block type="google-spreadsheet.writeCells">' +
     '     <field name="INSTANCE"></field>' +
@@ -36,7 +35,6 @@ Blockly.Sendto.blocks['google-spreadsheet.addCell'] =
 
 Blockly.Blocks['google-spreadsheet.writeCells'] = {
     init: function () {
-        // eslint-disable-next-line no-undef
         const instances = getInstances();
 
         this.appendDummyInput('NAME')
@@ -64,12 +62,12 @@ Blockly.JavaScript.forBlock['google-spreadsheet.writeCells'] = function (block) 
     let match;
     while ((match = cellRegex.exec(cellsCode)) !== null) {
         try {
-            cells.push(eval('(' + match[1] + ')'));
-        } catch (e) {}
+            cells.push(eval(`(${match[1]})`));
+        } catch (e) {
+            console.error('Error parsing cell data:', e);
+        }
     }
-    return (
-        `sendTo("google-spreadsheet${dropdown_instance}", "writeCells", {cells: ` + JSON.stringify(cells) + `});\n`
-    );
+    return `sendTo("google-spreadsheet${dropdown_instance}", "writeCells", {cells: ${JSON.stringify(cells)}});\n`;
 };
 
 // Hilfsblock für einzelne Zelleingabe (nur für writeCells)

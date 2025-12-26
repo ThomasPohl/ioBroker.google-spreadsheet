@@ -244,7 +244,7 @@ export class SpreadsheetUtils {
             });
     }
 
-     /**
+    /**
      * Delete multiple sheets from the Google Spreadsheet
      *
      * @param titles The titles of the sheets to delete

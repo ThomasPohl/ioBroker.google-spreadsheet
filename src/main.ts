@@ -209,7 +209,6 @@ class GoogleSpreadsheet extends utils.Adapter {
         const messageData: Record<string, any> = message.message as Record<string, any>;
         if (this.missingParameters(['cells'], messageData)) {
             return;
-
         }
         const cells: Array<{ sheetName: string; cell: string; data: any }> = messageData.cells as Array<{
             sheetName: string;
