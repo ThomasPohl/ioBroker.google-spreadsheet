@@ -244,6 +244,53 @@ export class SpreadsheetUtils {
             });
     }
 
+     /**
+     * Delete multiple sheets from the Google Spreadsheet
+     *
+     * @param titles The titles of the sheets to delete
+     */
+    public deleteSheets(titles: string[]): void {
+        const sheets = this.init();
+
+        sheets.spreadsheets
+            .get({ spreadsheetId: this.config.spreadsheetId })
+            .then(spreadsheet => {
+                if (spreadsheet && spreadsheet.data.sheets) {
+                    const requests: sheets_v4.Schema$Request[] = [];
+                    for (const title of titles) {
+                        const sheet = spreadsheet.data.sheets.find(
+                            sheet => sheet.properties && sheet.properties.title == title,
+                        );
+                        if (sheet && sheet.properties) {
+                            requests.push({
+                                deleteSheet: {
+                                    sheetId: sheet.properties.sheetId,
+                                },
+                            });
+                        }
+                    }
+                    if (requests.length > 0) {
+                        sheets.spreadsheets
+                            .batchUpdate({
+                                spreadsheetId: this.config.spreadsheetId,
+                                requestBody: {
+                                    requests: requests,
+                                },
+                            })
+                            .then(() => {
+                                this.log.debug('Sheets successfully deleted from google spreadsheet');
+                            })
+                            .catch(error => {
+                                this.log.error(`Error while deleting sheets from Google Spreadsheet:${error}`);
+                            });
+                    }
+                }
+            })
+            .catch(error => {
+                this.log.error(`Error while deleting sheets from Google Spreadsheet:${error}`);
+            });
+    }
+
     /**
      * Send data to a Google Spreadsheet
      *
@@ -280,30 +327,7 @@ export class SpreadsheetUtils {
      * @param data Data to write
      */
     public writeCell(sheetName: string, cell: string, data: any): void {
-        const sheets = this.init();
-        if (cell.startsWith("'") && cell.endsWith("'")) {
-            cell = cell.substring(1, cell.length - 1);
-        }
-
-        sheets.spreadsheets.values
-            .batchUpdate({
-                spreadsheetId: this.config.spreadsheetId,
-                requestBody: {
-                    valueInputOption: 'USER_ENTERED',
-                    data: [
-                        {
-                            range: `${sheetName}!${cell}`,
-                            values: this.prepareValues(data),
-                        },
-                    ],
-                },
-            })
-            .then(() => {
-                this.log.debug('Data successfully sent to google spreadsheet');
-            })
-            .catch(error => {
-                this.log.error(`Error while sending data to Google Spreadsheet:${error}`);
-            });
+        this.writeCells([{ sheetName, cell, data }]);
     }
 
     /**
@@ -316,7 +340,9 @@ export class SpreadsheetUtils {
         // Gruppiere nach sheetName, da batchUpdate mehrere Bereiche pro Sheet erlaubt
         const grouped: { [sheet: string]: Array<{ cell: string; data: any }> } = {};
         for (const cellObj of cells) {
-            if (!grouped[cellObj.sheetName]) grouped[cellObj.sheetName] = [];
+            if (!grouped[cellObj.sheetName]) {
+                grouped[cellObj.sheetName] = [];
+            }
             grouped[cellObj.sheetName].push({ cell: cellObj.cell, data: cellObj.data });
         }
         const data: Array<{ range: string; values: any[][] }> = [];

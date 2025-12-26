@@ -54,6 +54,7 @@ loadJS('../google-spreadsheet/blocks/append.js');
 loadJS('../google-spreadsheet/blocks/deleteRows.js');
 loadJS('../google-spreadsheet/blocks/createSheet.js');
 loadJS('../google-spreadsheet/blocks/deleteSheet.js');
+loadJS('../google-spreadsheet/blocks/deleteSheets.js');
 loadJS('../google-spreadsheet/blocks/duplicateSheet.js');
 loadJS('../google-spreadsheet/blocks/readCell.js');
 loadJS('../google-spreadsheet/blocks/writeCell.js');
