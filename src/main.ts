@@ -113,6 +113,15 @@ class GoogleSpreadsheet extends utils.Adapter {
                     }
                     break;
                 }
+                case 'deleteSheets': {
+                    this.log.debug('delete sheet');
+                    this.deleteSheets(obj);
+
+                    if (obj.callback) {
+                        this.sendTo(obj.from, obj.command, 'Message received', obj.callback);
+                    }
+                    break;
+                }
                 case 'duplicateSheet': {
                     this.log.debug('duplicate sheet');
                     this.duplicateSheet(obj);
@@ -134,6 +143,15 @@ class GoogleSpreadsheet extends utils.Adapter {
                 case 'writeCell': {
                     this.log.debug('write data to single cell');
                     this.writeCell(obj);
+
+                    if (obj.callback) {
+                        this.sendTo(obj.from, obj.command, 'Message received', obj.callback);
+                    }
+                    break;
+                }
+                case 'writeCells': {
+                    this.log.debug('write data to multiple cells');
+                    this.writeCells(obj);
 
                     if (obj.callback) {
                         this.sendTo(obj.from, obj.command, 'Message received', obj.callback);
@@ -187,6 +205,26 @@ class GoogleSpreadsheet extends utils.Adapter {
         }
         this.spreadsheet.writeCell(messageData.sheetName, messageData.cell, messageData.data);
     }
+    private writeCells(message: Record<string, any>): void {
+        const messageData: Record<string, any> = message.message as Record<string, any>;
+        if (this.missingParameters(['cells'], messageData)) {
+            return;
+        }
+        const cells: Array<{ sheetName: string; cell: string; data: any }> = messageData.cells as Array<{
+            sheetName: string;
+            cell: string;
+            data: any;
+        }>;
+        //Check that cell is a valid pattern
+        const cellPattern = new RegExp('[A-Z]+[0-9]+()');
+        for (const cellObj of cells) {
+            if (!cellPattern.test(cellObj.cell)) {
+                this.log.error(`Invalid cell pattern ${cellObj.cell}. Expected: A1`);
+                return;
+            }
+        }
+        this.spreadsheet.writeCells(cells);
+    }
     private async readCell(message: Record<string, any>): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             const messageData: Record<string, any> = message.message as Record<string, any>;
@@ -217,6 +255,9 @@ class GoogleSpreadsheet extends utils.Adapter {
     }
     public deleteSheet(message: ioBroker.Message): void {
         this.spreadsheet.deleteSheet(message.message as string);
+    }
+    public deleteSheets(message: ioBroker.Message): void {
+        this.spreadsheet.deleteSheets(message.message as string[]);
     }
     public duplicateSheet(message: ioBroker.Message): void {
         const messageData: Record<string, any> = message.message as Record<string, any>;

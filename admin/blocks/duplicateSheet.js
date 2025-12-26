@@ -12,8 +12,7 @@ Blockly.Words['google-spreadsheet_duplicate-sheet_newPosition'] = { en: 'at posi
 
 Blockly.Sendto.blocks['google-spreadsheetduplicateSheet'] =
     '<block type="google-spreadsheet.duplicateSheet">' +
-    '     <value name="INSTANCE">' +
-    '     </value>' +
+    '     <field name="INSTANCE"></field>' +
     '     <value name="SHEET_NAME">' +
     '         <shadow type="text">' +
     '             <field name="TEXT">text</field>' +
@@ -59,11 +58,11 @@ Blockly.Blocks['google-spreadsheet.duplicateSheet'] = {
     },
 };
 
-Blockly.JavaScript['google-spreadsheet.duplicateSheet'] = function (block) {
-    var dropdown_instance = block.getFieldValue('INSTANCE');
-    var source = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
-    var target = Blockly.JavaScript.valueToCode(block, 'NEW_SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
-    var index = Blockly.JavaScript.valueToCode(block, 'NEW_POSITION', Blockly.JavaScript.ORDER_ATOMIC);
+Blockly.JavaScript.forBlock['google-spreadsheet.duplicateSheet'] = function (block) {
+    const dropdown_instance = block.getFieldValue('INSTANCE');
+    const source = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
+    const target = Blockly.JavaScript.valueToCode(block, 'NEW_SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
+    let index = Blockly.JavaScript.valueToCode(block, 'NEW_POSITION', Blockly.JavaScript.ORDER_ATOMIC);
     if (!index) {
         index = -1;
     }

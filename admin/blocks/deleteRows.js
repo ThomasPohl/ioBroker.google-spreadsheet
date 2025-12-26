@@ -11,8 +11,7 @@ Blockly.Words['google-spreadsheet_delete-rows_endRow'] = { en: 'to', de: 'bis' }
 
 Blockly.Sendto.blocks['google-spreadsheet.deleteRows'] =
     '<block type="google-spreadsheet.deleteRows">' +
-    '     <value name="INSTANCE">' +
-    '     </value>' +
+    '     <field name="INSTANCE"></field>' +
     '     <value name="SHEET_NAME">' +
     '         <shadow type="text">' +
     '             <field name="TEXT">text</field>' +
@@ -62,11 +61,11 @@ Blockly.Blocks['google-spreadsheet.deleteRows'] = {
     },
 };
 
-Blockly.JavaScript['google-spreadsheet.deleteRows'] = function (block) {
-    var dropdown_instance = block.getFieldValue('INSTANCE');
-    var startRow = Blockly.JavaScript.valueToCode(block, 'START_ROW', Blockly.JavaScript.ORDER_ATOMIC);
-    var endRow = Blockly.JavaScript.valueToCode(block, 'END_ROW', Blockly.JavaScript.ORDER_ATOMIC);
-    var sheetName = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
+Blockly.JavaScript.forBlock['google-spreadsheet.deleteRows'] = function (block) {
+    const dropdown_instance = block.getFieldValue('INSTANCE');
+    const startRow = Blockly.JavaScript.valueToCode(block, 'START_ROW', Blockly.JavaScript.ORDER_ATOMIC);
+    const endRow = Blockly.JavaScript.valueToCode(block, 'END_ROW', Blockly.JavaScript.ORDER_ATOMIC);
+    const sheetName = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
     return `sendTo("google-spreadsheet${dropdown_instance}", "deleteRows", {"sheetName":${sheetName},"start":${
         startRow
     }, "end":${endRow}});\n`;

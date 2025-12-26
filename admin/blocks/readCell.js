@@ -9,10 +9,7 @@ Blockly.Words['google-spreadsheet_read_on-sheetName'] = { en: 'sheet', de: 'Tabe
 Blockly.Words['google-spreadsheet_read_in-cell'] = { en: 'cell', de: 'Zelle' };
 Blockly.Sendto.blocks['google-spreadsheet.read'] =
     '<block type="google-spreadsheet.read">' +
-    '     <value name="NAME">' +
-    '     </value>' +
-    '     <value name="INSTANCE">' +
-    '     </value>' +
+    '     <field name="INSTANCE"></field>' +
     '     <value name="SHEET_NAME">' +
     '         <shadow type="text">' +
     '             <field name="TEXT">text</field>' +
@@ -46,14 +43,14 @@ Blockly.Blocks['google-spreadsheet.read'] = {
     },
 };
 
-Blockly.JavaScript['google-spreadsheet.read'] = function (block) {
-    var dropdown_instance = block.getFieldValue('INSTANCE');
-    var data = Blockly.JavaScript.valueToCode(block, 'DATA', Blockly.JavaScript.ORDER_ATOMIC);
+Blockly.JavaScript.forBlock['google-spreadsheet.read'] = function (block) {
+    const dropdown_instance = block.getFieldValue('INSTANCE');
+    let data = Blockly.JavaScript.valueToCode(block, 'DATA', Blockly.JavaScript.ORDER_ATOMIC);
     if (!data) {
         data = '{}';
     }
-    var sheetName = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
-    var cell = Blockly.JavaScript.valueToCode(block, 'CELL', Blockly.JavaScript.ORDER_ATOMIC);
+    const sheetName = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
+    const cell = Blockly.JavaScript.valueToCode(block, 'CELL', Blockly.JavaScript.ORDER_ATOMIC);
 
     return [
         `await new Promise((resolve)=>{sendTo("google-spreadsheet${dropdown_instance}", "readCell", {"sheetName":"${

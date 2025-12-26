@@ -1,6 +1,6 @@
 'use strict';
-/*global Blockly:true */
-/*global getInstances:true */
+/*global Blockly */
+/*global getInstances */
 
 /// --- Write Cell  --------------------------------------------------
 
@@ -11,20 +11,17 @@ Blockly.Words['google-spreadsheet_writeCell_data'] = { en: 'the data', de: 'die 
 
 Blockly.Sendto.blocks['google-spreadsheet.writeCell'] =
     '<block type="google-spreadsheet.writeCell">' +
-    '     <value name="NAME">' +
-    '     </value>' +
-    '     <value name="INSTANCE">' +
-    '     </value>' +
-    '     <value name="SHEET_NAME">' +
+    '     <field name="INSTANCE"></field>' +
+    '     <field name="SHEET_NAME">' +
     '         <shadow type="text">' +
     '             <field name="TEXT">text</field>' +
     '         </shadow>' +
-    '     </value>' +
-    '     <value name="CELL">' +
+    '     </field>' +
+    '     <field name="CELL">' +
     '         <shadow type="text">' +
     '             <field name="TEXT">A1</field>' +
     '         </shadow>' +
-    '     </value>' +
+    '     </field>' +
     '     <value name="DATA">' +
     '     </value>' +
     '</block>';
@@ -51,11 +48,11 @@ Blockly.Blocks['google-spreadsheet.writeCell'] = {
     },
 };
 
-Blockly.JavaScript['google-spreadsheet.writeCell'] = function (block) {
-    var dropdown_instance = block.getFieldValue('INSTANCE');
-    var sheetName = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
-    var cell = Blockly.JavaScript.valueToCode(block, 'CELL', Blockly.JavaScript.ORDER_ATOMIC);
-    var data = Blockly.JavaScript.valueToCode(block, 'DATA', Blockly.JavaScript.ORDER_ATOMIC);
+Blockly.JavaScript.forBlock['google-spreadsheet.writeCell'] = function (block) {
+    const dropdown_instance = block.getFieldValue('INSTANCE');
+    const sheetName = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
+    const cell = Blockly.JavaScript.valueToCode(block, 'CELL', Blockly.JavaScript.ORDER_ATOMIC);
+    const data = Blockly.JavaScript.valueToCode(block, 'DATA', Blockly.JavaScript.ORDER_ATOMIC);
 
     return (
         `sendTo("google-spreadsheet${dropdown_instance}", "writeCell", {"sheetName": ${sheetName}, "cell": ${

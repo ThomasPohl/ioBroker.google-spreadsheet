@@ -26,10 +26,12 @@ This adapter can be used to automatically interact with google spreadsheets.
 * [Append data to spreadsheet](features/append.md)
 * [Delete rows from a spreadsheet](features/delete-rows.md)
 * [Create sheets](features/create-sheet.md)
-* [Delete sheets](features/delete-sheet.md)
+* [Delete sheet](features/delete-sheet.md)
+* [Delete sheets](features/delete-sheets.md)
 * [Duplicate sheets](features/duplicate-sheet.md)
 * [Read cell](features/read-cell.md)
 * [Write cell](features/write-cell.md)
+* [Write cells](features/write-cells.md)
 
 ## Usage
 
