@@ -114,7 +114,7 @@ Make sure the Service Account has adequate permissions to write to the spreadshe
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 0.6.0 (2025-12-26)
 - (Thomas Pohl) Added deleteSheets functionality (delete multiple sheets in one call)
 - (Thomas Pohl) Added blockly block for deleteSheets
 - (Thomas Pohl) Add write cells functionality (write multiple cells in one call)
@@ -123,21 +123,25 @@ Make sure the Service Account has adequate permissions to write to the spreadshe
 ### 0.5.0
 * (Thomas Pohl) Minimum node.js version is now 20
 * (Thomas Pohl) Display connection state
+
 ### 0.4.0
 * (Thomas Pohl) The privateKey is saved now encrypted
 * (Thomas Pohl) Support for node.js 22
+
 ### 0.3.1
 * (Thomas Pohl) Fixed reading cells and added error handling
+
 ### 0.3.0
 * (Thomas Pohl) Added writing of single cells
 * (Thomas Pohl) Added reading of single cells
 * (Thomas Pohl) Documentation for all features
+
 ### 0.2.0
 * (Thomas Pohl) Parsing of private keys is now more robust
+
 ### 0.1.0
 * (Thomas Pohl) Preparation for first stable release
 * (Thomas Pohl) Improve logging + Code cleanup
-
 
 ## License
 

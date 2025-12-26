@@ -1,186 +1,199 @@
 {
-    "common": {
-        "name": "google-spreadsheet",
-        "version": "0.5.0",
-        "news": {
-            "0.5.0": {
-                "en": "Minimum node.js version is now 20, connection state can now be displayed",
-                "de": "Die Mindestversion von node.js ist jetzt 20, der Verbindungsstatus kann jetzt angezeigt werden",
-                "ru": "Минимальная версия node.js теперь равна 20, теперь можно отображать состояние соединения.",
-                "pt": "A versão mínima do node.js agora é 20, o estado da conexão agora pode ser exibido",
-                "nl": "De minimale node.js-versie is nu 20, de verbindingsstatus kan nu worden weergegeven",
-                "fr": "La version minimale de node.js est désormais de 20, l'état de la connexion peut désormais être affiché",
-                "it": "La versione minima di node.js ora è 20, lo stato della connessione ora può essere visualizzato",
-                "es": "La versión mínima de node.js ahora es 20, ahora se puede mostrar el estado de la conexión",
-                "pl": "Minimalna wersja node.js to teraz 20, można teraz wyświetlić stan połączenia",
-                "uk": "Мінімальна версія node.js тепер становить 20, тепер можна відображати стан підключення",
-                "zh-cn": "最低 Node.js 版本现在为 20，现在可以显示连接状态"
-            },
-            "0.4.0": {
-                "en": "The private key is saved now encrypted",
-                "de": "Der private Schlüssel wird nun verschlüsselt gespeichert",
-                "ru": "Закрытый ключ сохранен и теперь зашифрован.",
-                "pt": "A chave privada é salva agora criptografada",
-                "nl": "De privésleutel wordt nu gecodeerd opgeslagen",
-                "fr": "La clé privée est enregistrée maintenant cryptée",
-                "it": "La chiave privata viene salvata ora crittografata",
-                "es": "La clave privada se guarda ahora cifrada.",
-                "pl": "Klucz prywatny jest zapisany i teraz zaszyfrowany",
-                "uk": "Приватний ключ збережено в зашифрованому вигляді",
-                "zh-cn": "私钥现已加密保存"
-            },
-            "0.3.1": {
-                "en": "Fixed reading cells and added error handling",
-                "de": "Das Lesen von Zellen wurde korrigiert und die Fehlerbehandlung hinzugefügt",
-                "ru": "Исправлено чтение ячеек и добавлена ​​обработка ошибок.",
-                "pt": "Células de leitura corrigidas e tratamento de erros adicionado",
-                "nl": "Vaste leescellen en toegevoegde foutafhandeling",
-                "fr": "Correction des cellules de lecture et ajout de la gestion des erreurs",
-                "it": "Risolte le celle di lettura e aggiunta la gestione degli errori",
-                "es": "Se corrigieron las celdas de lectura y se agregó manejo de errores.",
-                "pl": "Naprawiono odczytywanie komórek i dodano obsługę błędów",
-                "uk": "Виправлено читання клітинок і додано обробку помилок",
-                "zh-cn": "修复了读取单元并添加了错误处理"
-            },
-            "0.3.0": {
-                "en": "Added reading and writing of single cells",
-                "de": "Lesen und Schreiben einzelner Zellen hinzugefügt",
-                "ru": "Добавлено чтение и запись отдельных ячеек.",
-                "pt": "Adicionada leitura e escrita de células únicas",
-                "nl": "Lezen en schrijven van afzonderlijke cellen toegevoegd",
-                "fr": "Ajout de la lecture et de l'écriture de cellules individuelles",
-                "it": "Aggiunta lettura e scrittura di singole celle",
-                "es": "Se agregó lectura y escritura de celdas individuales.",
-                "pl": "Dodano odczyt i zapis pojedynczych komórek",
-                "uk": "Додано читання та запис окремих клітинок",
-                "zh-cn": "增加单细胞的读写"
-            },
-            "0.2.0": {
-                "en": "Parsing of private key is more robust",
-                "de": "Das Parsen des privaten Schlüssels ist robuster",
-                "ru": "Анализ закрытого ключа стал более надежным.",
-                "pt": "A análise da chave privada é mais robusta",
-                "nl": "Het parseren van de privésleutel is robuuster",
-                "fr": "L'analyse de la clé privée est plus robuste",
-                "it": "L'analisi della chiave privata è più solida",
-                "es": "El análisis de la clave privada es más sólido",
-                "pl": "Analiza klucza prywatnego jest bardziej niezawodna",
-                "uk": "Розбір закритого ключа більш надійний",
-                "zh-cn": "私钥解析更加稳健"
-            },
-            "0.1.0": {
-                "en": "Improved logging and code cleanup",
-                "de": "Verbesserte Protokollierung und Codebereinigung",
-                "ru": "Улучшено ведение журнала и очистка кода.",
-                "pt": "Registro aprimorado e limpeza de código",
-                "nl": "Verbeterde logboekregistratie en opschoning van de code",
-                "fr": "Journalisation et nettoyage du code améliorés",
-                "it": "Registrazione e pulizia del codice migliorate",
-                "es": "Registro mejorado y limpieza de código",
-                "pl": "Ulepszone rejestrowanie i czyszczenie kodu",
-                "uk": "Покращено журналювання та очищення коду",
-                "zh-cn": "改进的日志记录和代码清理"
-            }
-        },
-        "titleLang": {
-            "en": "Google Spreadsheet",
-            "de": "Google-Tabelle",
-            "ru": "Таблица Google",
-            "pt": "Planilha do Google",
-            "nl": "Google-spreadsheet",
-            "fr": "Feuille de calcul Google",
-            "it": "Foglio di lavoro Google",
-            "es": "Hoja de cálculo de Google",
-            "pl": "Arkusz kalkulacyjny Google",
-            "uk": "Таблиця Google",
-            "zh-cn": "谷歌电子表格"
-        },
-        "desc": {
-            "en": "This adapter can be used to interact with google spreadsheets.",
-            "de": "Dieser Adapter kann zur Interaktion mit Google-Tabellen verwendet werden.",
-            "ru": "Этот адаптер можно использовать для взаимодействия с электронными таблицами Google.",
-            "pt": "Este adaptador pode ser usado para interagir com planilhas do Google.",
-            "nl": "Deze adapter kan worden gebruikt voor interactie met Google Spreadsheets.",
-            "fr": "Cet adaptateur peut être utilisé pour interagir avec les feuilles de calcul Google.",
-            "it": "Questo adattatore può essere utilizzato per interagire con i fogli di calcolo Google.",
-            "es": "Este adaptador se puede utilizar para interactuar con las hojas de cálculo de Google.",
-            "pl": "Ten adapter może być używany do interakcji z arkuszami kalkulacyjnymi Google.",
-            "uk": "Цей адаптер можна використовувати для взаємодії з електронними таблицями Google.",
-            "zh-cn": "该适配器可用于与谷歌电子表格交互。"
-        },
-        "authors": [
-            "Thomas Pohl <post@thomaspohl.net>"
-        ],
-        "keywords": [
-            "google",
-            "spreadsheet"
-        ],
-        "licenseInformation": {
-            "license": "Apache-2.0",
-            "type": "free"
-        },
-        "platform": "Javascript/Node.js",
-        "icon": "google-spreadsheet.png",
-        "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/ThomasPohl/ioBroker.google-spreadsheet/main/admin/google-spreadsheet.png",
-        "readme": "https://github.com/ThomasPohl/ioBroker.google-spreadsheet/blob/main/README.md",
-        "loglevel": "info",
-        "mode": "daemon",
-        "type": "storage",
-        "compact": true,
-        "connectionType": "cloud",
-        "dataSource": "push",
-        "blockly": true,
-        "messagebox": true,
-        "tier": 2,
-        "adminUI": {
-            "config": "json"
-        },
-        "dependencies": [
-            {
-                "js-controller": ">=6.0.11"
-            }
-        ],
-        "globalDependencies": [
-            {
-                "admin": ">=7.6.17"
-            }
-        ]
+  "common": {
+    "name": "google-spreadsheet",
+    "version": "0.6.0",
+    "news": {
+      "0.6.0": {
+        "en": "Added deleteSheets functionality (delete multiple sheets in one call)\nAdded blockly block for deleteSheets\nAdd write cells functionality (write multiple cells in one call)\nAdded blockly block for writeCells",
+        "de": "Löschen Blätterfunktionalität (mehrere Blätter in einem Anruf löschen)\nBlockiert hinzugefügt für Löschen Bleche\nFügen Sie Schreibzellenfunktionalität hinzu (schreiben Sie mehrere Zellen in einem Anruf)\nBlockaden hinzugefügt für schreiben Zellen",
+        "ru": "Добавить удаление Функциональность листов (удалить несколько листов за один звонок)\nДобавлен блок-блок для удаления Листы\nДобавить функцию записи ячеек (записать несколько ячеек за один звонок)\nДобавлен блок-блок для записи Клетки",
+        "pt": "Adicionado apagar Funcionalidade das folhas (deletar várias folhas em uma chamada)\nAdicionado bloco em bloco para apagar Folhas\nAdicionar funcionalidade de gravação de células (escrever várias células em uma chamada)\nBloco em bloco adicionado para escrever Células",
+        "nl": "Verwijderen toegevoegd Sheets functionaliteit (verwijder meerdere vellen in één gesprek)\nBlok toegevoegd voor verwijderen Vellen\nVoeg schrijfcellen functionaliteit toe (schrijf meerdere cellen in één gesprek)\nBlokblok toegevoegd om te schrijven Cellen",
+        "fr": "Ajouté supprimer Fonctionnalité des feuilles (supprimer plusieurs feuilles en un seul appel)\nAjout d'un bloc pour supprimer Feuilles\nAjouter la fonctionnalité des cellules d'écriture (écrire plusieurs cellules dans un appel)\nAjouté bloc bloc pour écrire Cellules",
+        "it": "Aggiunto Cancella Funzionalità dei fogli (Cancella più fogli in una sola chiamata)\nAggiunto blocco blocco per eliminare Fogli\nAggiungere funzionalità delle celle di scrittura (scrivere più celle in una sola chiamata)\nAggiunto blocco blocco per scrivere Celle",
+        "es": "Supresión Funcionalidad de las hojas (derezar múltiples hojas en una sola llamada)\nAñadido bloque bloque bloque para borrar Hojas\nAgregar la funcionalidad de las células de escritura (escribir múltiples células en una llamada)\nSe agregó bloque bloqueado para escribir Celdas",
+        "pl": "Dodano usunięcie Funkcjonalność arkuszy (usunięcie wielu arkuszy w jednym wywołaniu)\nDodano blokowy blok do usunięcia Arkusze\nDodaj funkcję zapisywania komórek (zapis wielu komórek w jednym wywołaniu)\nDodano blokowy blok do zapisu Komórki",
+        "uk": "Видалити Функції аркушів (Видалити декілька аркушів в одному виклику)\nДодано блокнот для видалення Листи\nДодавання функцій клітин запису (запис кількох клітин в одному виклику)\nДодано блокнот для запису Клітини",
+        "zh-cn": "添加删除 工作表功能( 在一个呼叫中删除多个工作表)\n添加块块以删除 工作表\n添加写单元格功能( 在一个调用中写多个单元格)\n添加块块写入 单元格"
+      },
+      "0.5.0": {
+        "en": "Minimum node.js version is now 20, connection state can now be displayed",
+        "de": "Die Mindestversion von node.js ist jetzt 20, der Verbindungsstatus kann jetzt angezeigt werden",
+        "ru": "Минимальная версия node.js теперь равна 20, теперь можно отображать состояние соединения.",
+        "pt": "A versão mínima do node.js agora é 20, o estado da conexão agora pode ser exibido",
+        "nl": "De minimale node.js-versie is nu 20, de verbindingsstatus kan nu worden weergegeven",
+        "fr": "La version minimale de node.js est désormais de 20, l'état de la connexion peut désormais être affiché",
+        "it": "La versione minima di node.js ora è 20, lo stato della connessione ora può essere visualizzato",
+        "es": "La versión mínima de node.js ahora es 20, ahora se puede mostrar el estado de la conexión",
+        "pl": "Minimalna wersja node.js to teraz 20, można teraz wyświetlić stan połączenia",
+        "uk": "Мінімальна версія node.js тепер становить 20, тепер можна відображати стан підключення",
+        "zh-cn": "最低 Node.js 版本现在为 20，现在可以显示连接状态"
+      },
+      "0.4.0": {
+        "en": "The private key is saved now encrypted",
+        "de": "Der private Schlüssel wird nun verschlüsselt gespeichert",
+        "ru": "Закрытый ключ сохранен и теперь зашифрован.",
+        "pt": "A chave privada é salva agora criptografada",
+        "nl": "De privésleutel wordt nu gecodeerd opgeslagen",
+        "fr": "La clé privée est enregistrée maintenant cryptée",
+        "it": "La chiave privata viene salvata ora crittografata",
+        "es": "La clave privada se guarda ahora cifrada.",
+        "pl": "Klucz prywatny jest zapisany i teraz zaszyfrowany",
+        "uk": "Приватний ключ збережено в зашифрованому вигляді",
+        "zh-cn": "私钥现已加密保存"
+      },
+      "0.3.1": {
+        "en": "Fixed reading cells and added error handling",
+        "de": "Das Lesen von Zellen wurde korrigiert und die Fehlerbehandlung hinzugefügt",
+        "ru": "Исправлено чтение ячеек и добавлена ​​обработка ошибок.",
+        "pt": "Células de leitura corrigidas e tratamento de erros adicionado",
+        "nl": "Vaste leescellen en toegevoegde foutafhandeling",
+        "fr": "Correction des cellules de lecture et ajout de la gestion des erreurs",
+        "it": "Risolte le celle di lettura e aggiunta la gestione degli errori",
+        "es": "Se corrigieron las celdas de lectura y se agregó manejo de errores.",
+        "pl": "Naprawiono odczytywanie komórek i dodano obsługę błędów",
+        "uk": "Виправлено читання клітинок і додано обробку помилок",
+        "zh-cn": "修复了读取单元并添加了错误处理"
+      },
+      "0.3.0": {
+        "en": "Added reading and writing of single cells",
+        "de": "Lesen und Schreiben einzelner Zellen hinzugefügt",
+        "ru": "Добавлено чтение и запись отдельных ячеек.",
+        "pt": "Adicionada leitura e escrita de células únicas",
+        "nl": "Lezen en schrijven van afzonderlijke cellen toegevoegd",
+        "fr": "Ajout de la lecture et de l'écriture de cellules individuelles",
+        "it": "Aggiunta lettura e scrittura di singole celle",
+        "es": "Se agregó lectura y escritura de celdas individuales.",
+        "pl": "Dodano odczyt i zapis pojedynczych komórek",
+        "uk": "Додано читання та запис окремих клітинок",
+        "zh-cn": "增加单细胞的读写"
+      },
+      "0.2.0": {
+        "en": "Parsing of private key is more robust",
+        "de": "Das Parsen des privaten Schlüssels ist robuster",
+        "ru": "Анализ закрытого ключа стал более надежным.",
+        "pt": "A análise da chave privada é mais robusta",
+        "nl": "Het parseren van de privésleutel is robuuster",
+        "fr": "L'analyse de la clé privée est plus robuste",
+        "it": "L'analisi della chiave privata è più solida",
+        "es": "El análisis de la clave privada es más sólido",
+        "pl": "Analiza klucza prywatnego jest bardziej niezawodna",
+        "uk": "Розбір закритого ключа більш надійний",
+        "zh-cn": "私钥解析更加稳健"
+      },
+      "0.1.0": {
+        "en": "Improved logging and code cleanup",
+        "de": "Verbesserte Protokollierung und Codebereinigung",
+        "ru": "Улучшено ведение журнала и очистка кода.",
+        "pt": "Registro aprimorado e limpeza de código",
+        "nl": "Verbeterde logboekregistratie en opschoning van de code",
+        "fr": "Journalisation et nettoyage du code améliorés",
+        "it": "Registrazione e pulizia del codice migliorate",
+        "es": "Registro mejorado y limpieza de código",
+        "pl": "Ulepszone rejestrowanie i czyszczenie kodu",
+        "uk": "Покращено журналювання та очищення коду",
+        "zh-cn": "改进的日志记录和代码清理"
+      }
     },
-    "native": {
-        "spreadsheetId": "",
-        "serviceAccountEmail": "",
-        "privateKey": ""
+    "titleLang": {
+      "en": "Google Spreadsheet",
+      "de": "Google-Tabelle",
+      "ru": "Таблица Google",
+      "pt": "Planilha do Google",
+      "nl": "Google-spreadsheet",
+      "fr": "Feuille de calcul Google",
+      "it": "Foglio di lavoro Google",
+      "es": "Hoja de cálculo de Google",
+      "pl": "Arkusz kalkulacyjny Google",
+      "uk": "Таблиця Google",
+      "zh-cn": "谷歌电子表格"
     },
-    "protectedNative": [
-        "privateKey"
+    "desc": {
+      "en": "This adapter can be used to interact with google spreadsheets.",
+      "de": "Dieser Adapter kann zur Interaktion mit Google-Tabellen verwendet werden.",
+      "ru": "Этот адаптер можно использовать для взаимодействия с электронными таблицами Google.",
+      "pt": "Este adaptador pode ser usado para interagir com planilhas do Google.",
+      "nl": "Deze adapter kan worden gebruikt voor interactie met Google Spreadsheets.",
+      "fr": "Cet adaptateur peut être utilisé pour interagir avec les feuilles de calcul Google.",
+      "it": "Questo adattatore può essere utilizzato per interagire con i fogli di calcolo Google.",
+      "es": "Este adaptador se puede utilizar para interactuar con las hojas de cálculo de Google.",
+      "pl": "Ten adapter może być używany do interakcji z arkuszami kalkulacyjnymi Google.",
+      "uk": "Цей адаптер можна використовувати для взаємодії з електронними таблицями Google.",
+      "zh-cn": "该适配器可用于与谷歌电子表格交互。"
+    },
+    "authors": [
+      "Thomas Pohl <post@thomaspohl.net>"
     ],
-    "encryptedNative": [
-        "privateKey"
+    "keywords": [
+      "google",
+      "spreadsheet"
     ],
-    "objects": [],
-    "instanceObjects": [
-        {
-            "_id": "info.connection",
-            "type": "state",
-            "common": {
-                "name": {
-                    "en": "Connected to Google server",
-                    "de": "Verbindung mit Google Server",
-                    "ru": "Подключен к серверу Google",
-                    "pt": "Conectado ao servidor Google",
-                    "nl": "Verbinding met Google server",
-                    "fr": "Connecté au serveur Google",
-                    "it": "Collegato al server Google",
-                    "es": "Conectado al servidor Google",
-                    "pl": "Łączy się z serwerem Google"
-                },
-                "type": "boolean",
-                "read": true,
-                "write": false,
-                "def": false
-            },
-            "native": {}
-        }
+    "licenseInformation": {
+      "license": "Apache-2.0",
+      "type": "free"
+    },
+    "platform": "Javascript/Node.js",
+    "icon": "google-spreadsheet.png",
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/ThomasPohl/ioBroker.google-spreadsheet/main/admin/google-spreadsheet.png",
+    "readme": "https://github.com/ThomasPohl/ioBroker.google-spreadsheet/blob/main/README.md",
+    "loglevel": "info",
+    "mode": "daemon",
+    "type": "storage",
+    "compact": true,
+    "connectionType": "cloud",
+    "dataSource": "push",
+    "blockly": true,
+    "messagebox": true,
+    "tier": 2,
+    "adminUI": {
+      "config": "json"
+    },
+    "dependencies": [
+      {
+        "js-controller": ">=6.0.11"
+      }
+    ],
+    "globalDependencies": [
+      {
+        "admin": ">=7.6.17"
+      }
     ]
+  },
+  "native": {
+    "spreadsheetId": "",
+    "serviceAccountEmail": "",
+    "privateKey": ""
+  },
+  "protectedNative": [
+    "privateKey"
+  ],
+  "encryptedNative": [
+    "privateKey"
+  ],
+  "objects": [],
+  "instanceObjects": [
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "name": {
+          "en": "Connected to Google server",
+          "de": "Verbindung mit Google Server",
+          "ru": "Подключен к серверу Google",
+          "pt": "Conectado ao servidor Google",
+          "nl": "Verbinding met Google server",
+          "fr": "Connecté au serveur Google",
+          "it": "Collegato al server Google",
+          "es": "Conectado al servidor Google",
+          "pl": "Łączy się z serwerem Google"
+        },
+        "type": "boolean",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    }
+  ]
 }
