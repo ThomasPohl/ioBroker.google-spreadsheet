@@ -114,6 +114,12 @@ Make sure the Service Account has adequate permissions to write to the spreadshe
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+- (Thomas Pohl) Added deleteSheets functionality (delete multiple sheets in one call)
+- (Thomas Pohl) Added blockly block for deleteSheets
+- (Thomas Pohl) Add write cells functionality (write multiple cells in one call)
+- (Thomas Pohl) Added blockly block for writeCells
+
 ### 0.5.0
 * (Thomas Pohl) Minimum node.js version is now 20
 * (Thomas Pohl) Display connection state
