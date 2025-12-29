@@ -9,17 +9,6 @@
             "type": "panel",
             "label": "Main settings",
             "items": {
-                "spreadsheetId": {
-                    "newLine": true,
-                    "type": "text",
-                    "xs": 12,
-                    "sm": 12,
-                    "md": 8,
-                    "lg": 8,
-                    "xl": 8,
-                    "label": "spreadsheetId",
-                    "help": "spreadsheetIdHelp"
-                },
                 "serviceAccountEmail": {
                     "newLine": true,
                     "type": "text",
@@ -42,6 +31,58 @@
                     "label": "privateKey",
                     "minRows": 20,
                     "help": "privateKeyHelp"
+                },
+                "spreadsheetsErr1": {
+                    "type": "staticText",
+                    "text": "ERROR: Exactly one default spreadsheet allowed!",
+                    "newLine": true,
+                    "hidden": "let b=null; for(let ii=0; data.spreadsheets && ii<data.spreadsheets.length; ii++){ if (data.spreadsheets[ii].isDefault) { if (b===null){ b=true; } else if (b===true){ return false; } else { b=false; }}}; if (b===false || b===null) return false; return true;",
+                    "style": {
+                        "color": "red"
+                    },
+                    "xs": 12,
+                    "sm": 12,
+                    "md": 12,
+                    "lg": 6,
+                    "xl": 6
+                },
+                "spreadsheets": {
+                    "type": "table",
+                    "newLine": true,
+                    "label": "tokens",
+                    "help": "tokensHelp",
+                    "sm": 12,
+                    "md": 12,
+                    "lg": 12,
+                    "xl": 12,
+                    "items": [
+                        {
+                            "type": "checkbox",
+                            "attr": "isDefault",
+                            "width": "10%",
+                            "title": "defaultTokenAlias",
+                            "tooltip": "defaultTokenAliasHelp",
+                            "default": false,
+                            "validator": "let b=null; for(let ii=0; globalData.spreadsheets && ii<globalData.spreadsheets.length; ii++){ if (globalData.spreadsheets[ii].isDefault) { if (b===null){ b=true; } else if (b===true){ return false; } else { b=false; }}}; if (b===false || b===null) return false;  return true;",
+                            "validatorNoSaveOnError": true
+                        },
+                        {
+                            "type": "text",
+                            "attr": "alias",
+                            "width": "40%",
+                            "title": "spreadsheetAlias",
+                            "tooltip": "spreadsheetAliasHelp",
+                            "default": ""
+                        },
+                        {
+                            "type": "text",
+                            "attr": "spreadsheetId",
+                            "width": "50%",
+                            "title": "SpreadsheetId",
+                            "tooltip": "spreadsheetIdHelp",
+                            "default": ""
+                        }
+                    ]
                 }
             }
         }

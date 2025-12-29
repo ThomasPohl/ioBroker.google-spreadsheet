@@ -21,16 +21,37 @@ class GoogleSpreadsheet extends utils.Adapter {
         this.spreadsheet = new SpreadsheetUtils(this.config, this.log);
     }
 
+    private migrateSpreadhseetIdToTableIfNeeded(): void {
+        if (
+            this.config.spreadsheetId &&
+            this.config.spreadsheetId.length > 0 &&
+            (!this.config.spreadsheets || this.config.spreadsheets.length === 0)
+        ) {
+            this.log.info(`Migrating spreadsheetId ${this.config.spreadsheetId} to spreadsheets table`);
+            this.config.spreadsheets = [
+                {
+                    spreadsheetId: this.config.spreadsheetId,
+                    alias: 'default',
+                    isDefault: true,
+                },
+            ];
+            this.config.spreadsheetId = '';
+            this.extendForeignObject(`system.adapter.${this.name}.${this.instance}`, { native: this.config }, () => {
+                this.log.info('Migration completed');
+            });
+        }
+    }
     /**
      * Is called when databases are connected and adapter received configuration.
      */
     private async onReady(): Promise<void> {
         // Initialize your adapter here
+        this.migrateSpreadhseetIdToTableIfNeeded();
 
         // The adapters config (in the instance object everything under the attribute "native") is accessible via
         // this.config:
         this.log.debug(`config spreadsheetId: ${this.config.spreadsheetId}`);
-        if (this.config.privateKey && this.config.serviceAccountEmail && this.config.spreadsheetId) {
+        if (this.config.privateKey && this.config.serviceAccountEmail && this.config.spreadsheets.length > 0) {
             await this.setState('info.connection', true, true);
             this.log.info('Google-spreadsheet adapter configured');
         } else {
@@ -190,7 +211,7 @@ class GoogleSpreadsheet extends utils.Adapter {
         if (this.missingParameters(['sheetName', 'data'], messageData)) {
             return;
         }
-        this.spreadsheet.append(messageData.sheetName, messageData.data);
+        this.spreadsheet.append(messageData.sheetName, messageData.data, messageData.sheetAlias);
     }
     private writeCell(message: Record<string, any>): void {
         const messageData: Record<string, any> = message.message as Record<string, any>;

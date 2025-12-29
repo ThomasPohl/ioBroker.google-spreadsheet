@@ -6,10 +6,22 @@
 /*global document:true */
 
 if (typeof goog !== 'undefined') {
-    goog.provide('Blockly.JavaScript.Sendto');
+    goog.provide('Blockly.JavaScript.GoogleSpreadsheet');
 
     goog.require('Blockly.JavaScript');
 }
+
+Blockly.CustomBlocks = Blockly.CustomBlocks || [];
+Blockly.CustomBlocks.push('GoogleSpreadsheet');
+
+Blockly.GoogleSpreadsheet = {
+    HUE: 'rgb(35, 166, 103)',
+    blocks: {},
+    WARNING_PARENTS: [
+        'on_ext',
+    ],
+};
+Blockly.Words['GoogleSpreadsheet'] = {'en':'Google Spreadsheet','de': 'Google Tabellen'};
 
 Blockly.Words['google-spreadsheet_anyInstance'] = { en: 'all instances', de: 'allen Instanzen' };
 
@@ -23,8 +35,14 @@ function getInstances(withAny = true) {
         for (var i = 0; i < main.instances.length; i++) {
             var m = main.instances[i].match(/^system.adapter.google-spreadsheet.(\d+)$/);
             if (m) {
-                var n = parseInt(m[1], 10);
-                options.push([`google-spreadsheet.${n}`, `.${n}`]);
+                const instanceName = main.instances[i];
+                const n = parseInt(m[1], 10);
+                const aliases = getSheetAliases(instanceName);
+                if (aliases.length) {
+                    for (const alias of aliases) {
+                        options.push([`${alias} (google-spreadsheet.${n})`, `.${n}|${alias}`]);
+                    }
+                }
             }
         }
     }
@@ -36,6 +54,33 @@ function getInstances(withAny = true) {
     }
     return options;
 }
+
+function getSheetAliases (instanceName) {
+    const objects = window.main.objects;
+    if (objects !== undefined && main !== undefined && main.instances !== undefined && objects[instanceName]!== undefined && Array.isArray(objects[instanceName].native.spreadsheets)) {
+        const result = objects[instanceName].native.spreadsheets.map((sheet) => sheet.alias);
+        if (result.length > 0) {
+            return result;
+        }
+    }
+    return [];
+}
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
+function getInstanceAndAlias(block) {
+    const dropdown_value = block.getFieldValue('INSTANCE');
+    var dropdown_instance = '.0';
+    var sheetAlias = 'default';
+    if (dropdown_value.includes('|')) {
+        const parts = dropdown_value.split('|');
+        dropdown_instance = parts[0];
+        sheetAlias = parts[1];
+    } else {
+        dropdown_instance = dropdown_value;
+    }
+    return { instance: dropdown_instance, alias: sheetAlias };
+}
+
 /* eslint-enable @typescript-eslint/no-unused-vars */
 
 function loadJS(filename) {

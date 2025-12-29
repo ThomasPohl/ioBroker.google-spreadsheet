@@ -9,7 +9,7 @@ Blockly.Words['google-spreadsheet_delete-rows_on-sheetName'] = { en: 'on sheet',
 Blockly.Words['google-spreadsheet_delete-rows_startRow'] = { en: 'line', de: 'Zeile' };
 Blockly.Words['google-spreadsheet_delete-rows_endRow'] = { en: 'to', de: 'bis' };
 
-Blockly.Sendto.blocks['google-spreadsheet.deleteRows'] =
+Blockly.GoogleSpreadsheet.blocks['google-spreadsheet.deleteRows'] =
     '<block type="google-spreadsheet.deleteRows">' +
     '     <field name="INSTANCE"></field>' +
     '     <value name="SHEET_NAME">' +
@@ -55,7 +55,7 @@ Blockly.Blocks['google-spreadsheet.deleteRows'] = {
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
 
-        this.setColour(Blockly.Sendto.HUE);
+        this.setColour(Blockly.GoogleSpreadsheet.HUE);
         this.setTooltip(Blockly.Translate('google-spreadsheet_tooltip'));
         this.setHelpUrl(Blockly.Translate('google-spreadsheet_help'));
     },

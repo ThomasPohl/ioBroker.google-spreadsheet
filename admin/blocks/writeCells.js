@@ -7,14 +7,14 @@
 Blockly.Words['google-spreadsheet_writeCells_write-to'] = { en: 'write cells to', de: 'Schreibe Zellen in ' };
 Blockly.Words['google-spreadsheet_writeCells_cells'] = { en: 'cells', de: 'Zellen' };
 
-Blockly.Sendto.blocks['google-spreadsheet.writeCells'] =
+Blockly.GoogleSpreadsheet.blocks['google-spreadsheet.writeCells'] =
     '<block type="google-spreadsheet.writeCells">' +
     '     <field name="INSTANCE"></field>' +
     '     <statement name="CELLS"></statement>' +
     '</block>';
 
 // addCell-Block in die Toolbox aufnehmen, damit er auswählbar ist
-Blockly.Sendto.blocks['google-spreadsheet.addCell'] =
+Blockly.GoogleSpreadsheet.blocks['google-spreadsheet.addCell'] =
     '<block type="google-spreadsheet.addCell">' +
     '     <field name="SHEET_NAME">' +
     '         <shadow type="text">' +
@@ -48,7 +48,7 @@ Blockly.Blocks['google-spreadsheet.writeCells'] = {
         this.setInputsInline(false);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
-        this.setColour(Blockly.Sendto.HUE);
+        this.setColour(Blockly.GoogleSpreadsheet.HUE);
     },
 };
 
@@ -78,7 +78,7 @@ Blockly.Blocks['google-spreadsheet.addCell'] = {
         this.appendValueInput('DATA').appendField('Data');
         this.setPreviousStatement(true, 'google-spreadsheet.writeCell');
         this.setNextStatement(true, 'google-spreadsheet.writeCell');
-        this.setColour(Blockly.Sendto.HUE);
+        this.setColour(Blockly.GoogleSpreadsheet.HUE);
     },
 };
 

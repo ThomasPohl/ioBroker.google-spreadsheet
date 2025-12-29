@@ -8,7 +8,7 @@ Blockly.Words['google-spreadsheet_delete-sheets_sheetNames'] = {
     de: 'die Blätter mit Namen (Array)',
 };
 
-Blockly.Sendto.blocks['google-spreadsheet.deleteSheets'] =
+Blockly.GoogleSpreadsheet.blocks['google-spreadsheet.deleteSheets'] =
     '<block type="google-spreadsheet.deleteSheets">' +
     '     <field name="INSTANCE"></field>' +
     '     <value name="SHEET_NAMES">' +
@@ -32,7 +32,7 @@ Blockly.Blocks['google-spreadsheet.deleteSheets'] = {
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
 
-        this.setColour(Blockly.Sendto.HUE);
+        this.setColour(Blockly.GoogleSpreadsheet.HUE);
         this.setTooltip(Blockly.Translate('google-spreadsheet_tooltip'));
         this.setHelpUrl(Blockly.Translate('google-spreadsheet_help'));
     },

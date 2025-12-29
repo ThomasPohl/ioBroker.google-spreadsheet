@@ -9,7 +9,7 @@ Blockly.Words['google-spreadsheet_create-sheet_sheet-name'] = {
     de: 'ein Blatt mit dem Namen',
 };
 
-Blockly.Sendto.blocks['google-spreadsheet.createSheet'] =
+Blockly.GoogleSpreadsheet.blocks['google-spreadsheet.createSheet'] =
     '<block type="google-spreadsheet.createSheet">' +
     '     <field name="INSTANCE"></field>' +
     '     <value name="SHEET_NAME">' +
@@ -35,7 +35,7 @@ Blockly.Blocks['google-spreadsheet.createSheet'] = {
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
 
-        this.setColour(Blockly.Sendto.HUE);
+        this.setColour(Blockly.GoogleSpreadsheet.HUE);
         this.setTooltip(Blockly.Translate('google-spreadsheet_tooltip'));
         this.setHelpUrl(Blockly.Translate('google-spreadsheet_help'));
     },
