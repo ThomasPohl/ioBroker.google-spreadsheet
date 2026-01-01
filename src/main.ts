@@ -328,6 +328,9 @@ class GoogleSpreadsheet extends utils.Adapter {
     }
 }
 
+// Für Tests und direkte ES/TS-Imports
+export { GoogleSpreadsheet };
+
 if (require.main !== module) {
     // Export the constructor in compact mode
     module.exports = (options: Partial<utils.AdapterOptions> | undefined) => new GoogleSpreadsheet(options);
