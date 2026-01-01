@@ -9,7 +9,7 @@ Blockly.Words['google-spreadsheet_writeCell_sheetName'] = { en: 'on sheet', de: 
 Blockly.Words['google-spreadsheet_writeCell_cell'] = { en: 'in cell', de: 'in Zelle' };
 Blockly.Words['google-spreadsheet_writeCell_data'] = { en: 'the data', de: 'die Daten' };
 
-Blockly.GoogleSpreadsheet.blocks['google-spreadsheet.writeCell'] =
+Blockly.GoogleSheets.blocks['google-spreadsheet.writeCell'] =
     '<block type="google-spreadsheet.writeCell">' +
     '     <field name="INSTANCE"></field>' +
     '     <field name="SHEET_NAME">' +
@@ -44,7 +44,7 @@ Blockly.Blocks['google-spreadsheet.writeCell'] = {
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
 
-        this.setColour(Blockly.GoogleSpreadsheet.HUE);
+        this.setColour(Blockly.GoogleSheets.HUE);
     },
 };
 

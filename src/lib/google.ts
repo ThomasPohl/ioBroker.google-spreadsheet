@@ -83,7 +83,7 @@ export class SpreadsheetUtils {
     }
 
     /**
-     * Create a new sheet in the Google Spreadsheet
+     * Create a new sheet in the Google Sheets
      *
      * @param title The title of the new sheet
      * @param sheetAlias Alias of the sheet to use (optional)

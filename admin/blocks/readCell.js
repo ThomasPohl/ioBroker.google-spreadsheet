@@ -7,7 +7,7 @@
 Blockly.Words['google-spreadsheet_read_read-from'] = { en: 'read from', de: 'Lies von' };
 Blockly.Words['google-spreadsheet_read_on-sheetName'] = { en: 'sheet', de: 'Tabellenblatt' };
 Blockly.Words['google-spreadsheet_read_in-cell'] = { en: 'cell', de: 'Zelle' };
-Blockly.GoogleSpreadsheet.blocks['google-spreadsheet.read'] =
+Blockly.GoogleSheets.blocks['google-spreadsheet.read'] =
     '<block type="google-spreadsheet.read">' +
     '     <field name="INSTANCE"></field>' +
     '     <value name="SHEET_NAME">' +
@@ -39,7 +39,7 @@ Blockly.Blocks['google-spreadsheet.read'] = {
         this.setNextStatement(false, null);
         this.setOutput(true, 'String');
 
-        this.setColour(Blockly.GoogleSpreadsheet.HUE);
+        this.setColour(Blockly.GoogleSheets.HUE);
     },
 };
 

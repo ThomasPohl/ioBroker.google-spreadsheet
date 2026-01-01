@@ -6,24 +6,24 @@
 /*global document:true */
 
 if (typeof goog !== 'undefined') {
-    goog.provide('Blockly.JavaScript.GoogleSpreadsheet');
+    goog.provide('Blockly.JavaScript.GoogleSheets');
 
     goog.require('Blockly.JavaScript');
 }
 
 Blockly.CustomBlocks = Blockly.CustomBlocks || [];
-Blockly.CustomBlocks.push('GoogleSpreadsheet');
+Blockly.CustomBlocks.push('GoogleSheets');
 
-Blockly.GoogleSpreadsheet = {
+Blockly.GoogleSheets = {
     HUE: 'rgb(35, 166, 103)',
     blocks: {},
     WARNING_PARENTS: [
         'on_ext',
     ],
 };
-Blockly.Words['GoogleSpreadsheet'] = {'en':'Google Spreadsheet','de': 'Google Tabellen'};
+Blockly.Words['GoogleSheets'] = {'en':'Google Sheets','de': 'Google Sheets'};
 
-Blockly.Words['google-spreadsheet_anyInstance'] = { en: 'all instances', de: 'allen Instanzen' };
+Blockly.Words['google-spreadsheet_anyInstance'] = { en: 'default of all instances', de: 'default von allen Instanzen' };
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 function getInstances(withAny = true) {

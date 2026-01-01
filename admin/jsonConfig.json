@@ -2,7 +2,7 @@
     "i18n": true,
     "type": "tabs",
     "tabsStyle": {
-    "width": "calc(100% - 100px)"
+        "width": "calc(100% - 100px)"
     },
     "items": {
         "_options": {
@@ -31,7 +31,13 @@
                     "label": "privateKey",
                     "minRows": 20,
                     "help": "privateKeyHelp"
-                },
+                }
+            }
+        },
+        "_spreadsheets": {
+            "type": "panel",
+            "label": "Spreadsheets",
+            "items": {
                 "spreadsheetsErr1": {
                     "type": "staticText",
                     "text": "ERROR: Exactly one default spreadsheet allowed!",
@@ -49,8 +55,8 @@
                 "spreadsheets": {
                     "type": "table",
                     "newLine": true,
-                    "label": "tokens",
-                    "help": "tokensHelp",
+                    "label": "Spreadsheets",
+                    "help": "spreadsheetsHelp",
                     "sm": 12,
                     "md": 12,
                     "lg": 12,
@@ -60,8 +66,8 @@
                             "type": "checkbox",
                             "attr": "isDefault",
                             "width": "10%",
-                            "title": "defaultTokenAlias",
-                            "tooltip": "defaultTokenAliasHelp",
+                            "title": "defaultSpreadsheetAlias",
+                            "tooltip": "defaultSpreadsheetAliasHelp",
                             "default": false,
                             "validator": "let b=null; for(let ii=0; globalData.spreadsheets && ii<globalData.spreadsheets.length; ii++){ if (globalData.spreadsheets[ii].isDefault) { if (b===null){ b=true; } else if (b===true){ return false; } else { b=false; }}}; if (b===false || b===null) return false;  return true;",
                             "validatorNoSaveOnError": true

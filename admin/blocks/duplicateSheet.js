@@ -10,7 +10,7 @@ Blockly.Words['google-spreadsheet_duplicate-sheet_sheetName'] = {
 Blockly.Words['google-spreadsheet_duplicate-sheet_newSheetName'] = { en: 'new name', de: 'neuer Name' };
 Blockly.Words['google-spreadsheet_duplicate-sheet_newPosition'] = { en: 'at position', de: 'an Position' };
 
-Blockly.GoogleSpreadsheet.blocks['google-spreadsheetduplicateSheet'] =
+Blockly.GoogleSheets.blocks['google-spreadsheetduplicateSheet'] =
     '<block type="google-spreadsheet.duplicateSheet">' +
     '     <field name="INSTANCE"></field>' +
     '     <value name="SHEET_NAME">' +
@@ -54,7 +54,7 @@ Blockly.Blocks['google-spreadsheet.duplicateSheet'] = {
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
 
-        this.setColour(Blockly.GoogleSpreadsheet.HUE);
+        this.setColour(Blockly.GoogleSheets.HUE);
     },
 };
 

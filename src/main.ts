@@ -211,7 +211,7 @@ class GoogleSpreadsheet extends utils.Adapter {
         if (this.missingParameters(['sheetName', 'data'], messageData)) {
             return;
         }
-        this.spreadsheet.append(messageData.sheetName, messageData.data, messageData.sheetAlias);
+        this.spreadsheet.append(messageData.sheetName, messageData.data, messageData.alias);
     }
     private writeCell(message: Record<string, any>): void {
         const messageData: Record<string, any> = message.message as Record<string, any>;
@@ -224,7 +224,7 @@ class GoogleSpreadsheet extends utils.Adapter {
             this.log.error(`Invalid cell pattern ${messageData.cell}. Expected: A1`);
             return;
         }
-        this.spreadsheet.writeCell(messageData.sheetName, messageData.cell, messageData.data);
+        this.spreadsheet.writeCell(messageData.sheetName, messageData.cell, messageData.data, messageData.alias);
     }
     private writeCells(message: Record<string, any>): void {
         const messageData: Record<string, any> = message.message as Record<string, any>;
@@ -244,7 +244,7 @@ class GoogleSpreadsheet extends utils.Adapter {
                 return;
             }
         }
-        this.spreadsheet.writeCells(cells);
+        this.spreadsheet.writeCells(cells, messageData.alias);
     }
     private async readCell(message: Record<string, any>): Promise<any> {
         return new Promise<any>((resolve, reject) => {
@@ -259,7 +259,7 @@ class GoogleSpreadsheet extends utils.Adapter {
                 return;
             }
             this.spreadsheet
-                .readCell(messageData.sheetName, messageData.cell)
+                .readCell(messageData.sheetName, messageData.cell, messageData.alias)
                 .then(result => resolve(result))
                 .catch(error => reject(new Error(error)));
         });
@@ -269,23 +269,50 @@ class GoogleSpreadsheet extends utils.Adapter {
         if (this.missingParameters(['sheetName', 'start', 'end'], messageData)) {
             return;
         }
-        this.spreadsheet.deleteRows(messageData.sheetName, messageData.start, messageData.end);
+        this.spreadsheet.deleteRows(messageData.sheetName, messageData.start, messageData.end, messageData.alias);
     }
     public createSheet(message: ioBroker.Message): void {
-        this.spreadsheet.createSheet(message.message as string);
+        if (typeof message.message === 'string') {
+            this.log.warn('Deprecated call of createSheet with string as message. Please use object with title and optional alias!');
+            this.spreadsheet.createSheet(message.message, null);
+        } else {
+            const messageData: Record<string, any> = message.message as Record<string, any>;
+            if (this.missingParameters(['title'], messageData)) {
+                return;
+            }
+            this.spreadsheet.createSheet(messageData.title as string, messageData.alias);
+        }
     }
     public deleteSheet(message: ioBroker.Message): void {
-        this.spreadsheet.deleteSheet(message.message as string);
+        if (typeof message.message === 'string') {
+            this.log.warn('Deprecated call of deleteSheet with non-string as message. Please use object with sheetName and optional alias!');
+            this.spreadsheet.deleteSheet(message.message as string);
+        } else {
+            const messageData: Record<string, any> = message.message as Record<string, any>;
+            if (this.missingParameters(['sheetName'], messageData)) {
+                return;
+            }
+            this.spreadsheet.deleteSheet(messageData.sheetName as string, messageData.alias);
+        }
     }
     public deleteSheets(message: ioBroker.Message): void {
-        this.spreadsheet.deleteSheets(message.message as string[]);
+        if (Array.isArray(message.message)) {
+            this.log.warn('Deprecated call of deleteSheets with array as message. Please use object with sheetNames and optional alias!');
+            this.spreadsheet.deleteSheets(message.message as string[], null);
+        } else {
+            const messageData: Record<string, any> = message.message as Record<string, any>;
+            if (this.missingParameters(['sheetNames'], messageData)) {
+                return;
+            }
+            this.spreadsheet.deleteSheets(messageData.sheetNames as string[], messageData.alias);
+        }
     }
     public duplicateSheet(message: ioBroker.Message): void {
         const messageData: Record<string, any> = message.message as Record<string, any>;
         if (this.missingParameters(['source', 'target', 'index'], messageData)) {
             return;
         }
-        this.spreadsheet.duplicateSheet(messageData.source, messageData.target, messageData.index);
+        this.spreadsheet.duplicateSheet(messageData.source, messageData.target, messageData.index, messageData.alias);
     }
 
     private missingParameters(neededParameters: string[], messageData: Record<string, any>): boolean {
