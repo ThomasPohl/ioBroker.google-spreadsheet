@@ -1,20 +1,21 @@
 'use strict';
 /*global Blockly */
 /*global getInstances */
+/*global getInstanceAndAlias */
 
 /// --- Write Cells  --------------------------------------------------
 
 Blockly.Words['google-spreadsheet_writeCells_write-to'] = { en: 'write cells to', de: 'Schreibe Zellen in ' };
 Blockly.Words['google-spreadsheet_writeCells_cells'] = { en: 'cells', de: 'Zellen' };
 
-Blockly.Sendto.blocks['google-spreadsheet.writeCells'] =
+Blockly.GoogleSheets.blocks['google-spreadsheet.writeCells'] =
     '<block type="google-spreadsheet.writeCells">' +
     '     <field name="INSTANCE"></field>' +
     '     <statement name="CELLS"></statement>' +
     '</block>';
 
 // addCell-Block in die Toolbox aufnehmen, damit er auswählbar ist
-Blockly.Sendto.blocks['google-spreadsheet.addCell'] =
+Blockly.GoogleSheets.blocks['google-spreadsheet.addCell'] =
     '<block type="google-spreadsheet.addCell">' +
     '     <field name="SHEET_NAME">' +
     '         <shadow type="text">' +
@@ -48,12 +49,12 @@ Blockly.Blocks['google-spreadsheet.writeCells'] = {
         this.setInputsInline(false);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
-        this.setColour(Blockly.Sendto.HUE);
+        this.setColour(Blockly.GoogleSheets.HUE);
     },
 };
 
 Blockly.JavaScript.forBlock['google-spreadsheet.writeCells'] = function (block) {
-    const dropdown_instance = block.getFieldValue('INSTANCE');
+    const { instance, alias } = getInstanceAndAlias(block);
     const cellsCode = Blockly.JavaScript.statementToCode(block, 'CELLS');
     // cellsCode enthält mehrere Zeilen wie: addCell({sheetName: ..., cell: ..., data: ...});
     // Wir sammeln die Argumente in ein Array
@@ -67,7 +68,7 @@ Blockly.JavaScript.forBlock['google-spreadsheet.writeCells'] = function (block) 
             console.error('Error parsing cell data:', e);
         }
     }
-    return `sendTo("google-spreadsheet${dropdown_instance}", "writeCells", {cells: ${JSON.stringify(cells)}});\n`;
+    return `sendTo("google-spreadsheet${instance}", "writeCells", {cells: ${JSON.stringify(cells)}, "alias":"${alias}"});\n`;
 };
 
 // Hilfsblock für einzelne Zelleingabe (nur für writeCells)
@@ -78,7 +79,7 @@ Blockly.Blocks['google-spreadsheet.addCell'] = {
         this.appendValueInput('DATA').appendField('Data');
         this.setPreviousStatement(true, 'google-spreadsheet.writeCell');
         this.setNextStatement(true, 'google-spreadsheet.writeCell');
-        this.setColour(Blockly.Sendto.HUE);
+        this.setColour(Blockly.GoogleSheets.HUE);
     },
 };
 

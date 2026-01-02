@@ -1,13 +1,14 @@
 'use strict';
-/*global Blockly:true */
-/*global getInstances:true */
+/*global Blockly */
+/*global getInstances */
+/*global getInstanceAndAlias */
 
 /// --- Read Cell  --------------------------------------------------
 
 Blockly.Words['google-spreadsheet_read_read-from'] = { en: 'read from', de: 'Lies von' };
 Blockly.Words['google-spreadsheet_read_on-sheetName'] = { en: 'sheet', de: 'Tabellenblatt' };
 Blockly.Words['google-spreadsheet_read_in-cell'] = { en: 'cell', de: 'Zelle' };
-Blockly.Sendto.blocks['google-spreadsheet.read'] =
+Blockly.GoogleSheets.blocks['google-spreadsheet.read'] =
     '<block type="google-spreadsheet.read">' +
     '     <field name="INSTANCE"></field>' +
     '     <value name="SHEET_NAME">' +
@@ -39,12 +40,12 @@ Blockly.Blocks['google-spreadsheet.read'] = {
         this.setNextStatement(false, null);
         this.setOutput(true, 'String');
 
-        this.setColour(Blockly.Sendto.HUE);
+        this.setColour(Blockly.GoogleSheets.HUE);
     },
 };
 
 Blockly.JavaScript.forBlock['google-spreadsheet.read'] = function (block) {
-    const dropdown_instance = block.getFieldValue('INSTANCE');
+    const { instance, alias } = getInstanceAndAlias(block);
     let data = Blockly.JavaScript.valueToCode(block, 'DATA', Blockly.JavaScript.ORDER_ATOMIC);
     if (!data) {
         data = '{}';
@@ -53,9 +54,9 @@ Blockly.JavaScript.forBlock['google-spreadsheet.read'] = function (block) {
     const cell = Blockly.JavaScript.valueToCode(block, 'CELL', Blockly.JavaScript.ORDER_ATOMIC);
 
     return [
-        `await new Promise((resolve)=>{sendTo("google-spreadsheet${dropdown_instance}", "readCell", {"sheetName":"${
+        `await new Promise((resolve)=>{sendTo("google-spreadsheet${instance}", "readCell", {"sheetName":"${
             sheetName
-        }", "cell":"${cell}"}, (response)=>{resolve(response)}); })`,
+        }", "cell":"${cell}", "alias":"${alias}"} , (response)=>{resolve(response)}); })`,
         0,
     ];
 };

@@ -1,6 +1,7 @@
 'use strict';
 /*global Blockly */
 /*global getInstances */
+/*global getInstanceAndAlias */
 
 Blockly.Words['google-spreadsheet_delete-sheets_delete-on'] = { en: 'delete sheets in', de: 'lösche Blätter in' };
 Blockly.Words['google-spreadsheet_delete-sheets_sheetNames'] = {
@@ -8,7 +9,7 @@ Blockly.Words['google-spreadsheet_delete-sheets_sheetNames'] = {
     de: 'die Blätter mit Namen (Array)',
 };
 
-Blockly.Sendto.blocks['google-spreadsheet.deleteSheets'] =
+Blockly.GoogleSheets.blocks['google-spreadsheet.deleteSheets'] =
     '<block type="google-spreadsheet.deleteSheets">' +
     '     <field name="INSTANCE"></field>' +
     '     <value name="SHEET_NAMES">' +
@@ -32,7 +33,7 @@ Blockly.Blocks['google-spreadsheet.deleteSheets'] = {
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
 
-        this.setColour(Blockly.Sendto.HUE);
+        this.setColour(Blockly.GoogleSheets.HUE);
         this.setTooltip(Blockly.Translate('google-spreadsheet_tooltip'));
         this.setHelpUrl(Blockly.Translate('google-spreadsheet_help'));
     },
@@ -41,8 +42,8 @@ Blockly.Blocks['google-spreadsheet.deleteSheets'] = {
 Blockly.Blocks['google-spreadsheet.deleteSheets'].mutator = 'google-spreadsheet_deleteSheets_mutator';
 
 Blockly.JavaScript.forBlock['google-spreadsheet.deleteSheets'] = function (block) {
-    const dropdown_instance = block.getFieldValue('INSTANCE');
+    const { instance, alias } = getInstanceAndAlias(block);
     const data = Blockly.JavaScript.valueToCode(block, 'SHEET_NAMES', Blockly.JavaScript.ORDER_ATOMIC);
 
-    return `sendTo("google-spreadsheet${dropdown_instance}", "deleteSheets", ${data});\n`;
+    return `sendTo("google-spreadsheet${instance}", "deleteSheets", {sheetNames: ${data}, alias: "${alias}"});\n`;
 };

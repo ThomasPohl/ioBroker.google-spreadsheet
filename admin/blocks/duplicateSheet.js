@@ -1,6 +1,7 @@
 'use strict';
-/*global Blockly:true */
-/*global getInstances:true */
+/*global Blockly */
+/*global getInstances */
+/*global getInstanceAndAlias */
 
 Blockly.Words['google-spreadsheet_duplicate-sheet_duplicate-in'] = { en: 'duplicate in ', de: 'dupliziere in' };
 Blockly.Words['google-spreadsheet_duplicate-sheet_sheetName'] = {
@@ -10,7 +11,7 @@ Blockly.Words['google-spreadsheet_duplicate-sheet_sheetName'] = {
 Blockly.Words['google-spreadsheet_duplicate-sheet_newSheetName'] = { en: 'new name', de: 'neuer Name' };
 Blockly.Words['google-spreadsheet_duplicate-sheet_newPosition'] = { en: 'at position', de: 'an Position' };
 
-Blockly.Sendto.blocks['google-spreadsheetduplicateSheet'] =
+Blockly.GoogleSheets.blocks['google-spreadsheetduplicateSheet'] =
     '<block type="google-spreadsheet.duplicateSheet">' +
     '     <field name="INSTANCE"></field>' +
     '     <value name="SHEET_NAME">' +
@@ -54,12 +55,12 @@ Blockly.Blocks['google-spreadsheet.duplicateSheet'] = {
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
 
-        this.setColour(Blockly.Sendto.HUE);
+        this.setColour(Blockly.GoogleSheets.HUE);
     },
 };
 
 Blockly.JavaScript.forBlock['google-spreadsheet.duplicateSheet'] = function (block) {
-    const dropdown_instance = block.getFieldValue('INSTANCE');
+    const { instance, alias } = getInstanceAndAlias(block);
     const source = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
     const target = Blockly.JavaScript.valueToCode(block, 'NEW_SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
     let index = Blockly.JavaScript.valueToCode(block, 'NEW_POSITION', Blockly.JavaScript.ORDER_ATOMIC);
@@ -67,9 +68,5 @@ Blockly.JavaScript.forBlock['google-spreadsheet.duplicateSheet'] = function (blo
         index = -1;
     }
 
-    return (
-        `sendTo("google-spreadsheet${dropdown_instance}", "duplicateSheet", {"source": ${source}, "target": ${
-            target
-        }, "index":${index}}` + `);\n`
-    );
+    return `sendTo("google-spreadsheet${instance}", "duplicateSheet", {"source": ${source}, "target": ${target}, "index":${index}, "alias":"${alias}"});\n`;
 };

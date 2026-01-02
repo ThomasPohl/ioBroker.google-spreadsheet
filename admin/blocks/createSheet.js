@@ -1,6 +1,7 @@
 'use strict';
-/*global Blockly:true */
-/*global getInstances:true */
+/*global Blockly */
+/*global getInstances */
+/*global getInstanceAndAlias */
 
 /// ---Create sheet  --------------------------------------------------
 Blockly.Words['google-spreadsheet_create-sheet_create-in'] = { en: 'create in', de: 'erstelle in' };
@@ -9,7 +10,7 @@ Blockly.Words['google-spreadsheet_create-sheet_sheet-name'] = {
     de: 'ein Blatt mit dem Namen',
 };
 
-Blockly.Sendto.blocks['google-spreadsheet.createSheet'] =
+Blockly.GoogleSheets.blocks['google-spreadsheet.createSheet'] =
     '<block type="google-spreadsheet.createSheet">' +
     '     <field name="INSTANCE"></field>' +
     '     <value name="SHEET_NAME">' +
@@ -35,15 +36,15 @@ Blockly.Blocks['google-spreadsheet.createSheet'] = {
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
 
-        this.setColour(Blockly.Sendto.HUE);
+        this.setColour(Blockly.GoogleSheets.HUE);
         this.setTooltip(Blockly.Translate('google-spreadsheet_tooltip'));
         this.setHelpUrl(Blockly.Translate('google-spreadsheet_help'));
     },
 };
 
 Blockly.JavaScript.forBlock['google-spreadsheet.createSheet'] = function (block) {
-    const dropdown_instance = block.getFieldValue('INSTANCE');
-    const data = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
+    const { instance, alias } = getInstanceAndAlias(block);
+    const sheetName = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
 
-    return `sendTo("google-spreadsheet${dropdown_instance}", "createSheet", ${data});\n`;
+    return `sendTo("google-spreadsheet${instance}", "createSheet", {"sheetName":${sheetName}, "alias":"${alias}"});\n`;
 };

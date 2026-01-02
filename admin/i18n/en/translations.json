@@ -6,5 +6,12 @@
     "serviceAccountEmailHelp": "the emailaddress of the service account",
     "sheetName": "sheet name",
     "spreadsheetId": "spreadsheet id",
-    "spreadsheetIdHelp": "You can find the id in the URL of your spreadsheet."
+    "spreadsheetIdHelp": "You can find the id in the URL of your spreadsheet.",
+    "spreadsheetsHelp": "Help for spreadsheets table" ,
+    "defaultSpreadsheetAlias": "Default" ,
+    "defaultSpreadsheetAliasHelp": "Set this as the default spreadsheet" ,
+    "spreadsheetAlias": "Spreadsheet alias" ,
+    "spreadsheetAliasHelp": "Alias for the spreadsheet" ,
+    "SpreadsheetId": "Spreadsheet ID" ,
+    "spreadsheetsErr1": "ERROR: Exactly one default spreadsheet allowed!" 
 }

@@ -178,7 +178,7 @@
       "type": "state",
       "common": {
         "name": {
-          "en": "Connected to Google server",
+          "en": "Connection to Google server",
           "de": "Verbindung mit Google Server",
           "ru": "Подключен к серверу Google",
           "pt": "Conectado ao servidor Google",

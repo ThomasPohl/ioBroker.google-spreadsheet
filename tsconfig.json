@@ -32,11 +32,18 @@
         // "useUnknownInCatchVariables": false,
 
         "sourceMap": true,
-        "inlineSourceMap": false
+        "inlineSourceMap": false,
+        "moduleResolution": "node",
+        "module": "commonjs"
     },
     "types":[
         "googleapis"
     ],
+    "ts-node": {
+        "compilerOptions": {
+            "module": "commonjs"
+        }
+    },
     "include": [
         "src/**/*.ts"
 , "src/main.test.mts"    ],

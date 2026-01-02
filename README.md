@@ -114,6 +114,12 @@ Make sure the Service Account has adequate permissions to write to the spreadshe
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+- (Thomas Pohl) Added support for multiple spreadsheets with aliases
+- (Thomas Pohl) All methods now support an optional alias parameter to specify which spreadsheet to use
+- (Thomas Pohl) Automatic migration of old single spreadsheet configuration to new multi-spreadsheet format
+- (Thomas Pohl) Improved unit test coverage with mock support for adapter-core
+
 ### 0.6.0 (2025-12-26)
 - (Thomas Pohl) Added deleteSheets functionality (delete multiple sheets in one call)
 - (Thomas Pohl) Added blockly block for deleteSheets
