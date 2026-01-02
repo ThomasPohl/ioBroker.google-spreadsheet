@@ -1,6 +1,7 @@
 'use strict';
 /*global Blockly */
 /*global getInstances */
+/*global getInstanceAndAlias */
 
 Blockly.Words['google-spreadsheet_delete-sheets_delete-on'] = { en: 'delete sheets in', de: 'lösche Blätter in' };
 Blockly.Words['google-spreadsheet_delete-sheets_sheetNames'] = {

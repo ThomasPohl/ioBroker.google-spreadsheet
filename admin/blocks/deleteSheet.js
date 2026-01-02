@@ -1,6 +1,7 @@
 'use strict';
-/*global Blockly:true */
-/*global getInstances:true */
+/*global Blockly */
+/*global getInstances */
+/*global getInstanceAndAlias */
 
 Blockly.Words['google-spreadsheet_delete-sheet_delete-on'] = { en: 'delete in', de: 'lösche in' };
 Blockly.Words['google-spreadsheet_delete-sheet_sheetName'] = {
@@ -39,8 +40,8 @@ Blockly.Blocks['google-spreadsheet.deleteSheet'] = {
 };
 
 Blockly.JavaScript.forBlock['google-spreadsheet.deleteSheet'] = function (block) {
-    const dropdown_instance = block.getFieldValue('INSTANCE');
-    const data = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
+    const { instance, alias } = getInstanceAndAlias(block);
+    const sheetName = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
 
-    return `sendTo("google-spreadsheet${dropdown_instance}", "deleteSheet", ${data});\n`;
+    return `sendTo("google-spreadsheet${instance}", "deleteSheet", {"sheetName":${sheetName}, "alias":"${alias}"});\n`;
 };

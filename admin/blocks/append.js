@@ -1,6 +1,7 @@
 'use strict';
-/*global Blockly:true */
-/*global getInstances:true */
+/*global Blockly */
+/*global getInstances */
+/*global getInstanceAndAlias */
 
 /// --- Append  --------------------------------------------------
 Blockly.Words['google-spreadsheet_append_add-to'] = { en: 'append to', de: 'füge zu' };

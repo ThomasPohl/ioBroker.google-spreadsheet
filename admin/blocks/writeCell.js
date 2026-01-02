@@ -1,6 +1,7 @@
 'use strict';
 /*global Blockly */
 /*global getInstances */
+/*global getInstanceAndAlias */
 
 /// --- Write Cell  --------------------------------------------------
 
@@ -49,14 +50,10 @@ Blockly.Blocks['google-spreadsheet.writeCell'] = {
 };
 
 Blockly.JavaScript.forBlock['google-spreadsheet.writeCell'] = function (block) {
-    const dropdown_instance = block.getFieldValue('INSTANCE');
+    const { instance, alias } = getInstanceAndAlias(block);
     const sheetName = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
     const cell = Blockly.JavaScript.valueToCode(block, 'CELL', Blockly.JavaScript.ORDER_ATOMIC);
     const data = Blockly.JavaScript.valueToCode(block, 'DATA', Blockly.JavaScript.ORDER_ATOMIC);
 
-    return (
-        `sendTo("google-spreadsheet${dropdown_instance}", "writeCell", {"sheetName": ${sheetName}, "cell": ${
-            cell
-        }, "data":${data}}` + `);\n`
-    );
+    return `sendTo("google-spreadsheet${instance}", "writeCell", {"sheetName": ${sheetName}, "cell": ${cell}, "data":${data}, "alias":"${alias}"});\n`;
 };

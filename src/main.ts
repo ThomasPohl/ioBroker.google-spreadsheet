@@ -7,9 +7,17 @@ import * as utils from '@iobroker/adapter-core';
 import fs from 'fs';
 import { SpreadsheetUtils } from './lib/google';
 
+/**
+ * The adapter class
+ */
 class GoogleSpreadsheet extends utils.Adapter {
     private spreadsheet: SpreadsheetUtils;
 
+    /**
+     * Creates an instance of the adapter class.
+     *
+     * @param options The adapter options
+     */
     public constructor(options: Partial<utils.AdapterOptions> = {}) {
         super({
             ...options,
@@ -69,8 +77,13 @@ class GoogleSpreadsheet extends utils.Adapter {
                 if (data && data.native && data.native.privateKey && !data.native.privateKey.startsWith('$/aes')) {
                     this.config.privateKey = data.native.privateKey;
                     data.native.privateKey = this.encrypt(data.native.privateKey);
-                    this.extendForeignObject(`system.adapter.${this.name}.${this.instance}`, data);
-                    this.log.info('privateKey is stored now encrypted');
+                    this.extendForeignObject(`system.adapter.${this.name}.${this.instance}`, data)
+                        .then(() => {
+                            this.log.info('privateKey is stored now encrypted');
+                        })
+                        .catch(err => {
+                            this.log.error(`Cannot store encrypted privateKey: ${err}`);
+                        });
                 }
             });
         }
@@ -264,6 +277,11 @@ class GoogleSpreadsheet extends utils.Adapter {
                 .catch(error => reject(new Error(error)));
         });
     }
+    /**
+     * Delete rows from a sheet
+     *
+     * @param message The message object
+     */
     public deleteRows(message: ioBroker.Message): void {
         const messageData: Record<string, any> = message.message as Record<string, any>;
         if (this.missingParameters(['sheetName', 'start', 'end'], messageData)) {
@@ -271,22 +289,38 @@ class GoogleSpreadsheet extends utils.Adapter {
         }
         this.spreadsheet.deleteRows(messageData.sheetName, messageData.start, messageData.end, messageData.alias);
     }
+
+    /**
+     * Create a new sheet
+     *
+     * @param message The message object
+     */
     public createSheet(message: ioBroker.Message): void {
         if (typeof message.message === 'string') {
-            this.log.warn('Deprecated call of createSheet with string as message. Please use object with title and optional alias!');
+            this.log.warn(
+                'Deprecated call of createSheet with string as message. Please use object with title and optional alias!',
+            );
             this.spreadsheet.createSheet(message.message, null);
         } else {
             const messageData: Record<string, any> = message.message as Record<string, any>;
-            if (this.missingParameters(['title'], messageData)) {
+            if (this.missingParameters(['sheetName'], messageData)) {
                 return;
             }
-            this.spreadsheet.createSheet(messageData.title as string, messageData.alias);
+            this.spreadsheet.createSheet(messageData.sheetName as string, messageData.alias);
         }
     }
+
+    /**
+     * Delete a sheet
+     *
+     * @param message The message object
+     */
     public deleteSheet(message: ioBroker.Message): void {
         if (typeof message.message === 'string') {
-            this.log.warn('Deprecated call of deleteSheet with non-string as message. Please use object with sheetName and optional alias!');
-            this.spreadsheet.deleteSheet(message.message as string);
+            this.log.warn(
+                'Deprecated call of deleteSheet with non-string as message. Please use object with sheetName and optional alias!',
+            );
+            this.spreadsheet.deleteSheet(message.message);
         } else {
             const messageData: Record<string, any> = message.message as Record<string, any>;
             if (this.missingParameters(['sheetName'], messageData)) {
@@ -295,9 +329,17 @@ class GoogleSpreadsheet extends utils.Adapter {
             this.spreadsheet.deleteSheet(messageData.sheetName as string, messageData.alias);
         }
     }
+
+    /**
+     * Delete multiple sheets
+     *
+     * @param message The message object
+     */
     public deleteSheets(message: ioBroker.Message): void {
         if (Array.isArray(message.message)) {
-            this.log.warn('Deprecated call of deleteSheets with array as message. Please use object with sheetNames and optional alias!');
+            this.log.warn(
+                'Deprecated call of deleteSheets with array as message. Please use object with sheetNames and optional alias!',
+            );
             this.spreadsheet.deleteSheets(message.message as string[], null);
         } else {
             const messageData: Record<string, any> = message.message as Record<string, any>;
@@ -307,6 +349,12 @@ class GoogleSpreadsheet extends utils.Adapter {
             this.spreadsheet.deleteSheets(messageData.sheetNames as string[], messageData.alias);
         }
     }
+
+    /**
+     * Duplicate a sheet
+     *
+     * @param message The message object
+     */
     public duplicateSheet(message: ioBroker.Message): void {
         const messageData: Record<string, any> = message.message as Record<string, any>;
         if (this.missingParameters(['source', 'target', 'index'], messageData)) {
@@ -328,7 +376,6 @@ class GoogleSpreadsheet extends utils.Adapter {
     }
 }
 
-// Für Tests und direkte ES/TS-Imports
 export { GoogleSpreadsheet };
 
 if (require.main !== module) {

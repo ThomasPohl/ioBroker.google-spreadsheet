@@ -1,6 +1,7 @@
 'use strict';
-/*global Blockly:true */
-/*global getInstances:true */
+/*global Blockly */
+/*global getInstances */
+/*global getInstanceAndAlias */
 
 Blockly.Words['google-spreadsheet_duplicate-sheet_duplicate-in'] = { en: 'duplicate in ', de: 'dupliziere in' };
 Blockly.Words['google-spreadsheet_duplicate-sheet_sheetName'] = {
@@ -59,7 +60,7 @@ Blockly.Blocks['google-spreadsheet.duplicateSheet'] = {
 };
 
 Blockly.JavaScript.forBlock['google-spreadsheet.duplicateSheet'] = function (block) {
-    const dropdown_instance = block.getFieldValue('INSTANCE');
+    const { instance, alias } = getInstanceAndAlias(block);
     const source = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
     const target = Blockly.JavaScript.valueToCode(block, 'NEW_SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
     let index = Blockly.JavaScript.valueToCode(block, 'NEW_POSITION', Blockly.JavaScript.ORDER_ATOMIC);
@@ -67,9 +68,5 @@ Blockly.JavaScript.forBlock['google-spreadsheet.duplicateSheet'] = function (blo
         index = -1;
     }
 
-    return (
-        `sendTo("google-spreadsheet${dropdown_instance}", "duplicateSheet", {"source": ${source}, "target": ${
-            target
-        }, "index":${index}}` + `);\n`
-    );
+    return `sendTo("google-spreadsheet${instance}", "duplicateSheet", {"source": ${source}, "target": ${target}, "index":${index}, "alias":"${alias}"});\n`;
 };

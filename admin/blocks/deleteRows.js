@@ -1,6 +1,7 @@
 'use strict';
-/*global Blockly:true */
-/*global getInstances:true */
+/*global Blockly */
+/*global getInstances */
+/*global getInstanceAndAlias */
 
 /// --- Delete rows  --------------------------------------------------
 
@@ -62,11 +63,11 @@ Blockly.Blocks['google-spreadsheet.deleteRows'] = {
 };
 
 Blockly.JavaScript.forBlock['google-spreadsheet.deleteRows'] = function (block) {
-    const dropdown_instance = block.getFieldValue('INSTANCE');
+    const { instance, alias } = getInstanceAndAlias(block);
+    const sheetName = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
+
     const startRow = Blockly.JavaScript.valueToCode(block, 'START_ROW', Blockly.JavaScript.ORDER_ATOMIC);
     const endRow = Blockly.JavaScript.valueToCode(block, 'END_ROW', Blockly.JavaScript.ORDER_ATOMIC);
-    const sheetName = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
-    return `sendTo("google-spreadsheet${dropdown_instance}", "deleteRows", {"sheetName":${sheetName},"start":${
-        startRow
-    }, "end":${endRow}});\n`;
+    return `sendTo("google-spreadsheet${instance}", "deleteRows", {"sheetName":${sheetName},"start":${startRow}
+    }, "end":${endRow}, "alias":"${alias}"});\n`;
 };

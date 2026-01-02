@@ -12,13 +12,11 @@ describe('GoogleSpreadsheet', () => {
         config = {
             privateKey: 'key',
             serviceAccountEmail: 'mail',
-            spreadsheets: [
-                { alias: 'main', spreadsheetId: 'id1', isDefault: true },
-            ],
+            spreadsheets: [{ alias: 'main', spreadsheetId: 'id1', isDefault: true }],
         };
         log = { debug: sinon.spy(), error: sinon.spy(), warn: sinon.spy(), info: sinon.spy() };
         spreadsheet = new SpreadsheetUtils(config, log);
-        
+
         // Create a mock adapter object with the methods we want to test
         adapter = {
             config: config,
@@ -44,18 +42,15 @@ describe('GoogleSpreadsheet', () => {
     });
 
     it('should detect missing parameters', () => {
-        // @ts-ignore
         expect(adapter.missingParameters(['foo'], {})).to.be.true;
         expect(log.error.calledWithMatch("The parameter 'foo' is required")).to.be.true;
     });
 
     it('should not detect missing parameters if all present', () => {
-        // @ts-ignore
         expect(adapter.missingParameters(['foo'], { foo: 1 })).to.be.false;
     });
 
     it('should warn on unknown command', () => {
-        // @ts-ignore
         adapter.onMessage({ command: 'unknown', message: {}, from: '', callback: undefined });
         expect(log.warn.calledWithMatch('unknown command')).to.be.true;
     });

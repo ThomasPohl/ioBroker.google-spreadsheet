@@ -36,23 +36,19 @@ describe('SpreadsheetUtils', () => {
     });
 
     it('prepareValues wraps non-array', () => {
-        // @ts-ignore
-        expect(utils["prepareValues"]('foo')).to.deep.equal([["foo"]]);
+        expect(utils['prepareValues']('foo')).to.deep.equal([['foo']]);
     });
 
     it('prepareValues wraps array', () => {
-        // @ts-ignore
-        expect(utils["prepareValues"]([1,2])).to.deep.equal([[1,2]]);
+        expect(utils['prepareValues']([1, 2])).to.deep.equal([[1, 2]]);
     });
 
     it('formatPrivateKey replaces \\n', () => {
-        // @ts-ignore
-        expect(utils["formatPrivateKey"]('a\\nb')).to.equal('a\nb');
+        expect(utils['formatPrivateKey']('a\\nb')).to.equal('a\nb');
     });
 
     it('formatPrivateKey returns undefined for empty', () => {
-        // @ts-ignore
-        expect(utils["formatPrivateKey"]('')).to.be.undefined;
+        expect(utils['formatPrivateKey']('')).to.be.undefined;
     });
 
     describe('API operations with mocked googleapis', () => {
@@ -79,7 +75,6 @@ describe('SpreadsheetUtils', () => {
                     batchUpdate: sinon.stub().resolves({}),
                 },
             };
-            // @ts-ignore - Mock private init method
             initStub = sinon.stub(utils, 'init' as any).returns(sheetsStub);
         });
 
@@ -90,7 +85,7 @@ describe('SpreadsheetUtils', () => {
         describe('append', () => {
             it('should call API with correct parameters', () => {
                 utils.append('Sheet1', ['data1', 'data2'], 'main');
-                
+
                 expect(sheetsStub.spreadsheets.values.append.calledOnce).to.be.true;
                 const args = sheetsStub.spreadsheets.values.append.firstCall.args[0];
                 expect(args.range).to.equal('Sheet1');
@@ -101,7 +96,7 @@ describe('SpreadsheetUtils', () => {
 
             it('should use default spreadsheet when alias is null', () => {
                 utils.append('Sheet1', ['data'], null);
-                
+
                 const args = sheetsStub.spreadsheets.values.append.firstCall.args[0];
                 expect(args.spreadsheetId).to.equal('id1');
             });
@@ -110,7 +105,7 @@ describe('SpreadsheetUtils', () => {
         describe('deleteRows', () => {
             it('should delete rows with correct parameters', () => {
                 utils.deleteRows('Sheet1', 2, 5, 'main');
-                
+
                 expect(sheetsStub.spreadsheets.get.calledOnce).to.be.true;
             });
         });
@@ -118,7 +113,7 @@ describe('SpreadsheetUtils', () => {
         describe('createSheet', () => {
             it('should create sheet with title', () => {
                 utils.createSheet('NewSheet', 'main');
-                
+
                 expect(sheetsStub.spreadsheets.batchUpdate.calledOnce).to.be.true;
                 const args = sheetsStub.spreadsheets.batchUpdate.firstCall.args[0];
                 expect(args.requestBody.requests[0].addSheet.properties.title).to.equal('NewSheet');
@@ -128,7 +123,7 @@ describe('SpreadsheetUtils', () => {
         describe('deleteSheet', () => {
             it('should delete sheet by title', () => {
                 utils.deleteSheet('Sheet1', 'main');
-                
+
                 expect(sheetsStub.spreadsheets.get.calledOnce).to.be.true;
             });
         });
@@ -136,7 +131,7 @@ describe('SpreadsheetUtils', () => {
         describe('deleteSheets', () => {
             it('should delete multiple sheets', () => {
                 utils.deleteSheets(['Sheet1', 'Sheet2'], 'main');
-                
+
                 expect(sheetsStub.spreadsheets.get.calledOnce).to.be.true;
             });
         });
@@ -144,7 +139,7 @@ describe('SpreadsheetUtils', () => {
         describe('duplicateSheet', () => {
             it('should duplicate sheet with correct parameters', () => {
                 utils.duplicateSheet('Sheet1', 'Sheet1Copy', 1, 'main');
-                
+
                 expect(sheetsStub.spreadsheets.get.calledOnce).to.be.true;
             });
         });
@@ -152,7 +147,7 @@ describe('SpreadsheetUtils', () => {
         describe('writeCell', () => {
             it('should write single cell', () => {
                 utils.writeCell('Sheet1', 'A1', 'testValue', 'main');
-                
+
                 expect(sheetsStub.spreadsheets.values.batchUpdate.calledOnce).to.be.true;
                 const args = sheetsStub.spreadsheets.values.batchUpdate.firstCall.args[0];
                 expect(args.requestBody.data[0].range).to.equal('Sheet1!A1');
@@ -161,7 +156,7 @@ describe('SpreadsheetUtils', () => {
 
             it('should handle quoted cell references', () => {
                 utils.writeCell('Sheet1', "'A1'", 'testValue', 'main');
-                
+
                 const args = sheetsStub.spreadsheets.values.batchUpdate.firstCall.args[0];
                 expect(args.requestBody.data[0].range).to.equal('Sheet1!A1');
             });
@@ -175,7 +170,7 @@ describe('SpreadsheetUtils', () => {
                     { sheetName: 'Sheet2', cell: 'C3', data: 'value3' },
                 ];
                 utils.writeCells(cells, 'main');
-                
+
                 expect(sheetsStub.spreadsheets.values.batchUpdate.calledOnce).to.be.true;
                 const args = sheetsStub.spreadsheets.values.batchUpdate.firstCall.args[0];
                 expect(args.requestBody.data).to.have.lengthOf(3);
@@ -188,21 +183,21 @@ describe('SpreadsheetUtils', () => {
         describe('readCell', () => {
             it('should read cell value', async () => {
                 const result = await utils.readCell('Sheet1', 'A1', 'main');
-                
+
                 expect(sheetsStub.spreadsheets.values.get.calledOnce).to.be.true;
                 expect(result).to.equal('test');
             });
 
             it('should handle quoted cell references', async () => {
                 await utils.readCell('Sheet1', "'A1'", 'main');
-                
+
                 const args = sheetsStub.spreadsheets.values.get.firstCall.args[0];
                 expect(args.range).to.equal('Sheet1!A1');
             });
 
             it('should reject when no data found', async () => {
                 sheetsStub.spreadsheets.values.get.resolves({ data: { values: [] } });
-                
+
                 try {
                     await utils.readCell('Sheet1', 'A1', 'main');
                     expect.fail('Should have thrown an error');

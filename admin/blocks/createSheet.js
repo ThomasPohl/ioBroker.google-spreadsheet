@@ -1,6 +1,7 @@
 'use strict';
-/*global Blockly:true */
-/*global getInstances:true */
+/*global Blockly */
+/*global getInstances */
+/*global getInstanceAndAlias */
 
 /// ---Create sheet  --------------------------------------------------
 Blockly.Words['google-spreadsheet_create-sheet_create-in'] = { en: 'create in', de: 'erstelle in' };
@@ -42,8 +43,8 @@ Blockly.Blocks['google-spreadsheet.createSheet'] = {
 };
 
 Blockly.JavaScript.forBlock['google-spreadsheet.createSheet'] = function (block) {
-    const dropdown_instance = block.getFieldValue('INSTANCE');
-    const data = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
+    const { instance, alias } = getInstanceAndAlias(block);
+    const sheetName = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
 
-    return `sendTo("google-spreadsheet${dropdown_instance}", "createSheet", ${data});\n`;
+    return `sendTo("google-spreadsheet${instance}", "createSheet", {"sheetName":${sheetName}, "alias":"${alias}"});\n`;
 };

@@ -176,7 +176,6 @@ export class SpreadsheetUtils {
      * @param target Name of the target file
      * @param parentFolder Name of the parent folder
      * @param filecontent Data of the file
-     * @param sheetAlias Alias of the sheet to use (optional)
      */
     public upload(target: string, parentFolder: string, filecontent: any): void {
         const auth = new google.auth.GoogleAuth({

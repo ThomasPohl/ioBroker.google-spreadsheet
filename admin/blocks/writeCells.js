@@ -1,6 +1,7 @@
 'use strict';
 /*global Blockly */
 /*global getInstances */
+/*global getInstanceAndAlias */
 
 /// --- Write Cells  --------------------------------------------------
 
@@ -53,7 +54,7 @@ Blockly.Blocks['google-spreadsheet.writeCells'] = {
 };
 
 Blockly.JavaScript.forBlock['google-spreadsheet.writeCells'] = function (block) {
-    const dropdown_instance = block.getFieldValue('INSTANCE');
+    const { instance, alias } = getInstanceAndAlias(block);
     const cellsCode = Blockly.JavaScript.statementToCode(block, 'CELLS');
     // cellsCode enthält mehrere Zeilen wie: addCell({sheetName: ..., cell: ..., data: ...});
     // Wir sammeln die Argumente in ein Array
@@ -67,7 +68,7 @@ Blockly.JavaScript.forBlock['google-spreadsheet.writeCells'] = function (block) 
             console.error('Error parsing cell data:', e);
         }
     }
-    return `sendTo("google-spreadsheet${dropdown_instance}", "writeCells", {cells: ${JSON.stringify(cells)}});\n`;
+    return `sendTo("google-spreadsheet${instance}", "writeCells", {cells: ${JSON.stringify(cells)}, "alias":"${alias}"});\n`;
 };
 
 // Hilfsblock für einzelne Zelleingabe (nur für writeCells)

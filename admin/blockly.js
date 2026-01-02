@@ -1,9 +1,10 @@
 'use strict';
 
-/*global goog:true */
-/*global Blockly:true */
-/*global main:true */
-/*global document:true */
+/*global goog */
+/*global Blockly */
+/*global main */
+/*global document */
+/*global window */
 
 if (typeof goog !== 'undefined') {
     goog.provide('Blockly.JavaScript.GoogleSheets');
@@ -17,11 +18,9 @@ Blockly.CustomBlocks.push('GoogleSheets');
 Blockly.GoogleSheets = {
     HUE: 'rgb(35, 166, 103)',
     blocks: {},
-    WARNING_PARENTS: [
-        'on_ext',
-    ],
+    WARNING_PARENTS: ['on_ext'],
 };
-Blockly.Words['GoogleSheets'] = {'en':'Google Sheets','de': 'Google Sheets'};
+Blockly.Words['GoogleSheets'] = { en: 'Google Sheets', de: 'Google Sheets' };
 
 Blockly.Words['google-spreadsheet_anyInstance'] = { en: 'default of all instances', de: 'default von allen Instanzen' };
 
@@ -55,10 +54,16 @@ function getInstances(withAny = true) {
     return options;
 }
 
-function getSheetAliases (instanceName) {
+function getSheetAliases(instanceName) {
     const objects = window.main.objects;
-    if (objects !== undefined && main !== undefined && main.instances !== undefined && objects[instanceName]!== undefined && Array.isArray(objects[instanceName].native.spreadsheets)) {
-        const result = objects[instanceName].native.spreadsheets.map((sheet) => sheet.alias);
+    if (
+        objects !== undefined &&
+        main !== undefined &&
+        main.instances !== undefined &&
+        objects[instanceName] !== undefined &&
+        Array.isArray(objects[instanceName].native.spreadsheets)
+    ) {
+        const result = objects[instanceName].native.spreadsheets.map(sheet => sheet.alias);
         if (result.length > 0) {
             return result;
         }
