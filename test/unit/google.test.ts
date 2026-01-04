@@ -16,7 +16,7 @@ describe('SpreadsheetUtils', () => {
                 { alias: 'other', spreadsheetId: 'id2', isDefault: false },
             ],
         };
-        log = { debug: sinon.spy(), error: sinon.spy(), warn: sinon.spy() };
+        log = { debug: sinon.spy(), error: sinon.spy(), warn: sinon.spy(), info: sinon.spy() };
         utils = new SpreadsheetUtils(config, log);
     });
 
@@ -83,8 +83,8 @@ describe('SpreadsheetUtils', () => {
         });
 
         describe('append', () => {
-            it('should call API with correct parameters', () => {
-                utils.append('Sheet1', ['data1', 'data2'], 'main');
+            it('should call API with correct parameters', async () => {
+                await utils.append('Sheet1', ['data1', 'data2'], 'main');
 
                 expect(sheetsStub.spreadsheets.values.append.calledOnce).to.be.true;
                 const args = sheetsStub.spreadsheets.values.append.firstCall.args[0];
@@ -94,8 +94,8 @@ describe('SpreadsheetUtils', () => {
                 expect(args.requestBody.values).to.deep.equal([['data1', 'data2']]);
             });
 
-            it('should use default spreadsheet when alias is null', () => {
-                utils.append('Sheet1', ['data'], null);
+            it('should use default spreadsheet when alias is null', async () => {
+                await utils.append('Sheet1', ['data'], null);
 
                 const args = sheetsStub.spreadsheets.values.append.firstCall.args[0];
                 expect(args.spreadsheetId).to.equal('id1');
@@ -103,16 +103,16 @@ describe('SpreadsheetUtils', () => {
         });
 
         describe('deleteRows', () => {
-            it('should delete rows with correct parameters', () => {
-                utils.deleteRows('Sheet1', 2, 5, 'main');
+            it('should delete rows with correct parameters', async () => {
+                await utils.deleteRows('Sheet1', 2, 5, 'main');
 
                 expect(sheetsStub.spreadsheets.get.calledOnce).to.be.true;
             });
         });
 
         describe('createSheet', () => {
-            it('should create sheet with title', () => {
-                utils.createSheet('NewSheet', 'main');
+            it('should create sheet with title', async () => {
+                await utils.createSheet('NewSheet', 'main');
 
                 expect(sheetsStub.spreadsheets.batchUpdate.calledOnce).to.be.true;
                 const args = sheetsStub.spreadsheets.batchUpdate.firstCall.args[0];
@@ -121,32 +121,32 @@ describe('SpreadsheetUtils', () => {
         });
 
         describe('deleteSheet', () => {
-            it('should delete sheet by title', () => {
-                utils.deleteSheet('Sheet1', 'main');
+            it('should delete sheet by title', async () => {
+                await utils.deleteSheet('Sheet1', 'main');
 
                 expect(sheetsStub.spreadsheets.get.calledOnce).to.be.true;
             });
         });
 
         describe('deleteSheets', () => {
-            it('should delete multiple sheets', () => {
-                utils.deleteSheets(['Sheet1', 'Sheet2'], 'main');
+            it('should delete multiple sheets', async () => {
+                await utils.deleteSheets(['Sheet1', 'Sheet2'], 'main');
 
                 expect(sheetsStub.spreadsheets.get.calledOnce).to.be.true;
             });
         });
 
         describe('duplicateSheet', () => {
-            it('should duplicate sheet with correct parameters', () => {
-                utils.duplicateSheet('Sheet1', 'Sheet1Copy', 1, 'main');
+            it('should duplicate sheet with correct parameters', async () => {
+                await utils.duplicateSheet('Sheet1', 'Sheet1Copy', 1, 'main');
 
                 expect(sheetsStub.spreadsheets.get.calledOnce).to.be.true;
             });
         });
 
         describe('writeCell', () => {
-            it('should write single cell', () => {
-                utils.writeCell('Sheet1', 'A1', 'testValue', 'main');
+            it('should write single cell', async () => {
+                await utils.writeCell('Sheet1', 'A1', 'testValue', 'main');
 
                 expect(sheetsStub.spreadsheets.values.batchUpdate.calledOnce).to.be.true;
                 const args = sheetsStub.spreadsheets.values.batchUpdate.firstCall.args[0];
@@ -154,8 +154,8 @@ describe('SpreadsheetUtils', () => {
                 expect(args.requestBody.data[0].values).to.deep.equal([['testValue']]);
             });
 
-            it('should handle quoted cell references', () => {
-                utils.writeCell('Sheet1', "'A1'", 'testValue', 'main');
+            it('should handle quoted cell references', async () => {
+                await utils.writeCell('Sheet1', "'A1'", 'testValue', 'main');
 
                 const args = sheetsStub.spreadsheets.values.batchUpdate.firstCall.args[0];
                 expect(args.requestBody.data[0].range).to.equal('Sheet1!A1');
@@ -163,13 +163,13 @@ describe('SpreadsheetUtils', () => {
         });
 
         describe('writeCells', () => {
-            it('should write multiple cells', () => {
+            it('should write multiple cells', async () => {
                 const cells = [
                     { sheetName: 'Sheet1', cell: 'A1', data: 'value1' },
                     { sheetName: 'Sheet1', cell: 'B2', data: 'value2' },
                     { sheetName: 'Sheet2', cell: 'C3', data: 'value3' },
                 ];
-                utils.writeCells(cells, 'main');
+                await utils.writeCells(cells, 'main');
 
                 expect(sheetsStub.spreadsheets.values.batchUpdate.calledOnce).to.be.true;
                 const args = sheetsStub.spreadsheets.values.batchUpdate.firstCall.args[0];

@@ -1,7 +1,7 @@
 {
   "name": "iobroker.google-spreadsheet",
   "version": "0.6.0",
-  "description": "Adapter for io broker to work with google spreadsheets",
+  "description": "Adapter for io broker to work with google sheets",
   "author": {
     "name": "Thomas Pohl",
     "email": "post@thomaspohl.net"

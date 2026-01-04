@@ -16,9 +16,9 @@ Blockly.GoogleSheets.blocks['google-spreadsheet.read'] =
     '             <field name="TEXT">text</field>' +
     '         </shadow>' +
     '     </value>' +
-    '     <value name="RANGE">' +
+    '     <value name="CELL">' +
     '         <shadow type="text">' +
-    '             <field name="TEXT">text</field>' +
+    '             <field name="TEXT">A1</field>' +
     '         </shadow>' +
     '     </value>' +
     '</block>';
@@ -46,17 +46,11 @@ Blockly.Blocks['google-spreadsheet.read'] = {
 
 Blockly.JavaScript.forBlock['google-spreadsheet.read'] = function (block) {
     const { instance, alias } = getInstanceAndAlias(block);
-    let data = Blockly.JavaScript.valueToCode(block, 'DATA', Blockly.JavaScript.ORDER_ATOMIC);
-    if (!data) {
-        data = '{}';
-    }
     const sheetName = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
     const cell = Blockly.JavaScript.valueToCode(block, 'CELL', Blockly.JavaScript.ORDER_ATOMIC);
 
     return [
-        `await new Promise((resolve)=>{sendTo("google-spreadsheet${instance}", "readCell", {"sheetName":"${
-            sheetName
-        }", "cell":"${cell}", "alias":"${alias}"} , (response)=>{resolve(response)}); })`,
+        `await new Promise((resolve)=>{sendTo("google-spreadsheet${instance}", "readCell", {sheetName: ${sheetName}, cell: ${cell}, alias: "${alias}"}, (response)=>{resolve(response)}); })`,
         0,
     ];
 };

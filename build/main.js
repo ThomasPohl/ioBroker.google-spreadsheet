@@ -22,9 +22,14 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 var utils = __toESM(require("@iobroker/adapter-core"));
-var import_fs = __toESM(require("fs"));
 var import_google = require("./lib/google");
+var import_messageHandlers = require("./lib/messageHandlers");
 class GoogleSpreadsheet extends utils.Adapter {
+  /**
+   * Creates an instance of the adapter class.
+   *
+   * @param options The adapter options
+   */
   constructor(options = {}) {
     super({
       ...options,
@@ -56,7 +61,6 @@ class GoogleSpreadsheet extends utils.Adapter {
    */
   async onReady() {
     this.migrateSpreadhseetIdToTableIfNeeded();
-    this.log.debug(`config spreadsheetId: ${this.config.spreadsheetId}`);
     if (this.config.privateKey && this.config.serviceAccountEmail && this.config.spreadsheets.length > 0) {
       await this.setState("info.connection", true, true);
       this.log.info("Google-spreadsheet adapter configured");
@@ -73,8 +77,11 @@ class GoogleSpreadsheet extends utils.Adapter {
         if (data && data.native && data.native.privateKey && !data.native.privateKey.startsWith("$/aes")) {
           this.config.privateKey = data.native.privateKey;
           data.native.privateKey = this.encrypt(data.native.privateKey);
-          this.extendForeignObject(`system.adapter.${this.name}.${this.instance}`, data);
-          this.log.info("privateKey is stored now encrypted");
+          this.extendForeignObject(`system.adapter.${this.name}.${this.instance}`, data).then(() => {
+            this.log.info("privateKey is stored now encrypted");
+          }).catch((err) => {
+            this.log.error(`Cannot store encrypted privateKey: ${err}`);
+          });
         }
       });
     }
@@ -92,216 +99,41 @@ class GoogleSpreadsheet extends utils.Adapter {
       callback();
     }
   }
-  // If you need to accept messages in your adapter, uncomment the following block and the corresponding line in the constructor.
-  // /**
-  //  * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...
-  //  * Using this method requires "common.messagebox" property to be set to true in io-package.json
-  //  */
+  /**
+   * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...
+   * Using this method requires "common.messagebox" property to be set to true in io-package.json
+   *
+   * @param obj The message object
+   */
   onMessage(obj) {
+    const handlers = {
+      append: { handler: import_messageHandlers.handleAppend, logMessage: "append to spreadsheet" },
+      deleteRows: { handler: import_messageHandlers.handleDeleteRows, logMessage: "delete rows from spreadsheet" },
+      createSheet: { handler: import_messageHandlers.handleCreateSheet, logMessage: "create sheet" },
+      deleteSheet: { handler: import_messageHandlers.handleDeleteSheet, logMessage: "delete sheet" },
+      deleteSheets: { handler: import_messageHandlers.handleDeleteSheets, logMessage: "delete sheets" },
+      duplicateSheet: { handler: import_messageHandlers.handleDuplicateSheet, logMessage: "duplicate sheet" },
+      upload: { handler: import_messageHandlers.handleUpload, logMessage: "upload file" },
+      writeCell: { handler: import_messageHandlers.handleWriteCell, logMessage: "write cell" },
+      writeCells: { handler: import_messageHandlers.handleWriteCells, logMessage: "write cells" },
+      readCell: { handler: import_messageHandlers.handleReadCell, logMessage: "read cell" }
+    };
+    this.log.debug(`Received message: ${JSON.stringify(obj)}`);
     if (typeof obj === "object" && obj.message) {
-      switch (obj.command) {
-        case "append": {
-          this.log.debug("append to spreadsheet");
-          this.append(obj);
+      if (obj.command && obj.command in handlers) {
+        const command = obj.command;
+        this.log.debug(handlers[command].logMessage);
+        handlers[command].handler(this.spreadsheet, this.log, obj).then((result) => {
           if (obj.callback) {
-            this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+            this.sendTo(obj.from, obj.command, result ? result : "Message received", obj.callback);
           }
-          break;
-        }
-        case "deleteRows": {
-          this.log.debug("delete rows from spreadsheet");
-          this.deleteRows(obj);
-          if (obj.callback) {
-            this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-          }
-          break;
-        }
-        case "createSheet": {
-          this.log.debug("create sheet");
-          this.createSheet(obj);
-          if (obj.callback) {
-            this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-          }
-          break;
-        }
-        case "deleteSheet": {
-          this.log.debug("delete sheet");
-          this.deleteSheet(obj);
-          if (obj.callback) {
-            this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-          }
-          break;
-        }
-        case "deleteSheets": {
-          this.log.debug("delete sheet");
-          this.deleteSheets(obj);
-          if (obj.callback) {
-            this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-          }
-          break;
-        }
-        case "duplicateSheet": {
-          this.log.debug("duplicate sheet");
-          this.duplicateSheet(obj);
-          if (obj.callback) {
-            this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-          }
-          break;
-        }
-        case "upload": {
-          this.log.debug("upload file");
-          this.upload(obj);
-          if (obj.callback) {
-            this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-          }
-          break;
-        }
-        case "writeCell": {
-          this.log.debug("write data to single cell");
-          this.writeCell(obj);
-          if (obj.callback) {
-            this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-          }
-          break;
-        }
-        case "writeCells": {
-          this.log.debug("write data to multiple cells");
-          this.writeCells(obj);
-          if (obj.callback) {
-            this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-          }
-          break;
-        }
-        case "readCell": {
-          this.log.debug("read single cell");
-          this.readCell(obj).then((result) => {
-            if (obj.callback) {
-              this.sendTo(obj.from, obj.command, result, obj.callback);
-            }
-          }).catch((error) => this.log.error(`Cannot read cell: ${error}`));
-          break;
-        }
-        default: {
-          this.log.warn(`unknown command: ${obj.command}`);
-          break;
-        }
+        }).catch((error) => {
+          this.log.error(`Cannot ${obj.command}: ${error}`);
+        });
+      } else {
+        this.log.warn(`unknown command: ${obj.command}`);
       }
     }
-  }
-  upload(message) {
-    const messageData = message.message;
-    if (this.missingParameters(["target", "parentFolder"], messageData)) {
-      return;
-    }
-    this.spreadsheet.upload(messageData.target, messageData.parentFolder, import_fs.default.createReadStream(messageData.source));
-  }
-  append(message) {
-    const messageData = message.message;
-    if (this.missingParameters(["sheetName", "data"], messageData)) {
-      return;
-    }
-    this.spreadsheet.append(messageData.sheetName, messageData.data, messageData.alias);
-  }
-  writeCell(message) {
-    const messageData = message.message;
-    if (this.missingParameters(["sheetName", "cell", "data"], messageData)) {
-      return;
-    }
-    const cellPattern = new RegExp("[A-Z]+[0-9]+()");
-    if (!cellPattern.test(messageData.cell)) {
-      this.log.error(`Invalid cell pattern ${messageData.cell}. Expected: A1`);
-      return;
-    }
-    this.spreadsheet.writeCell(messageData.sheetName, messageData.cell, messageData.data, messageData.alias);
-  }
-  writeCells(message) {
-    const messageData = message.message;
-    if (this.missingParameters(["cells"], messageData)) {
-      return;
-    }
-    const cells = messageData.cells;
-    const cellPattern = new RegExp("[A-Z]+[0-9]+()");
-    for (const cellObj of cells) {
-      if (!cellPattern.test(cellObj.cell)) {
-        this.log.error(`Invalid cell pattern ${cellObj.cell}. Expected: A1`);
-        return;
-      }
-    }
-    this.spreadsheet.writeCells(cells, messageData.alias);
-  }
-  async readCell(message) {
-    return new Promise((resolve, reject) => {
-      const messageData = message.message;
-      if (this.missingParameters(["sheetName", "cell"], messageData)) {
-        return;
-      }
-      const cellPattern = new RegExp("[A-Z]+[0-9]+()");
-      if (!cellPattern.test(messageData.cell)) {
-        this.log.error(`Invalid cell pattern ${messageData.cell}. Expected: A1`);
-        return;
-      }
-      this.spreadsheet.readCell(messageData.sheetName, messageData.cell, messageData.alias).then((result) => resolve(result)).catch((error) => reject(new Error(error)));
-    });
-  }
-  deleteRows(message) {
-    const messageData = message.message;
-    if (this.missingParameters(["sheetName", "start", "end"], messageData)) {
-      return;
-    }
-    this.spreadsheet.deleteRows(messageData.sheetName, messageData.start, messageData.end, messageData.alias);
-  }
-  createSheet(message) {
-    if (typeof message.message === "string") {
-      this.log.warn("Deprecated call of createSheet with string as message. Please use object with title and optional alias!");
-      this.spreadsheet.createSheet(message.message, null);
-    } else {
-      const messageData = message.message;
-      if (this.missingParameters(["title"], messageData)) {
-        return;
-      }
-      this.spreadsheet.createSheet(messageData.title, messageData.alias);
-    }
-  }
-  deleteSheet(message) {
-    if (typeof message.message === "string") {
-      this.log.warn("Deprecated call of deleteSheet with non-string as message. Please use object with sheetName and optional alias!");
-      this.spreadsheet.deleteSheet(message.message);
-    } else {
-      const messageData = message.message;
-      if (this.missingParameters(["sheetName"], messageData)) {
-        return;
-      }
-      this.spreadsheet.deleteSheet(messageData.sheetName, messageData.alias);
-    }
-  }
-  deleteSheets(message) {
-    if (Array.isArray(message.message)) {
-      this.log.warn("Deprecated call of deleteSheets with array as message. Please use object with sheetNames and optional alias!");
-      this.spreadsheet.deleteSheets(message.message, null);
-    } else {
-      const messageData = message.message;
-      if (this.missingParameters(["sheetNames"], messageData)) {
-        return;
-      }
-      this.spreadsheet.deleteSheets(messageData.sheetNames, messageData.alias);
-    }
-  }
-  duplicateSheet(message) {
-    const messageData = message.message;
-    if (this.missingParameters(["source", "target", "index"], messageData)) {
-      return;
-    }
-    this.spreadsheet.duplicateSheet(messageData.source, messageData.target, messageData.index, messageData.alias);
-  }
-  missingParameters(neededParameters, messageData) {
-    let result = false;
-    for (const parameter of neededParameters) {
-      if (Object.keys(messageData).indexOf(parameter) == -1) {
-        result = true;
-        this.log.error(`The parameter '${parameter}' is required but was not passed!`);
-      }
-    }
-    return result;
   }
 }
 if (require.main !== module) {

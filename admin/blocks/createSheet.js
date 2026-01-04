@@ -46,5 +46,5 @@ Blockly.JavaScript.forBlock['google-spreadsheet.createSheet'] = function (block)
     const { instance, alias } = getInstanceAndAlias(block);
     const sheetName = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
 
-    return `sendTo("google-spreadsheet${instance}", "createSheet", {"sheetName":${sheetName}, "alias":"${alias}"});\n`;
+    return `await sendToAsync("google-spreadsheet${instance}", "createSheet", {"sheetName":${sheetName}, "alias":"${alias}"});\n`;
 };

@@ -19,7 +19,7 @@
 
 ## google-spreadsheet adapter for ioBroker
 
-This adapter can be used to automatically interact with google spreadsheets.
+This adapter can be used to automatically interact with google sheets.
 
 ## Features
 
@@ -42,7 +42,7 @@ This adapter can be used to automatically interact with google spreadsheets.
 
 2. Create or select an existing project that you wish to use with the API.
 
-3. Enable the Google Spreadsheet API for your project.
+3. Enable the Google Sheets API for your project.
 
 #### Create a Service Account
 
@@ -102,10 +102,10 @@ Use the available blocks to automatically interact with your spreadsheet.
 
 ## Troubleshooting
 
-### Error while sending data to Google Spreadsheet:Error: error:0909006C:PEM routines:get_name:no start line
+### Error while sending data to Google Sheets:Error: error:0909006C:PEM routines:get_name:no start line
 When copying the private key into the configuration, make sure there are no \n. If there are \n in the key, please replace the with normal line breaks
 
-### Error while sending data to Google Spreadsheet:Error: The caller does not have permission
+### Error while sending data to Google Sheets:Error: The caller does not have permission
 Make sure the Service Account has adequate permissions to write to the spreadsheet. Refer to the "Grant Access to the Spreadsheet" section above.
 
 
@@ -119,6 +119,8 @@ Make sure the Service Account has adequate permissions to write to the spreadshe
 - (Thomas Pohl) All methods now support an optional alias parameter to specify which spreadsheet to use
 - (Thomas Pohl) Automatic migration of old single spreadsheet configuration to new multi-spreadsheet format
 - (Thomas Pohl) Improved unit test coverage with mock support for adapter-core
+- (Thomas Pohl) Improved error handling and logging for better debugging
+- (Thomas Pohl) Improved handling of async operations to prevent potential race conditions
 
 ### 0.6.0 (2025-12-26)
 - (Thomas Pohl) Added deleteSheets functionality (delete multiple sheets in one call)
