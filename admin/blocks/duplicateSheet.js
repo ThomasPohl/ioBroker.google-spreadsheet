@@ -68,5 +68,5 @@ Blockly.JavaScript.forBlock['google-spreadsheet.duplicateSheet'] = function (blo
         index = -1;
     }
 
-    return `sendTo("google-spreadsheet${instance}", "duplicateSheet", {"source": ${source}, "target": ${target}, "index":${index}, "alias":"${alias}"});\n`;
+    return `await sendToAsync("google-spreadsheet${instance}", "duplicateSheet", {"source": ${source}, "target": ${target}, "index":${index}, "alias":"${alias}"});\n`;
 };

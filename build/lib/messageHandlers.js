@@ -107,7 +107,7 @@ function handleDuplicateSheet(spreadsheet, log, message) {
 }
 function handleUpload(spreadsheet, log, message) {
   const messageData = message.message;
-  if (missingParameters(["target", "parentFolder"], messageData, log)) {
+  if (missingParameters(["target", "parentFolder", "source"], messageData, log)) {
     return Promise.reject(new Error("Missing parameters for upload"));
   }
   return spreadsheet.upload(messageData.target, messageData.parentFolder, import_fs.default.createReadStream(messageData.source));

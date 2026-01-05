@@ -1,10 +1,17 @@
 {
+    "SpreadsheetId": "Tabellenkalkulations-ID",
+    "defaultSpreadsheetAlias": "Standard",
+    "defaultSpreadsheetAliasHelp": "Legen Sie dies als Standardtabelle fest",
     "google-spreadsheet adapter settings": "Adaptereinstellungen für Google-Tabelle",
     "privateKey": "Privater Schlüssel",
+    "privateKeyHelp": "Öffnen Sie die heruntergeladene private Schlüsseldatei und kopieren Sie nur den Schlüssel, der mit -----BEGIN PRIVATE KEY----- beginnt.",
     "serviceAccountEmail": "E-Mail-Adresse des Dienstkontos",
+    "serviceAccountEmailHelp": "die E-Mail-Adresse des Dienstkontos",
     "sheetName": "Blattname",
+    "spreadsheetAlias": "Tabellen-Alias",
+    "spreadsheetAliasHelp": "Alias ​​für die Tabelle",
     "spreadsheetId": "Tabellenkalkulations-ID",
     "spreadsheetIdHelp": "Sie finden die ID in der URL Ihrer Tabelle.",
-    "privateKeyHelp": "Öffnen Sie die heruntergeladene private Schlüsseldatei und kopieren Sie nur den Schlüssel, der mit -----BEGIN PRIVATE KEY----- beginnt.",
-    "serviceAccountEmailHelp": "die E-Mail-Adresse des Dienstkontos"
+    "spreadsheetsErr1": "FEHLER: Genau eine Standardtabelle erlaubt!",
+    "spreadsheetsHelp": "Hilfe zur Tabellenkalkulationstabelle"
 }

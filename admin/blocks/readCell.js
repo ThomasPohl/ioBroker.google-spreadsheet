@@ -49,8 +49,5 @@ Blockly.JavaScript.forBlock['google-spreadsheet.read'] = function (block) {
     const sheetName = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
     const cell = Blockly.JavaScript.valueToCode(block, 'CELL', Blockly.JavaScript.ORDER_ATOMIC);
 
-    return [
-        `await new Promise((resolve)=>{sendTo("google-spreadsheet${instance}", "readCell", {sheetName: ${sheetName}, cell: ${cell}, alias: "${alias}"}, (response)=>{resolve(response)}); })`,
-        0,
-    ];
+    return `await sendToAsync("google-spreadsheet${instance}", "readCell", {sheetName: ${sheetName}, cell: ${cell}, alias: "${alias}"})`;
 };

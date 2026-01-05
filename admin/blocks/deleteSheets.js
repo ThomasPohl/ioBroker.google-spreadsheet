@@ -45,5 +45,5 @@ Blockly.JavaScript.forBlock['google-spreadsheet.deleteSheets'] = function (block
     const { instance, alias } = getInstanceAndAlias(block);
     const data = Blockly.JavaScript.valueToCode(block, 'SHEET_NAMES', Blockly.JavaScript.ORDER_ATOMIC);
 
-    return `sendTo("google-spreadsheet${instance}", "deleteSheets", {sheetNames: ${data}, alias: "${alias}"});\n`;
+    return `await sendToAsync("google-spreadsheet${instance}", "deleteSheets", {sheetNames: ${data}, alias: "${alias}"});\n`;
 };

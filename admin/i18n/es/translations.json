@@ -1,10 +1,17 @@
 {
+    "SpreadsheetId": "ID de hoja de cálculo",
+    "defaultSpreadsheetAlias": "Por defecto",
+    "defaultSpreadsheetAliasHelp": "Establecer esto como la hoja de cálculo predeterminada",
     "google-spreadsheet adapter settings": "Configuración del adaptador para la hoja de cálculo de Google",
     "privateKey": "llave privada",
-    "serviceAccountEmail": "cuenta de servicio",
-    "sheetName": "nombre de la hoja",
-    "spreadsheetId": "identificación de la hoja de cálculo",
     "privateKeyHelp": "Abra el archivo de clave privada descargado y copie solo la clave que comienza con -----BEGIN PRIVATE KEY-----",
+    "serviceAccountEmail": "cuenta de servicio",
     "serviceAccountEmailHelp": "la dirección de correo electrónico de la cuenta de servicio",
-    "spreadsheetIdHelp": "Puede encontrar la identificación en la URL de su hoja de cálculo."
+    "sheetName": "nombre de la hoja",
+    "spreadsheetAlias": "Alias ​​de hoja de cálculo",
+    "spreadsheetAliasHelp": "Alias ​​de la hoja de cálculo",
+    "spreadsheetId": "identificación de la hoja de cálculo",
+    "spreadsheetIdHelp": "Puede encontrar la identificación en la URL de su hoja de cálculo.",
+    "spreadsheetsErr1": "ERROR: ¡Se permite exactamente una hoja de cálculo predeterminada!",
+    "spreadsheetsHelp": "Ayuda para tabla de hojas de cálculo"
 }

@@ -1,10 +1,17 @@
 {
+    "SpreadsheetId": "ID de feuille de calcul",
+    "defaultSpreadsheetAlias": "Défaut",
+    "defaultSpreadsheetAliasHelp": "Définir ceci comme feuille de calcul par défaut",
     "google-spreadsheet adapter settings": "Paramètres de l'adaptateur pour google-spreadsheet",
     "privateKey": "Clé privée",
-    "serviceAccountEmail": "compte de service",
-    "sheetName": "nom de la feuille",
-    "spreadsheetId": "identifiant de la feuille de calcul",
     "privateKeyHelp": "Ouvrez le fichier de clé privée téléchargé et copiez uniquement la clé commençant par -----BEGIN PRIVATE KEY-----",
+    "serviceAccountEmail": "compte de service",
     "serviceAccountEmailHelp": "l'adresse e-mail du compte de service",
-    "spreadsheetIdHelp": "Vous pouvez trouver l'identifiant dans l'URL de votre feuille de calcul."
+    "sheetName": "nom de la feuille",
+    "spreadsheetAlias": "Alias ​​de feuille de calcul",
+    "spreadsheetAliasHelp": "Alias ​​de la feuille de calcul",
+    "spreadsheetId": "identifiant de la feuille de calcul",
+    "spreadsheetIdHelp": "Vous pouvez trouver l'identifiant dans l'URL de votre feuille de calcul.",
+    "spreadsheetsErr1": "ERREUR : Exactement une feuille de calcul par défaut autorisée !",
+    "spreadsheetsHelp": "Aide pour le tableau des feuilles de calcul"
 }

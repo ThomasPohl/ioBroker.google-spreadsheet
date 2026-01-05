@@ -1,10 +1,17 @@
 {
+    "SpreadsheetId": "ID del foglio di calcolo",
+    "defaultSpreadsheetAlias": "Predefinito",
+    "defaultSpreadsheetAliasHelp": "Impostalo come foglio di calcolo predefinito",
     "google-spreadsheet adapter settings": "Impostazioni dell'adattatore per il foglio di calcolo di Google",
     "privateKey": "chiave privata",
-    "serviceAccountEmail": "conto di servizio",
-    "sheetName": "nome foglio",
-    "spreadsheetId": "ID foglio di calcolo",
     "privateKeyHelp": "Apri il file della chiave privata scaricato e copia solo la chiave che inizia con -----BEGIN PRIVATE KEY-----",
+    "serviceAccountEmail": "conto di servizio",
     "serviceAccountEmailHelp": "l'indirizzo email dell'account di servizio",
-    "spreadsheetIdHelp": "Puoi trovare l'ID nell'URL del tuo foglio di calcolo."
+    "sheetName": "nome foglio",
+    "spreadsheetAlias": "Alias ​​del foglio di calcolo",
+    "spreadsheetAliasHelp": "Alias ​​per il foglio di calcolo",
+    "spreadsheetId": "ID foglio di calcolo",
+    "spreadsheetIdHelp": "Puoi trovare l'ID nell'URL del tuo foglio di calcolo.",
+    "spreadsheetsErr1": "ERRORE: è consentito esattamente un foglio di calcolo predefinito!",
+    "spreadsheetsHelp": "Guida per la tabella dei fogli di calcolo"
 }

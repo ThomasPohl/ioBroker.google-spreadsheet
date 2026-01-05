@@ -68,7 +68,7 @@ Blockly.JavaScript.forBlock['google-spreadsheet.writeCells'] = function (block) 
             console.error('Error parsing cell data:', e);
         }
     }
-    return `sendTo("google-spreadsheet${instance}", "writeCells", {cells: ${JSON.stringify(cells)}, "alias":"${alias}"});\n`;
+    return `await sendToAsync("google-spreadsheet${instance}", "writeCells", {cells: ${JSON.stringify(cells)}, "alias":"${alias}"});\n`;
 };
 
 // Hilfsblock für einzelne Zelleingabe (nur für writeCells)

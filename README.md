@@ -21,17 +21,22 @@
 
 This adapter can be used to automatically interact with google sheets.
 
+## API
+
+* [sendTo API documentation](docs/sendTo-API.md)
+
 ## Features
 
-* [Append data to spreadsheet](features/append.md)
-* [Delete rows from a spreadsheet](features/delete-rows.md)
-* [Create sheets](features/create-sheet.md)
-* [Delete sheet](features/delete-sheet.md)
-* [Delete sheets](features/delete-sheets.md)
-* [Duplicate sheets](features/duplicate-sheet.md)
-* [Read cell](features/read-cell.md)
-* [Write cell](features/write-cell.md)
-* [Write cells](features/write-cells.md)
+* [Append data to spreadsheet](docs/features/append.md)
+* [Delete rows from a spreadsheet](docs/features/delete-rows.md)
+* [Create sheets](docs/features/create-sheet.md)
+* [Delete sheet](docs/features/delete-sheet.md)
+* [Delete sheets](docs/features/delete-sheets.md)
+* [Duplicate sheets](docs/features/duplicate-sheet.md)
+* [Read cell](docs/features/read-cell.md)
+* [Write cell](docs/features/write-cell.md)
+* [Write cells](docs/features/write-cells.md)
+
 
 ## Usage
 
@@ -121,6 +126,7 @@ Make sure the Service Account has adequate permissions to write to the spreadshe
 - (Thomas Pohl) Improved unit test coverage with mock support for adapter-core
 - (Thomas Pohl) Improved error handling and logging for better debugging
 - (Thomas Pohl) Improved handling of async operations to prevent potential race conditions
+- (Thomas Pohl) All blocklys will use await sendToAsync - this makes it easier to implement blocklys that depend on the termination of other blocklys
 
 ### 0.6.0 (2025-12-26)
 - (Thomas Pohl) Added deleteSheets functionality (delete multiple sheets in one call)

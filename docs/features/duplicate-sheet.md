@@ -1,13 +1,19 @@
 # Duplicate Sheet
 
+➡️ See the [sendTo API documentation](../sendTo-API.md) for general usage and all available commands.
+
 The duplicate-sheet feature allows you to create a copy of a specific sheet in a Google spreadsheet. This can be particularly useful when you have a sheet that serves as a template. By duplicating the template sheet, you can preserve the original while working with a copy that retains all the formatting and formulas or even diagrams of the original.
 
 Used API endpoint: https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets/batchUpdate
+
 
 The feature accepts the following parameters:
 - `source`: The name of the sheet to be duplicated.
 - `target`: The name of the new sheet.
 - `index`: The position where the new sheet should be inserted.
+- `alias` (optional): The spreadsheet alias if you have multiple spreadsheets configured.
+
+**Callback result:** `{ success: true }` on success, or `{ error: string }` on failure.
 
 ## Blockly
 

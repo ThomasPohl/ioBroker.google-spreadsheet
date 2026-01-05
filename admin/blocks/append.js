@@ -51,5 +51,5 @@ Blockly.JavaScript.forBlock['google-spreadsheet.append'] = function (block) {
     }
     const sheetName = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
 
-    return `sendTo("google-spreadsheet${instance}", "append", {"sheetName":${sheetName}, "alias":"${alias}", "data":${data}});\n`;
+    return `await sendToAsync("google-spreadsheet${instance}", "append", {"sheetName":${sheetName}, "alias":"${alias}", "data":${data}});\n`;
 };
