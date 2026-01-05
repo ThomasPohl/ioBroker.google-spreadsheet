@@ -1,17 +1,18 @@
 # sendTo API for ioBroker.google-spreadsheet
 
-This document describes the `sendTo` API for the ioBroker adapter **google-spreadsheet**. The API uses the `command` parameter to distinguish between different spreadsheet operations. Each command expects a specific payload and returns a result via callback.
+
+This document describes the `sendTo` API for the ioBroker adapter **google-spreadsheet**. The API uses the `command` parameter to distinguish between different spreadsheet operations. Each command expects a specific payload. The callback is optional and can be used to receive the result of the operation.
 
 ## Usage
 
 ```js
-sendTo('google-spreadsheet.<instance>', <command>, <message>, callback);
+sendTo('google-spreadsheet.<instance>', <command>, <message>[, callback]);
 ```
 
 - `<instance>`: The instance number of your adapter (e.g., `0`)
 - `<command>`: One of the supported commands listed below
 - `<message>`: An object with the required parameters for the command
-- `callback`: Function to handle the result
+- `[callback]` (optional): Function to handle the result
 
 ## Supported Commands
 
@@ -30,8 +31,8 @@ sendTo('google-spreadsheet.<instance>', <command>, <message>, callback);
 
 ### Result Details
 
-- For most commands, the callback receives an object `{ success: true }` if the operation was successful, or `{ error: string }` if an error occurred.
-- For `readCell`, the callback receives `{ value: any }` with the cell value, or `{ error: string }` if reading failed.
+- For most commands, if a callback is provided, it receives an object `{ success: true }` if the operation was successful, or `{ error: string }` if an error occurred.
+- For `readCell`, if a callback is provided, it receives `{ value: any }` with the cell value, or `{ error: string }` if reading failed.
 
 ### Parameter Details
 - `alias` is optional and refers to the spreadsheet alias if you have multiple spreadsheets configured.
@@ -40,15 +41,18 @@ sendTo('google-spreadsheet.<instance>', <command>, <message>, callback);
 ## Example
 
 ```js
-// Read a cell
+// Read a cell (with callback)
 sendTo('google-spreadsheet.0', 'readCell', { sheetName: 'Sheet1', cell: 'A1' }, (result) => {
     console.log('Cell value:', result);
 });
 
-// Write to a cell
+// Write to a cell (with callback)
 sendTo('google-spreadsheet.0', 'writeCell', { sheetName: 'Sheet1', cell: 'A1', data: 'Hello' }, (result) => {
     console.log('Write result:', result);
 });
+
+// Write to a cell (without callback)
+sendTo('google-spreadsheet.0', 'writeCell', { sheetName: 'Sheet1', cell: 'A1', data: 'Hello' });
 ```
 
 ## Feature Documentation
