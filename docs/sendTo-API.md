@@ -55,16 +55,16 @@ sendTo('google-spreadsheet.0', 'writeCell', { sheetName: 'Sheet1', cell: 'A1', d
 
 For detailed usage and examples of each command, see the following documents:
 
-- [Append](../features/append.md)
-- [Create Sheet](../features/create-sheet.md)
-- [Delete Rows](../features/delete-rows.md)
-- [Delete Sheet](../features/delete-sheet.md)
-- [Delete Sheets](../features/delete-sheets.md)
-- [Duplicate Sheet](../features/duplicate-sheet.md)
-- [Read Cell](../features/read-cell.md)
-- [Write Cell](../features/write-cell.md)
-- [Write Cells](../features/write-cells.md)
+- [Append](features/append.md)
+- [Create Sheet](features/create-sheet.md)
+- [Delete Rows](features/delete-rows.md)
+- [Delete Sheet](features/delete-sheet.md)
+- [Delete Sheets](features/delete-sheets.md)
+- [Duplicate Sheet](features/duplicate-sheet.md)
+- [Read Cell](features/read-cell.md)
+- [Write Cell](features/write-cell.md)
+- [Write Cells](features/write-cells.md)
 
 ---
 
-Back to [README.md](./README.md)
+Back to [README.md](../README.md)
