@@ -85,7 +85,7 @@ Add the following information to the configuration of your adapter instance in i
 - **Service Account** - The email address of the service account you created.
 - **Private Key** - Open the downloaded JSON file, and locate the private key within the file. Copy only the part starting with "-----BEGIN PRIVATE KEY-----."
 
-![Settings](img/settings.png)
+![Settings](docs/img/settings.png)
 
 #### Find the Spreadsheet ID in the URL
 
@@ -103,7 +103,7 @@ https://docs.google.com/spreadsheets/d/SPREADSHEET_ID/edit
 
 Use the available blocks to automatically interact with your spreadsheet.
 
-![Blockly](img/blockly-append.png)
+![Blockly](docs/img/blockly-append.png)
 
 ## Troubleshooting
 
