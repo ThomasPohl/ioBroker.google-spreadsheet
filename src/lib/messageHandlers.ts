@@ -6,7 +6,7 @@ import fs from 'fs';
  *
  * @param spreadsheet Instance of SpreadsheetUtils
  * @param log ioBroker Logger
- * @param message Message object with sheetName, data and optional alias
+ * @param message Message object with sheet, values and optional alias
  * @returns Promise that resolves on success
  */
 export function handleAppend(
@@ -16,11 +16,27 @@ export function handleAppend(
 ): Promise<void> {
     return new Promise<void>((resolve, reject) => {
         const messageData: Record<string, any> = message.message as Record<string, any>;
-        if (missingParameters(['sheetName', 'data'], messageData, log)) {
+        // Konsistente Parameternamen: sheet, values, alias
+        let sheet = messageData.sheet;
+        let values = messageData.values;
+        const alias = messageData.alias;
+        // Consistent parameter names: sheet, values, alias
+        // Backward compatibility
+        if (!sheet && messageData.sheetName) {
+            log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
+            sheet = messageData.sheetName;
+        }
+        if (!values && messageData.data) {
+            log.warn("Parameter 'data' is deprecated, please use 'values' instead!");
+            values = messageData.data;
+        }
+        if (!sheet || !values) {
+            log.error("Missing parameters for append: 'sheet' and/or 'values'");
             reject(new Error('Missing parameters for append'));
+            return;
         }
         spreadsheet
-            .append(messageData.sheetName, messageData.data, messageData.alias)
+            .append(sheet, values, alias)
             .then(() => resolve())
             .catch(error => reject(new Error(error)));
     });
@@ -31,7 +47,7 @@ export function handleAppend(
  *
  * @param spreadsheet Instance of SpreadsheetUtils
  * @param log ioBroker Logger
- * @param message Message object with sheetName, start, end and optional alias
+ * @param message Message object with sheet, start, end and optional alias
  * @returns Promise that resolves on success
  */
 export function handleDeleteRows(
@@ -41,11 +57,21 @@ export function handleDeleteRows(
 ): Promise<void> {
     return new Promise<void>((resolve, reject) => {
         const messageData: Record<string, any> = message.message as Record<string, any>;
-        if (missingParameters(['sheetName', 'start', 'end'], messageData, log)) {
+        let sheet = messageData.sheet;
+        const start = messageData.start;
+        const end = messageData.end;
+        const alias = messageData.alias;
+        if (!sheet && messageData.sheetName) {
+            log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
+            sheet = messageData.sheetName;
+        }
+        if (!sheet || typeof start !== 'number' || typeof end !== 'number') {
+            log.error("Missing parameters for deleteRows: 'sheet', 'start', 'end'");
             reject(new Error('Missing parameters for deleteRows'));
+            return;
         }
         spreadsheet
-            .deleteRows(messageData.sheetName, messageData.start, messageData.end, messageData.alias)
+            .deleteRows(sheet, start, end, alias)
             .then(() => resolve())
             .catch(error => reject(new Error(error)));
     });
@@ -56,7 +82,7 @@ export function handleDeleteRows(
  *
  * @param spreadsheet Instance of SpreadsheetUtils
  * @param log ioBroker Logger
- * @param message Message object with sheetName and optional alias
+ * @param message Message object with sheet and optional alias
  * @returns Promise that resolves on success
  */
 export function handleCreateSheet(
@@ -65,16 +91,21 @@ export function handleCreateSheet(
     message: Record<string, any>,
 ): Promise<void> {
     if (typeof message.message === 'string') {
-        log.warn(
-            'Deprecated call of createSheet with string as message. Please use object with sheetName and optional alias!',
-        );
+        log.warn('Deprecated call of createSheet with string as message. Please use an object with sheet!');
         return spreadsheet.createSheet(message.message, null);
     }
     const messageData: Record<string, any> = message.message as Record<string, any>;
-    if (missingParameters(['sheetName'], messageData, log)) {
+    let sheet = messageData.sheet;
+    const alias = messageData.alias;
+    if (!sheet && messageData.sheetName) {
+        log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
+        sheet = messageData.sheetName;
+    }
+    if (!sheet) {
+        log.error("Missing parameter for createSheet: 'sheet'");
         return Promise.reject(new Error('Missing parameters for createSheet'));
     }
-    return spreadsheet.createSheet(messageData.sheetName as string, messageData.alias);
+    return spreadsheet.createSheet(sheet, alias);
 }
 
 /**
@@ -82,7 +113,7 @@ export function handleCreateSheet(
  *
  * @param spreadsheet Instance of SpreadsheetUtils
  * @param log ioBroker Logger
- * @param message Message object with sheetName and optional alias
+ * @param message Message object with sheet and optional alias
  * @returns Promise that resolves on success
  */
 export function handleDeleteSheet(
@@ -91,16 +122,21 @@ export function handleDeleteSheet(
     message: Record<string, any>,
 ): Promise<void> {
     if (typeof message.message === 'string') {
-        log.warn(
-            'Deprecated call of deleteSheet with non-string as message. Please use object with sheetName and optional alias!',
-        );
+        log.warn('Deprecated call of deleteSheet with string as message. Please use an object with sheet!');
         return spreadsheet.deleteSheet(message.message);
     }
     const messageData: Record<string, any> = message.message as Record<string, any>;
-    if (missingParameters(['sheetName'], messageData, log)) {
+    let sheet = messageData.sheet;
+    const alias = messageData.alias;
+    if (!sheet && messageData.sheetName) {
+        log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
+        sheet = messageData.sheetName;
+    }
+    if (!sheet) {
+        log.error("Missing parameter for deleteSheet: 'sheet'");
         return Promise.reject(new Error('Missing parameters for deleteSheet'));
     }
-    return spreadsheet.deleteSheet(messageData.sheetName as string, messageData.alias);
+    return spreadsheet.deleteSheet(sheet, alias);
 }
 
 /**
@@ -108,7 +144,7 @@ export function handleDeleteSheet(
  *
  * @param spreadsheet Instance of SpreadsheetUtils
  * @param log ioBroker Logger
- * @param message Message object with sheetNames (array) and optional alias
+ * @param message Message object with sheets (array) and optional alias
  * @returns Promise that resolves on success
  */
 export function handleDeleteSheets(
@@ -117,16 +153,21 @@ export function handleDeleteSheets(
     message: Record<string, any>,
 ): Promise<void> {
     if (Array.isArray(message.message)) {
-        log.warn(
-            'Deprecated call of deleteSheets with array as message. Please use object with sheetNames and optional alias!',
-        );
+        log.warn('Deprecated call of deleteSheets with array as message. Please use an object with sheets!');
         return spreadsheet.deleteSheets(message.message as string[], null);
     }
     const messageData: Record<string, any> = message.message as Record<string, any>;
-    if (missingParameters(['sheetNames'], messageData, log)) {
+    let sheets = messageData.sheets;
+    const alias = messageData.alias;
+    if (!sheets && messageData.sheetNames) {
+        log.warn("Parameter 'sheetNames' is deprecated, please use 'sheets' instead!");
+        sheets = messageData.sheetNames;
+    }
+    if (!sheets) {
+        log.error("Missing parameter for deleteSheets: 'sheets'");
         return Promise.reject(new Error('Missing parameters for deleteSheets'));
     }
-    return spreadsheet.deleteSheets(messageData.sheetNames as string[], messageData.alias);
+    return spreadsheet.deleteSheets(sheets, alias);
 }
 
 /**
@@ -143,10 +184,15 @@ export function handleDuplicateSheet(
     message: Record<string, any>,
 ): Promise<void> {
     const messageData: Record<string, any> = message.message as Record<string, any>;
-    if (missingParameters(['source', 'target', 'index'], messageData, log)) {
+    const source = messageData.source;
+    const target = messageData.target;
+    const index = messageData.index;
+    const alias = messageData.alias;
+    if (!source || !target || typeof index !== 'number') {
+        log.error("Missing parameters for duplicateSheet: 'source', 'target', 'index'");
         return Promise.reject(new Error('Missing parameters for duplicateSheet'));
     }
-    return spreadsheet.duplicateSheet(messageData.source, messageData.target, messageData.index, messageData.alias);
+    return spreadsheet.duplicateSheet(source, target, index, alias);
 }
 
 /**
@@ -163,10 +209,14 @@ export function handleUpload(
     message: Record<string, any>,
 ): Promise<void> {
     const messageData: Record<string, any> = message.message as Record<string, any>;
-    if (missingParameters(['target', 'parentFolder', 'source'], messageData, log)) {
+    const target = messageData.target;
+    const parentFolder = messageData.parentFolder;
+    const source = messageData.source;
+    if (!target || !parentFolder || !source) {
+        log.error("Missing parameters for upload: 'target', 'parentFolder', 'source'");
         return Promise.reject(new Error('Missing parameters for upload'));
     }
-    return spreadsheet.upload(messageData.target, messageData.parentFolder, fs.createReadStream(messageData.source));
+    return spreadsheet.upload(target, parentFolder, fs.createReadStream(source));
 }
 
 /**
@@ -174,7 +224,7 @@ export function handleUpload(
  *
  * @param spreadsheet Instance of SpreadsheetUtils
  * @param log ioBroker Logger
- * @param message Message object with sheetName, cell, data and optional alias
+ * @param message Message object with sheet, cell, value and optional alias
  * @returns Promise that resolves on success
  */
 export function handleWriteCell(
@@ -183,15 +233,28 @@ export function handleWriteCell(
     message: Record<string, any>,
 ): Promise<void> {
     const messageData: Record<string, any> = message.message as Record<string, any>;
-    if (missingParameters(['sheetName', 'cell', 'data'], messageData, log)) {
+    let sheet = messageData.sheet;
+    const cell = messageData.cell;
+    let value = messageData.value;
+    const alias = messageData.alias;
+    if (!sheet && messageData.sheetName) {
+        log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
+        sheet = messageData.sheetName;
+    }
+    if (!value && messageData.data) {
+        log.warn("Parameter 'data' is deprecated, please use 'value' instead!");
+        value = messageData.data;
+    }
+    if (!sheet || !cell || typeof value === 'undefined') {
+        log.error("Missing parameters for writeCell: 'sheet', 'cell', 'value'");
         return Promise.reject(new Error('Missing parameters for writeCell'));
     }
-    const cellPattern = new RegExp('[A-Z]+[0-9]+()');
-    if (!cellPattern.test(messageData.cell)) {
-        log.error(`Invalid cell pattern ${messageData.cell}. Expected: A1`);
-        return Promise.reject(new Error(`Invalid cell pattern ${messageData.cell}. Expected: A1`));
+    const cellPattern = new RegExp('^[A-Z]+[0-9]+$');
+    if (!cellPattern.test(cell)) {
+        log.error(`Invalid cell pattern ${cell}. Expected: A1`);
+        return Promise.reject(new Error(`Invalid cell pattern ${cell}. Expected: A1`));
     }
-    return spreadsheet.writeCell(messageData.sheetName, messageData.cell, messageData.data, messageData.alias);
+    return spreadsheet.writeCell(sheet, cell, value, alias);
 }
 
 /**
@@ -199,7 +262,7 @@ export function handleWriteCell(
  *
  * @param spreadsheet Instance of SpreadsheetUtils
  * @param log ioBroker Logger
- * @param message Message object with cells (array) and optional alias
+ * @param message Message object with cells (array of {sheet, cell, value}) and optional alias
  * @returns Promise that resolves on success
  */
 export function handleWriteCells(
@@ -208,22 +271,33 @@ export function handleWriteCells(
     message: Record<string, any>,
 ): Promise<void> {
     const messageData: Record<string, any> = message.message as Record<string, any>;
-    if (missingParameters(['cells'], messageData, log)) {
+    const cells = messageData.cells;
+    const alias = messageData.alias;
+    if (!cells) {
+        log.error("Missing parameter for writeCells: 'cells'");
         return Promise.reject(new Error('Missing parameters for writeCells'));
     }
-    const cells: Array<{ sheetName: string; cell: string; data: any }> = messageData.cells as Array<{
-        sheetName: string;
-        cell: string;
-        data: any;
-    }>;
-    const cellPattern = new RegExp('[A-Z]+[0-9]+()');
+    // Future: cells = [{sheet, cell, value}]
+    const cellPattern = new RegExp('^[A-Z]+[0-9]+$');
     for (const cellObj of cells) {
+        if (!cellObj.sheet && cellObj.sheetName) {
+            log.warn("Parameter 'sheetName' in cells is deprecated, please use 'sheet' instead!");
+            cellObj.sheet = cellObj.sheetName;
+        }
+        if (!cellObj.value && typeof cellObj.data !== 'undefined') {
+            log.warn("Parameter 'data' in cells is deprecated, please use 'value' instead!");
+            cellObj.value = cellObj.data;
+        }
+        if (!cellObj.sheet || !cellObj.cell || typeof cellObj.value === 'undefined') {
+            log.error("Missing parameters for writeCells: 'sheet', 'cell', 'value' in cells");
+            return Promise.reject(new Error('Missing parameters for writeCells'));
+        }
         if (!cellPattern.test(cellObj.cell)) {
             log.error(`Invalid cell pattern ${cellObj.cell}. Expected: A1`);
             return Promise.reject(new Error(`Invalid cell pattern ${cellObj.cell}. Expected: A1`));
         }
     }
-    return spreadsheet.writeCells(cells, messageData.alias);
+    return spreadsheet.writeCells(cells, alias);
 }
 
 /**
@@ -231,7 +305,7 @@ export function handleWriteCells(
  *
  * @param spreadsheet Instance of SpreadsheetUtils
  * @param log ioBroker Logger
- * @param message Message object with sheetName, cell and optional alias
+ * @param message Message object with sheet, cell and optional alias
  * @returns Promise that resolves with the read value
  */
 export function handleReadCell(
@@ -240,28 +314,21 @@ export function handleReadCell(
     message: Record<string, any>,
 ): Promise<any> {
     const messageData: Record<string, any> = message.message as Record<string, any>;
-    if (missingParameters(['sheetName', 'cell'], messageData, log)) {
+    let sheet = messageData.sheet;
+    const cell = messageData.cell;
+    const alias = messageData.alias;
+    if (!sheet && messageData.sheetName) {
+        log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
+        sheet = messageData.sheetName;
+    }
+    if (!sheet || !cell) {
+        log.error("Missing parameters for readCell: 'sheet', 'cell'");
         return Promise.reject(new Error('Missing parameters for readCell'));
     }
-    const cellPattern = new RegExp('[A-Z]+[0-9]+()');
-    if (!cellPattern.test(messageData.cell)) {
-        log.error(`Invalid cell pattern ${messageData.cell}. Expected: A1`);
-        return Promise.reject(new Error(`Invalid cell pattern ${messageData.cell}. Expected: A1`));
+    const cellPattern = new RegExp('^[A-Z]+[0-9]+$');
+    if (!cellPattern.test(cell)) {
+        log.error(`Invalid cell pattern ${cell}. Expected: A1`);
+        return Promise.reject(new Error(`Invalid cell pattern ${cell}. Expected: A1`));
     }
-    return spreadsheet.readCell(messageData.sheetName, messageData.cell, messageData.alias);
-}
-
-function missingParameters(
-    neededParameters: string[],
-    messageData: Record<string, any>,
-    log: ioBroker.Logger,
-): boolean {
-    let result = false;
-    for (const parameter of neededParameters) {
-        if (Object.keys(messageData).indexOf(parameter) == -1) {
-            result = true;
-            log.error(`The parameter '${parameter}' is required but was not passed!`);
-        }
-    }
-    return result;
+    return spreadsheet.readCell(sheet, cell, alias);
 }
