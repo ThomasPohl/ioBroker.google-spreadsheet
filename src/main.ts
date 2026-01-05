@@ -17,7 +17,7 @@ import {
 /**
  * The adapter class
  */
-export class GoogleSpreadsheet extends utils.Adapter {
+class GoogleSpreadsheet extends utils.Adapter {
     private spreadsheet: SpreadsheetUtils;
 
     /**
@@ -147,4 +147,13 @@ export class GoogleSpreadsheet extends utils.Adapter {
             }
         }
     }
+}
+
+export { GoogleSpreadsheet };
+
+if (require.main !== module) {
+    module.exports = (options: Partial<utils.AdapterOptions> | undefined) => new GoogleSpreadsheet(options);
+    module.exports.GoogleSpreadsheet = GoogleSpreadsheet;
+} else {
+    (() => new GoogleSpreadsheet())();
 }
