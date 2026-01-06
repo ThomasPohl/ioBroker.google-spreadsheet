@@ -165,9 +165,9 @@ describe('SpreadsheetUtils', () => {
         describe('writeCells', () => {
             it('should write multiple cells', async () => {
                 const cells = [
-                    { sheetName: 'Sheet1', cell: 'A1', data: 'value1' },
-                    { sheetName: 'Sheet1', cell: 'B2', data: 'value2' },
-                    { sheetName: 'Sheet2', cell: 'C3', data: 'value3' },
+                    { sheet: 'Sheet1', cell: 'A1', data: 'value1' },
+                    { sheet: 'Sheet1', cell: 'B2', data: 'value2' },
+                    { sheet: 'Sheet2', cell: 'C3', data: 'value3' },
                 ];
                 await utils.writeCells(cells, 'main');
 
