@@ -120,13 +120,10 @@ Make sure the Service Account has adequate permissions to write to the spreadshe
     ### **WORK IN PROGRESS**
 -->
 ### **WORK IN PROGRESS**
-- (Thomas Pohl) Added support for multiple spreadsheets with aliases
-- (Thomas Pohl) All methods now support an optional alias parameter to specify which spreadsheet to use
-- (Thomas Pohl) Automatic migration of old single spreadsheet configuration to new multi-spreadsheet format
-- (Thomas Pohl) Improved unit test coverage with mock support for adapter-core
-- (Thomas Pohl) Improved error handling and logging for better debugging
-- (Thomas Pohl) Improved handling of async operations to prevent potential race conditions
-- (Thomas Pohl) All blocklys will use await sendToAsync - this makes it easier to implement blocklys that depend on the termination of other blocklys
+* (Thomas Pohl) Support for multiple spreadsheets with aliases
+* (Thomas Pohl) Automatic migration of old configs
+* (Thomas Pohl) Improved tests, error handling, and logging
+* (Thomas Pohl) Better async handling in Blockly blocks
 
 ### 0.6.0 (2025-12-26)
 - (Thomas Pohl) Added deleteSheets functionality (delete multiple sheets in one call)
@@ -144,18 +141,6 @@ Make sure the Service Account has adequate permissions to write to the spreadshe
 
 ### 0.3.1
 * (Thomas Pohl) Fixed reading cells and added error handling
-
-### 0.3.0
-* (Thomas Pohl) Added writing of single cells
-* (Thomas Pohl) Added reading of single cells
-* (Thomas Pohl) Documentation for all features
-
-### 0.2.0
-* (Thomas Pohl) Parsing of private keys is now more robust
-
-### 0.1.0
-* (Thomas Pohl) Preparation for first stable release
-* (Thomas Pohl) Improve logging + Code cleanup
 
 ## License
 
