@@ -1,6 +1,6 @@
 {
   "name": "iobroker.google-spreadsheet",
-  "version": "0.6.0",
+  "version": "1.0.0",
   "description": "Adapter for io broker to work with google sheets",
   "author": {
     "name": "Thomas Pohl",
@@ -36,7 +36,6 @@
     "@types/gapi": "^0.0.47",
     "@types/node": "^25.0.3",
     "@types/proxyquire": "^1.3.31",
-    "@types/gapi": "^0.0.47",
     "@typescript-eslint/eslint-plugin": "^8.52.0",
     "@typescript-eslint/parser": "^8.52.0",
     "nyc": "^17.1.0",

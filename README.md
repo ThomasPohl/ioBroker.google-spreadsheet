@@ -119,7 +119,7 @@ Make sure the Service Account has adequate permissions to write to the spreadshe
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 1.0.0 (2026-01-06)
 * (Thomas Pohl) Support for multiple spreadsheets with aliases
 * (Thomas Pohl) Automatic migration of old configs
 * (Thomas Pohl) Improved tests, error handling, and logging

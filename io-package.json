@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "google-spreadsheet",
-    "version": "0.6.0",
+    "version": "1.0.0",
     "news": {
+      "1.0.0": {
+        "en": "Support for multiple spreadsheets with aliases\nAutomatic migration of old configs\nImproved tests, error handling, and logging\nBetter async handling in Blockly blocks",
+        "de": "Unterstützung für mehrere Tabellen mit Aliasen\nAutomatische Migration von alten Configs\nVerbesserte Tests, Fehlerbehandlung und Protokollierung\nBesseres async Handling in Blockly Blöcken",
+        "ru": "Поддержка нескольких электронных таблиц с псевдонимами\nАвтоматическая миграция старых конфигураций\nУлучшенные тесты, обработка ошибок и регистрация\nЛучшее управление асинхронизацией в блоках Blockly",
+        "pt": "Suporte para várias planilhas com apelidos\nMigração automática das configurações antigas\nMelhoria dos testes, manipulação de erros e registro\nMelhor manipulação assync em blocos blockly",
+        "nl": "Ondersteuning voor meerdere spreadsheets met aliassen\nAutomatische migratie van oude configuraties\nVerbeterde tests, foutafhandeling en logging\nBetere async behandeling in blokken",
+        "fr": "Prise en charge de plusieurs feuilles de calcul avec alias\nMigration automatique des anciennes configurations\nAmélioration des tests, du traitement des erreurs et de l'enregistrement\nMeilleure manipulation de l'async en blocs bloc",
+        "it": "Supporto per più fogli di calcolo con alias\nMigrazione automatica delle vecchie configura\nTest migliorati, gestione degli errori e registrazione\nMigliorare la gestione asin nei blocchi Blockly",
+        "es": "Soporte para múltiples hojas de cálculo con alias\nMigración automática de antiguos configs\nPruebas mejoradas, manejo de errores y registro\nMejor manejo de asinc en bloques bloqueados",
+        "pl": "Obsługa wielu arkuszy kalkulacyjnych z aliasami\nAutomatyczna migracja starych konfig\nUlepszone testy, obsługa błędów i logowanie\nLepsza obsługa Async w blokach Blockly",
+        "uk": "Підтримка декількох таблиць з псевдонімами\nАвтоматична міграція старих конфігурацій\nПокращуйте тести, похибки та загибель\nКраще виконання асинхронних блоків",
+        "zh-cn": "用别名支持多个电子表格\n自动迁移旧配置\n改进测试、错误处理和记录\n在 Blockly 区块中更好地进行同步处理"
+      },
       "0.6.0": {
         "en": "Added deleteSheets functionality (delete multiple sheets in one call)\nAdded blockly block for deleteSheets\nAdd write cells functionality (write multiple cells in one call)\nAdded blockly block for writeCells",
         "de": "Löschen Blätterfunktionalität (mehrere Blätter in einem Anruf löschen)\nBlockiert hinzugefügt für Löschen Bleche\nFügen Sie Schreibzellenfunktionalität hinzu (schreiben Sie mehrere Zellen in einem Anruf)\nBlockaden hinzugefügt für schreiben Zellen",
@@ -80,19 +93,6 @@
         "pl": "Analiza klucza prywatnego jest bardziej niezawodna",
         "uk": "Розбір закритого ключа більш надійний",
         "zh-cn": "私钥解析更加稳健"
-      },
-      "0.1.0": {
-        "en": "Improved logging and code cleanup",
-        "de": "Verbesserte Protokollierung und Codebereinigung",
-        "ru": "Улучшено ведение журнала и очистка кода.",
-        "pt": "Registro aprimorado e limpeza de código",
-        "nl": "Verbeterde logboekregistratie en opschoning van de code",
-        "fr": "Journalisation et nettoyage du code améliorés",
-        "it": "Registrazione e pulizia del codice migliorate",
-        "es": "Registro mejorado y limpieza de código",
-        "pl": "Ulepszone rejestrowanie i czyszczenie kodu",
-        "uk": "Покращено журналювання та очищення коду",
-        "zh-cn": "改进的日志记录和代码清理"
       }
     },
     "titleLang": {
