@@ -1,10 +1,17 @@
 {
+    "SpreadsheetId": "Spreadsheet-ID",
+    "defaultSpreadsheetAlias": "Standaard",
+    "defaultSpreadsheetAliasHelp": "Stel dit in als het standaardspreadsheet",
     "google-spreadsheet adapter settings": "Adapterinstellingen voor google-spreadsheet",
     "privateKey": "prive sleutel",
-    "serviceAccountEmail": "service rekening",
-    "sheetName": "blad naam",
-    "spreadsheetId": "spreadsheet-id",
     "privateKeyHelp": "Open het gedownloade privésleutelbestand en kopieer alleen de sleutel die begint met -----BEGIN PRIVATE KEY-----",
+    "serviceAccountEmail": "service rekening",
     "serviceAccountEmailHelp": "het e-mailadres van het serviceaccount",
-    "spreadsheetIdHelp": "U vindt de ID in de URL van uw spreadsheet."
+    "sheetName": "blad naam",
+    "spreadsheetAlias": "Spreadsheet-alias",
+    "spreadsheetAliasHelp": "Alias ​​voor het spreadsheet",
+    "spreadsheetId": "spreadsheet-id",
+    "spreadsheetIdHelp": "U vindt de ID in de URL van uw spreadsheet.",
+    "spreadsheetsErr1": "FOUT: Er is precies één standaardspreadsheet toegestaan!",
+    "spreadsheetsHelp": "Hulp voor spreadsheetstabel"
 }

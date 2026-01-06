@@ -1,10 +1,17 @@
 {
+    "SpreadsheetId": "ID da planilha",
+    "defaultSpreadsheetAlias": "Padrão",
+    "defaultSpreadsheetAliasHelp": "Defina esta como a planilha padrão",
     "google-spreadsheet adapter settings": "Configurações do adaptador para planilha do google",
     "privateKey": "chave privada",
-    "serviceAccountEmail": "conta de serviço",
-    "sheetName": "nome da folha",
-    "spreadsheetId": "ID da planilha",
     "privateKeyHelp": "Abra o arquivo de chave privada baixado e copie apenas a chave que começa com -----BEGIN PRIVATE KEY-----",
+    "serviceAccountEmail": "conta de serviço",
     "serviceAccountEmailHelp": "o endereço de e-mail da conta de serviço",
-    "spreadsheetIdHelp": "Você pode encontrar o ID no URL da sua planilha."
+    "sheetName": "nome da folha",
+    "spreadsheetAlias": "Alias ​​de planilha",
+    "spreadsheetAliasHelp": "Alias ​​da planilha",
+    "spreadsheetId": "ID da planilha",
+    "spreadsheetIdHelp": "Você pode encontrar o ID no URL da sua planilha.",
+    "spreadsheetsErr1": "ERRO: É permitida exatamente uma planilha padrão!",
+    "spreadsheetsHelp": "Ajuda para tabela de planilhas"
 }

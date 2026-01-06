@@ -1,6 +1,8 @@
 'use strict';
-/*global Blockly:true */
-/*global getInstances:true */
+/*global Blockly */
+/*global getInstances */
+/*global getInstanceAndAlias */
+/*global makeAsync */
 
 /// --- Delete rows  --------------------------------------------------
 
@@ -9,7 +11,7 @@ Blockly.Words['google-spreadsheet_delete-rows_on-sheetName'] = { en: 'on sheet',
 Blockly.Words['google-spreadsheet_delete-rows_startRow'] = { en: 'line', de: 'Zeile' };
 Blockly.Words['google-spreadsheet_delete-rows_endRow'] = { en: 'to', de: 'bis' };
 
-Blockly.Sendto.blocks['google-spreadsheet.deleteRows'] =
+Blockly.GoogleSheets.blocks['google-spreadsheet.deleteRows'] =
     '<block type="google-spreadsheet.deleteRows">' +
     '     <field name="INSTANCE"></field>' +
     '     <value name="SHEET_NAME">' +
@@ -55,18 +57,18 @@ Blockly.Blocks['google-spreadsheet.deleteRows'] = {
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
 
-        this.setColour(Blockly.Sendto.HUE);
+        this.setColour(Blockly.GoogleSheets.HUE);
         this.setTooltip(Blockly.Translate('google-spreadsheet_tooltip'));
         this.setHelpUrl(Blockly.Translate('google-spreadsheet_help'));
     },
 };
 
 Blockly.JavaScript.forBlock['google-spreadsheet.deleteRows'] = function (block) {
-    const dropdown_instance = block.getFieldValue('INSTANCE');
+    const { instance, alias } = getInstanceAndAlias(block);
+    const sheetName = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
+
     const startRow = Blockly.JavaScript.valueToCode(block, 'START_ROW', Blockly.JavaScript.ORDER_ATOMIC);
     const endRow = Blockly.JavaScript.valueToCode(block, 'END_ROW', Blockly.JavaScript.ORDER_ATOMIC);
-    const sheetName = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
-    return `sendTo("google-spreadsheet${dropdown_instance}", "deleteRows", {"sheetName":${sheetName},"start":${
-        startRow
-    }, "end":${endRow}});\n`;
+    const statement = `sendTo("google-spreadsheet${instance}", "deleteRows", {sheet:${sheetName}, alias:"${alias}", rows:[${startRow}, ${endRow}]})`;
+    return makeAsync(statement);
 };

@@ -1,17 +1,28 @@
 'use strict';
 
-/*global goog:true */
-/*global Blockly:true */
-/*global main:true */
-/*global document:true */
+/*global goog */
+/*global Blockly */
+/*global main */
+/*global document */
+/*global window */
 
 if (typeof goog !== 'undefined') {
-    goog.provide('Blockly.JavaScript.Sendto');
+    goog.provide('Blockly.JavaScript.GoogleSheets');
 
     goog.require('Blockly.JavaScript');
 }
 
-Blockly.Words['google-spreadsheet_anyInstance'] = { en: 'all instances', de: 'allen Instanzen' };
+Blockly.CustomBlocks = Blockly.CustomBlocks || [];
+Blockly.CustomBlocks.push('GoogleSheets');
+
+Blockly.GoogleSheets = {
+    HUE: 'rgb(35, 166, 103)',
+    blocks: {},
+    WARNING_PARENTS: ['on_ext'],
+};
+Blockly.Words['GoogleSheets'] = { en: 'Google Sheets', de: 'Google Sheets' };
+
+Blockly.Words['google-spreadsheet_anyInstance'] = { en: 'default of all instances', de: 'default von allen Instanzen' };
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 function getInstances(withAny = true) {
@@ -23,8 +34,14 @@ function getInstances(withAny = true) {
         for (var i = 0; i < main.instances.length; i++) {
             var m = main.instances[i].match(/^system.adapter.google-spreadsheet.(\d+)$/);
             if (m) {
-                var n = parseInt(m[1], 10);
-                options.push([`google-spreadsheet.${n}`, `.${n}`]);
+                const instanceName = main.instances[i];
+                const n = parseInt(m[1], 10);
+                const aliases = getSheetAliases(instanceName);
+                if (aliases.length) {
+                    for (const alias of aliases) {
+                        options.push([`${alias} (google-spreadsheet.${n})`, `.${n}|${alias}`]);
+                    }
+                }
             }
         }
     }
@@ -36,6 +53,60 @@ function getInstances(withAny = true) {
     }
     return options;
 }
+
+function getSheetAliases(instanceName) {
+    const objects = window.main.objects;
+    if (
+        objects !== undefined &&
+        main !== undefined &&
+        main.instances !== undefined &&
+        objects[instanceName] !== undefined &&
+        Array.isArray(objects[instanceName].native.spreadsheets)
+    ) {
+        const result = objects[instanceName].native.spreadsheets.map(sheet => sheet.alias);
+        if (result.length > 0) {
+            return result;
+        }
+    }
+    return [];
+}
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
+function getInstanceAndAlias(block) {
+    const dropdown_value = block.getFieldValue('INSTANCE');
+    var dropdown_instance = '.0';
+    var sheetAlias = 'default';
+    if (dropdown_value.includes('|')) {
+        const parts = dropdown_value.split('|');
+        dropdown_instance = parts[0];
+        sheetAlias = parts[1];
+    } else {
+        dropdown_instance = dropdown_value;
+    }
+    return { instance: dropdown_instance, alias: sheetAlias };
+}
+
+function makeAsync(statement) {
+    return `await new Promise((resolve)=>{${statement} ()=>{resolve()}); });\n`;
+}
+
+function createSendToCall(instance, command, params, waitForCompletion = false) {
+    const paramString = JSON.stringify(params);
+
+    let statement = '';
+
+    if (waitForCompletion) {
+        statement += 'await new Promise((resolve)=>{';
+    }
+    statement += `sendTo("google-spreadsheet${instance}", "${command}", ${paramString}`;
+    if (waitForCompletion) {
+        statement += `, ()=>{resolve()}); });\n`;
+    } else {
+        statement += ');';
+    }
+    return statement;
+}
+
 /* eslint-enable @typescript-eslint/no-unused-vars */
 
 function loadJS(filename) {

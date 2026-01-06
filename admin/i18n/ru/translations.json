@@ -1,10 +1,17 @@
 {
+    "SpreadsheetId": "Идентификатор таблицы",
+    "defaultSpreadsheetAlias": "По умолчанию",
+    "defaultSpreadsheetAliasHelp": "Установите это как таблицу по умолчанию",
     "google-spreadsheet adapter settings": "Настройки адаптера для google-таблицы",
     "privateKey": "закрытый ключ",
-    "serviceAccountEmail": "сервисный аккаунт",
-    "sheetName": "имя листа",
-    "spreadsheetId": "идентификатор электронной таблицы",
     "privateKeyHelp": "Откройте загруженный файл закрытого ключа и скопируйте только ключ, начинающийся с -----BEGIN PRIVATE KEY-----",
+    "serviceAccountEmail": "сервисный аккаунт",
     "serviceAccountEmailHelp": "адрес электронной почты учетной записи службы",
-    "spreadsheetIdHelp": "Идентификатор можно найти в URL-адресе вашей таблицы."
+    "sheetName": "имя листа",
+    "spreadsheetAlias": "Псевдоним электронной таблицы",
+    "spreadsheetAliasHelp": "Псевдоним для электронной таблицы",
+    "spreadsheetId": "идентификатор электронной таблицы",
+    "spreadsheetIdHelp": "Идентификатор можно найти в URL-адресе вашей таблицы.",
+    "spreadsheetsErr1": "ОШИБКА: разрешена ровно одна таблица по умолчанию!",
+    "spreadsheetsHelp": "Справка по таблице электронных таблиц"
 }

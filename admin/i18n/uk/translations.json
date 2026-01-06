@@ -1,10 +1,17 @@
 {
+    "SpreadsheetId": "Ідентифікатор електронної таблиці",
+    "defaultSpreadsheetAlias": "За замовчуванням",
+    "defaultSpreadsheetAliasHelp": "Установіть це як електронну таблицю за умовчанням",
     "google-spreadsheet adapter settings": "Налаштування адаптера для google-таблиць",
     "privateKey": "закритий ключ",
-    "serviceAccountEmail": "електронну пошту службового облікового запису",
-    "sheetName": "ім'я аркуша",
-    "spreadsheetId": "ідентифікатор електронної таблиці",
     "privateKeyHelp": "Відкрийте завантажений файл закритого ключа та скопіюйте лише ключ, який починається з -----BEGIN PRIVATE KEY-----",
+    "serviceAccountEmail": "електронну пошту службового облікового запису",
     "serviceAccountEmailHelp": "адреса електронної пошти облікового запису служби",
-    "spreadsheetIdHelp": "Ідентифікатор можна знайти в URL-адресі електронної таблиці."
+    "sheetName": "ім'я аркуша",
+    "spreadsheetAlias": "Псевдонім електронної таблиці",
+    "spreadsheetAliasHelp": "Псевдонім для електронної таблиці",
+    "spreadsheetId": "ідентифікатор електронної таблиці",
+    "spreadsheetIdHelp": "Ідентифікатор можна знайти в URL-адресі електронної таблиці.",
+    "spreadsheetsErr1": "ПОМИЛКА: дозволена лише одна таблиця за замовчуванням!",
+    "spreadsheetsHelp": "Довідка для таблиці електронних таблиць"
 }

@@ -1,10 +1,17 @@
 {
+    "SpreadsheetId": "电子表格 ID",
+    "defaultSpreadsheetAlias": "默认",
+    "defaultSpreadsheetAliasHelp": "将其设置为默认电子表格",
     "google-spreadsheet adapter settings": "谷歌电子表格的适配器设置",
     "privateKey": "私钥",
-    "serviceAccountEmail": "服务帐号",
-    "sheetName": "工作表名称",
-    "spreadsheetId": "电子表格编号",
     "privateKeyHelp": "打开下载的私钥文件并仅复制以 -----BEGIN PRIVATE KEY----- 开头的密钥",
+    "serviceAccountEmail": "服务帐号",
     "serviceAccountEmailHelp": "服务帐户的电子邮件地址",
-    "spreadsheetIdHelp": "您可以在电子表格的 URL 中找到该 ID。"
+    "sheetName": "工作表名称",
+    "spreadsheetAlias": "电子表格别名",
+    "spreadsheetAliasHelp": "电子表格的别名",
+    "spreadsheetId": "电子表格编号",
+    "spreadsheetIdHelp": "您可以在电子表格的 URL 中找到该 ID。",
+    "spreadsheetsErr1": "错误：仅允许使用一个默认电子表格！",
+    "spreadsheetsHelp": "电子表格表格的帮助"
 }

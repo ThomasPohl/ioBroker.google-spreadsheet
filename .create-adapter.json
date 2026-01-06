@@ -2,10 +2,11 @@
     "cli": true,
     "target": "directory",
     "adapterName": "google-spreadsheet",
-    "title": "Google Spreadsheet",
-    "description": "Append data to google spreadsheets",
+    "title": "Google Sheets",
+    "description": "Interact with google sheets",
     "keywords": [
         "google",
+        "sheets",
         "spreadsheet"
     ],
     "expert": "yes",

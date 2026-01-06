@@ -1,5 +1,7 @@
 # Write multiple cells
 
+➡️ See the [sendTo API documentation](../sendTo-API.md) for general usage and all available commands.
+
 With the `writeCells` block you can write values to multiple cells in your Google Spreadsheet at once.
 
 ## Blockly
@@ -37,6 +39,9 @@ sendTo("google-spreadsheet.0", "writeCells", {
   - **sheetName**: Name of the sheet
   - **cell**: Cell address (e.g. `A1`)
   - **data**: Value to write
+- **alias** (optional): The spreadsheet alias if you have multiple spreadsheets configured.
+
+**Callback result:** `{ success: true }` on success, or `{ error: string }` on failure.
 
 ## Example
 

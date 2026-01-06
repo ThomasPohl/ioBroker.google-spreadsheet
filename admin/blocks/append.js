@@ -1,14 +1,15 @@
 'use strict';
-/*global Blockly:true */
-/*global getInstances:true */
+/*global Blockly */
+/*global getInstances */
+/*global getInstanceAndAlias */
 
 /// --- Append  --------------------------------------------------
 Blockly.Words['google-spreadsheet_append_add-to'] = { en: 'append to', de: 'füge zu' };
 Blockly.Words['google-spreadsheet_append_on-sheetName'] = { en: 'on sheet', de: 'auf Tabellenblatt' };
 Blockly.Words['google-spreadsheet_append_data'] = { en: 'the data', de: 'die Daten' };
-Blockly.Words['google-spreadsheet_append_add-to-suffix'] = { en: '', de: 'hinzu' };
+Blockly.Words['google-spreadsheet_append_add-to-suffix'] = { en: ' ', de: 'hinzu' };
 
-Blockly.Sendto.blocks['google-spreadsheet.append'] =
+Blockly.GoogleSheets.blocks['google-spreadsheet.append'] =
     '<block type="google-spreadsheet.append">' +
     '     <field name="INSTANCE"></field>' +
     '     <value name="SHEET_NAME">' +
@@ -38,17 +39,18 @@ Blockly.Blocks['google-spreadsheet.append'] = {
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
 
-        this.setColour(Blockly.Sendto.HUE);
+        this.setColour(Blockly.GoogleSheets.HUE);
     },
 };
 
 Blockly.JavaScript.forBlock['google-spreadsheet.append'] = function (block) {
-    const dropdown_instance = block.getFieldValue('INSTANCE');
+    const { instance, alias } = getInstanceAndAlias(block);
     let data = Blockly.JavaScript.valueToCode(block, 'DATA', Blockly.JavaScript.ORDER_ATOMIC);
     if (!data) {
         data = '{}';
     }
     const sheetName = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
 
-    return `sendTo("google-spreadsheet${dropdown_instance}", "append", {"sheetName":${sheetName}, "data":${data}});\n`;
+    const statement = `sendTo("google-spreadsheet${instance}", "append", {sheet:${sheetName}, alias:"${alias}", values:${data}})`;
+    return `${statement};\n`;
 };

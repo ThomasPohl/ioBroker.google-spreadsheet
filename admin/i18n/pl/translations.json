@@ -1,10 +1,17 @@
 {
+    "SpreadsheetId": "Identyfikator arkusza kalkulacyjnego",
+    "defaultSpreadsheetAlias": "Domyślny",
+    "defaultSpreadsheetAliasHelp": "Ustaw to jako domyślny arkusz kalkulacyjny",
     "google-spreadsheet adapter settings": "Ustawienia adaptera dla arkusza kalkulacyjnego Google",
     "privateKey": "prywatny klucz",
-    "serviceAccountEmail": "konto usługi",
-    "sheetName": "nazwa arkusza",
-    "spreadsheetId": "identyfikator arkusza kalkulacyjnego",
     "privateKeyHelp": "Otwórz pobrany plik klucza prywatnego i skopiuj sam klucz, zaczynając od -----BEGIN PRIVATE KEY-----",
+    "serviceAccountEmail": "konto usługi",
     "serviceAccountEmailHelp": "adres e-mail konta usługi",
-    "spreadsheetIdHelp": "Identyfikator znajdziesz w adresie URL swojego arkusza kalkulacyjnego."
+    "sheetName": "nazwa arkusza",
+    "spreadsheetAlias": "Alias ​​arkusza kalkulacyjnego",
+    "spreadsheetAliasHelp": "Alias ​​dla arkusza kalkulacyjnego",
+    "spreadsheetId": "identyfikator arkusza kalkulacyjnego",
+    "spreadsheetIdHelp": "Identyfikator znajdziesz w adresie URL swojego arkusza kalkulacyjnego.",
+    "spreadsheetsErr1": "BŁĄD: dozwolony jest dokładnie jeden domyślny arkusz kalkulacyjny!",
+    "spreadsheetsHelp": "Pomoc dotycząca tabeli arkuszy kalkulacyjnych"
 }

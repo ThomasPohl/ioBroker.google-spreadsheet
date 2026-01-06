@@ -1,9 +1,17 @@
 # Read Cell
+
+➡️ See the [sendTo API documentation](../sendTo-API.md) for general usage and all available commands.
 The read cell feature allows you to read data from a specific cell in a Google spreadsheet.
 
 Used API endpoint: https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets.values/get
 
-The feature accepts two parameters: `sheetName` and `cell`.
+
+The feature accepts the following parameters:
+- `sheetName`: The name of the sheet.
+- `cell`: The cell address (e.g. `A1`).
+- `alias` (optional): The spreadsheet alias if you have multiple spreadsheets configured.
+
+**Callback result:** `{ value: any }` with the cell value, or `{ error: string }` on failure.
 
 ## Blockly
 

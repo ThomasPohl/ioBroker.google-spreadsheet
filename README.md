@@ -19,19 +19,24 @@
 
 ## google-spreadsheet adapter for ioBroker
 
-This adapter can be used to automatically interact with google spreadsheets.
+This adapter can be used to automatically interact with google sheets.
+
+## API
+
+* [sendTo API documentation](docs/sendTo-API.md)
 
 ## Features
 
-* [Append data to spreadsheet](features/append.md)
-* [Delete rows from a spreadsheet](features/delete-rows.md)
-* [Create sheets](features/create-sheet.md)
-* [Delete sheet](features/delete-sheet.md)
-* [Delete sheets](features/delete-sheets.md)
-* [Duplicate sheets](features/duplicate-sheet.md)
-* [Read cell](features/read-cell.md)
-* [Write cell](features/write-cell.md)
-* [Write cells](features/write-cells.md)
+* [Append data to spreadsheet](docs/features/append.md)
+* [Delete rows from a spreadsheet](docs/features/delete-rows.md)
+* [Create sheets](docs/features/create-sheet.md)
+* [Delete sheet](docs/features/delete-sheet.md)
+* [Delete sheets](docs/features/delete-sheets.md)
+* [Duplicate sheets](docs/features/duplicate-sheet.md)
+* [Read cell](docs/features/read-cell.md)
+* [Write cell](docs/features/write-cell.md)
+* [Write cells](docs/features/write-cells.md)
+
 
 ## Usage
 
@@ -42,7 +47,7 @@ This adapter can be used to automatically interact with google spreadsheets.
 
 2. Create or select an existing project that you wish to use with the API.
 
-3. Enable the Google Spreadsheet API for your project.
+3. Enable the Google Sheets API for your project.
 
 #### Create a Service Account
 
@@ -80,7 +85,7 @@ Add the following information to the configuration of your adapter instance in i
 - **Service Account** - The email address of the service account you created.
 - **Private Key** - Open the downloaded JSON file, and locate the private key within the file. Copy only the part starting with "-----BEGIN PRIVATE KEY-----."
 
-![Settings](img/settings.png)
+![Settings](docs/img/settings.png)
 
 #### Find the Spreadsheet ID in the URL
 
@@ -98,14 +103,14 @@ https://docs.google.com/spreadsheets/d/SPREADSHEET_ID/edit
 
 Use the available blocks to automatically interact with your spreadsheet.
 
-![Blockly](img/blockly-append.png)
+![Blockly](docs/img/blockly-append.png)
 
 ## Troubleshooting
 
-### Error while sending data to Google Spreadsheet:Error: error:0909006C:PEM routines:get_name:no start line
+### Error while sending data to Google Sheets:Error: error:0909006C:PEM routines:get_name:no start line
 When copying the private key into the configuration, make sure there are no \n. If there are \n in the key, please replace the with normal line breaks
 
-### Error while sending data to Google Spreadsheet:Error: The caller does not have permission
+### Error while sending data to Google Sheets:Error: The caller does not have permission
 Make sure the Service Account has adequate permissions to write to the spreadsheet. Refer to the "Grant Access to the Spreadsheet" section above.
 
 
@@ -114,6 +119,15 @@ Make sure the Service Account has adequate permissions to write to the spreadshe
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+- (Thomas Pohl) Added support for multiple spreadsheets with aliases
+- (Thomas Pohl) All methods now support an optional alias parameter to specify which spreadsheet to use
+- (Thomas Pohl) Automatic migration of old single spreadsheet configuration to new multi-spreadsheet format
+- (Thomas Pohl) Improved unit test coverage with mock support for adapter-core
+- (Thomas Pohl) Improved error handling and logging for better debugging
+- (Thomas Pohl) Improved handling of async operations to prevent potential race conditions
+- (Thomas Pohl) All blocklys will use await sendToAsync - this makes it easier to implement blocklys that depend on the termination of other blocklys
+
 ### 0.6.0 (2025-12-26)
 - (Thomas Pohl) Added deleteSheets functionality (delete multiple sheets in one call)
 - (Thomas Pohl) Added blockly block for deleteSheets

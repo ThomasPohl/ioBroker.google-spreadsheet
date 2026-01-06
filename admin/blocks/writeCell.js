@@ -1,6 +1,8 @@
 'use strict';
 /*global Blockly */
 /*global getInstances */
+/*global getInstanceAndAlias */
+/*global makeAsync */
 
 /// --- Write Cell  --------------------------------------------------
 
@@ -9,7 +11,7 @@ Blockly.Words['google-spreadsheet_writeCell_sheetName'] = { en: 'on sheet', de: 
 Blockly.Words['google-spreadsheet_writeCell_cell'] = { en: 'in cell', de: 'in Zelle' };
 Blockly.Words['google-spreadsheet_writeCell_data'] = { en: 'the data', de: 'die Daten' };
 
-Blockly.Sendto.blocks['google-spreadsheet.writeCell'] =
+Blockly.GoogleSheets.blocks['google-spreadsheet.writeCell'] =
     '<block type="google-spreadsheet.writeCell">' +
     '     <field name="INSTANCE"></field>' +
     '     <field name="SHEET_NAME">' +
@@ -44,19 +46,16 @@ Blockly.Blocks['google-spreadsheet.writeCell'] = {
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
 
-        this.setColour(Blockly.Sendto.HUE);
+        this.setColour(Blockly.GoogleSheets.HUE);
     },
 };
 
 Blockly.JavaScript.forBlock['google-spreadsheet.writeCell'] = function (block) {
-    const dropdown_instance = block.getFieldValue('INSTANCE');
+    const { instance, alias } = getInstanceAndAlias(block);
     const sheetName = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
     const cell = Blockly.JavaScript.valueToCode(block, 'CELL', Blockly.JavaScript.ORDER_ATOMIC);
     const data = Blockly.JavaScript.valueToCode(block, 'DATA', Blockly.JavaScript.ORDER_ATOMIC);
 
-    return (
-        `sendTo("google-spreadsheet${dropdown_instance}", "writeCell", {"sheetName": ${sheetName}, "cell": ${
-            cell
-        }, "data":${data}}` + `);\n`
-    );
+    const statement = `sendTo("google-spreadsheet${instance}", "writeCell", {sheet:${sheetName}, cell:${cell}, value:${data}, alias:"${alias}"})`;
+    return makeAsync(statement);
 };

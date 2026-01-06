@@ -5,6 +5,10 @@ var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
 var __copyProps = (to, from, except, desc) => {
   if (from && typeof from === "object" || typeof from === "function") {
     for (let key of __getOwnPropNames(from))
@@ -21,10 +25,21 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
   mod
 ));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var main_exports = {};
+__export(main_exports, {
+  GoogleSpreadsheet: () => GoogleSpreadsheet
+});
+module.exports = __toCommonJS(main_exports);
 var utils = __toESM(require("@iobroker/adapter-core"));
-var import_fs = __toESM(require("fs"));
 var import_google = require("./lib/google");
+var import_messageHandlers = require("./lib/messageHandlers/index");
 class GoogleSpreadsheet extends utils.Adapter {
+  /**
+   * Creates an instance of the adapter class.
+   *
+   * @param options The adapter options
+   */
   constructor(options = {}) {
     super({
       ...options,
@@ -35,12 +50,28 @@ class GoogleSpreadsheet extends utils.Adapter {
     this.on("unload", this.onUnload.bind(this));
     this.spreadsheet = new import_google.SpreadsheetUtils(this.config, this.log);
   }
+  migrateSpreadhseetIdToTableIfNeeded() {
+    if (this.config.spreadsheetId && this.config.spreadsheetId.length > 0 && (!this.config.spreadsheets || this.config.spreadsheets.length === 0)) {
+      this.log.info(`Migrating spreadsheetId ${this.config.spreadsheetId} to spreadsheets table`);
+      this.config.spreadsheets = [
+        {
+          spreadsheetId: this.config.spreadsheetId,
+          alias: "default",
+          isDefault: true
+        }
+      ];
+      this.config.spreadsheetId = "";
+      this.extendForeignObject(`system.adapter.${this.name}.${this.instance}`, { native: this.config }, () => {
+        this.log.info("Migration completed");
+      });
+    }
+  }
   /**
    * Is called when databases are connected and adapter received configuration.
    */
   async onReady() {
-    this.log.debug(`config spreadsheetId: ${this.config.spreadsheetId}`);
-    if (this.config.privateKey && this.config.serviceAccountEmail && this.config.spreadsheetId) {
+    this.migrateSpreadhseetIdToTableIfNeeded();
+    if (this.config.privateKey && this.config.serviceAccountEmail && this.config.spreadsheets.length > 0) {
       await this.setState("info.connection", true, true);
       this.log.info("Google-spreadsheet adapter configured");
     } else {
@@ -56,8 +87,11 @@ class GoogleSpreadsheet extends utils.Adapter {
         if (data && data.native && data.native.privateKey && !data.native.privateKey.startsWith("$/aes")) {
           this.config.privateKey = data.native.privateKey;
           data.native.privateKey = this.encrypt(data.native.privateKey);
-          this.extendForeignObject(`system.adapter.${this.name}.${this.instance}`, data);
-          this.log.info("privateKey is stored now encrypted");
+          this.extendForeignObject(`system.adapter.${this.name}.${this.instance}`, data).then(() => {
+            this.log.info("privateKey is stored now encrypted");
+          }).catch((err) => {
+            this.log.error(`Cannot store encrypted privateKey: ${err}`);
+          });
         }
       });
     }
@@ -75,194 +109,54 @@ class GoogleSpreadsheet extends utils.Adapter {
       callback();
     }
   }
-  // If you need to accept messages in your adapter, uncomment the following block and the corresponding line in the constructor.
-  // /**
-  //  * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...
-  //  * Using this method requires "common.messagebox" property to be set to true in io-package.json
-  //  */
+  /**
+   * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...
+   * Using this method requires "common.messagebox" property to be set to true in io-package.json
+   *
+   * @param obj The message object
+   */
   onMessage(obj) {
+    const handlers = {
+      append: { handler: import_messageHandlers.handleAppend, logMessage: "append to spreadsheet" },
+      deleteRows: { handler: import_messageHandlers.handleDeleteRows, logMessage: "delete rows from spreadsheet" },
+      createSheet: { handler: import_messageHandlers.handleCreateSheet, logMessage: "create sheet" },
+      deleteSheet: { handler: import_messageHandlers.handleDeleteSheet, logMessage: "delete sheet" },
+      deleteSheets: { handler: import_messageHandlers.handleDeleteSheets, logMessage: "delete sheets" },
+      duplicateSheet: { handler: import_messageHandlers.handleDuplicateSheet, logMessage: "duplicate sheet" },
+      upload: { handler: import_messageHandlers.handleUpload, logMessage: "upload file" },
+      writeCell: { handler: import_messageHandlers.handleWriteCell, logMessage: "write cell" },
+      writeCells: { handler: import_messageHandlers.handleWriteCells, logMessage: "write cells" },
+      readCell: { handler: import_messageHandlers.handleReadCell, logMessage: "read cell" }
+    };
+    this.log.debug(`Received message: ${JSON.stringify(obj)}`);
     if (typeof obj === "object" && obj.message) {
-      switch (obj.command) {
-        case "append": {
-          this.log.debug("append to spreadsheet");
-          this.append(obj);
+      if (obj.command && obj.command in handlers) {
+        const command = obj.command;
+        this.log.debug(handlers[command].logMessage);
+        handlers[command].handler(this.spreadsheet, this.log, obj).then((result) => {
           if (obj.callback) {
-            this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+            this.sendTo(obj.from, obj.command, result ? result : "Message received", obj.callback);
           }
-          break;
-        }
-        case "deleteRows": {
-          this.log.debug("delete rows from spreadsheet");
-          this.deleteRows(obj);
+        }).catch((error) => {
+          this.log.error(`Cannot ${obj.command}: ${error}`);
           if (obj.callback) {
-            this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+            this.sendTo(obj.from, obj.command, { error: error.message }, obj.callback);
           }
-          break;
-        }
-        case "createSheet": {
-          this.log.debug("create sheet");
-          this.createSheet(obj);
-          if (obj.callback) {
-            this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-          }
-          break;
-        }
-        case "deleteSheet": {
-          this.log.debug("delete sheet");
-          this.deleteSheet(obj);
-          if (obj.callback) {
-            this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-          }
-          break;
-        }
-        case "deleteSheets": {
-          this.log.debug("delete sheet");
-          this.deleteSheets(obj);
-          if (obj.callback) {
-            this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-          }
-          break;
-        }
-        case "duplicateSheet": {
-          this.log.debug("duplicate sheet");
-          this.duplicateSheet(obj);
-          if (obj.callback) {
-            this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-          }
-          break;
-        }
-        case "upload": {
-          this.log.debug("upload file");
-          this.upload(obj);
-          if (obj.callback) {
-            this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-          }
-          break;
-        }
-        case "writeCell": {
-          this.log.debug("write data to single cell");
-          this.writeCell(obj);
-          if (obj.callback) {
-            this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-          }
-          break;
-        }
-        case "writeCells": {
-          this.log.debug("write data to multiple cells");
-          this.writeCells(obj);
-          if (obj.callback) {
-            this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-          }
-          break;
-        }
-        case "readCell": {
-          this.log.debug("read single cell");
-          this.readCell(obj).then((result) => {
-            if (obj.callback) {
-              this.sendTo(obj.from, obj.command, result, obj.callback);
-            }
-          }).catch((error) => this.log.error(`Cannot read cell: ${error}`));
-          break;
-        }
-        default: {
-          this.log.warn(`unknown command: ${obj.command}`);
-          break;
-        }
+        });
+      } else {
+        this.log.warn(`unknown command: ${obj.command}`);
       }
     }
-  }
-  upload(message) {
-    const messageData = message.message;
-    if (this.missingParameters(["target", "parentFolder"], messageData)) {
-      return;
-    }
-    this.spreadsheet.upload(messageData.target, messageData.parentFolder, import_fs.default.createReadStream(messageData.source));
-  }
-  append(message) {
-    const messageData = message.message;
-    if (this.missingParameters(["sheetName", "data"], messageData)) {
-      return;
-    }
-    this.spreadsheet.append(messageData.sheetName, messageData.data);
-  }
-  writeCell(message) {
-    const messageData = message.message;
-    if (this.missingParameters(["sheetName", "cell", "data"], messageData)) {
-      return;
-    }
-    const cellPattern = new RegExp("[A-Z]+[0-9]+()");
-    if (!cellPattern.test(messageData.cell)) {
-      this.log.error(`Invalid cell pattern ${messageData.cell}. Expected: A1`);
-      return;
-    }
-    this.spreadsheet.writeCell(messageData.sheetName, messageData.cell, messageData.data);
-  }
-  writeCells(message) {
-    const messageData = message.message;
-    if (this.missingParameters(["cells"], messageData)) {
-      return;
-    }
-    const cells = messageData.cells;
-    const cellPattern = new RegExp("[A-Z]+[0-9]+()");
-    for (const cellObj of cells) {
-      if (!cellPattern.test(cellObj.cell)) {
-        this.log.error(`Invalid cell pattern ${cellObj.cell}. Expected: A1`);
-        return;
-      }
-    }
-    this.spreadsheet.writeCells(cells);
-  }
-  async readCell(message) {
-    return new Promise((resolve, reject) => {
-      const messageData = message.message;
-      if (this.missingParameters(["sheetName", "cell"], messageData)) {
-        return;
-      }
-      const cellPattern = new RegExp("[A-Z]+[0-9]+()");
-      if (!cellPattern.test(messageData.cell)) {
-        this.log.error(`Invalid cell pattern ${messageData.cell}. Expected: A1`);
-        return;
-      }
-      this.spreadsheet.readCell(messageData.sheetName, messageData.cell).then((result) => resolve(result)).catch((error) => reject(new Error(error)));
-    });
-  }
-  deleteRows(message) {
-    const messageData = message.message;
-    if (this.missingParameters(["sheetName", "start", "end"], messageData)) {
-      return;
-    }
-    this.spreadsheet.deleteRows(messageData.sheetName, messageData.start, messageData.end);
-  }
-  createSheet(message) {
-    this.spreadsheet.createSheet(message.message);
-  }
-  deleteSheet(message) {
-    this.spreadsheet.deleteSheet(message.message);
-  }
-  deleteSheets(message) {
-    this.spreadsheet.deleteSheets(message.message);
-  }
-  duplicateSheet(message) {
-    const messageData = message.message;
-    if (this.missingParameters(["source", "target", "index"], messageData)) {
-      return;
-    }
-    this.spreadsheet.duplicateSheet(messageData.source, messageData.target, messageData.index);
-  }
-  missingParameters(neededParameters, messageData) {
-    let result = false;
-    for (const parameter of neededParameters) {
-      if (Object.keys(messageData).indexOf(parameter) == -1) {
-        result = true;
-        this.log.error(`The parameter '${parameter}' is required but was not passed!`);
-      }
-    }
-    return result;
   }
 }
 if (require.main !== module) {
   module.exports = (options) => new GoogleSpreadsheet(options);
+  module.exports.GoogleSpreadsheet = GoogleSpreadsheet;
 } else {
   (() => new GoogleSpreadsheet())();
 }
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  GoogleSpreadsheet
+});
 //# sourceMappingURL=main.js.map

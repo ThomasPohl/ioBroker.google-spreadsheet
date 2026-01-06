@@ -1,9 +1,18 @@
 # Write Cell
+
+➡️ See the [sendTo API documentation](../sendTo-API.md) for general usage and all available commands.
 The write cell feature allows you to write data to a specific cell in a Google spreadsheet.
 
 Used API endpoint: https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets.values/update
 
-The feature accepts three parameters: `sheetName`, `cell`, and `data`. The `data` parameter can be any value that you want to write to the cell.
+
+The feature accepts the following parameters:
+- `sheetName`: The name of the sheet.
+- `cell`: The cell address (e.g. `A1`).
+- `data`: The value to write.
+- `alias` (optional): The spreadsheet alias if you have multiple spreadsheets configured.
+
+**Callback result:** `{ success: true }` on success, or `{ error: string }` on failure.
 
 ## Blockly
 
