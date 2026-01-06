@@ -18,21 +18,21 @@ Blockly.GoogleSheets.blocks['google-spreadsheet.writeCells'] =
 // addCell-Block in die Toolbox aufnehmen, damit er auswählbar ist
 Blockly.GoogleSheets.blocks['google-spreadsheet.addCell'] =
     '<block type="google-spreadsheet.addCell">' +
-    '     <field name="SHEET_NAME">' +
+    '     <value name="SHEET_NAME">' +
     '         <shadow type="text">' +
     '             <field name="TEXT">text</field>' +
     '         </shadow>' +
-    '     </field>' +
-    '     <field name="CELL">' +
+    '     </value>' +
+    '     <value name="CELL">' +
     '         <shadow type="text">' +
     '             <field name="TEXT">A1</field>' +
     '         </shadow>' +
-    '     </field>' +
-    '     <field name="DATA">' +
+    '     </value>' +
+    '     <value name="DATA">' +
     '         <shadow type="text">' +
     '             <field name="TEXT"></field>' +
     '         </shadow>' +
-    '     </field>' +
+    '     </value>' +
     '</block>';
 
 Blockly.Blocks['google-spreadsheet.writeCells'] = {
@@ -44,7 +44,7 @@ Blockly.Blocks['google-spreadsheet.writeCells'] = {
             .appendField(new Blockly.FieldDropdown(instances), 'INSTANCE');
 
         this.appendStatementInput('CELLS')
-            .setCheck('google-spreadsheet.writeCell')
+            .setCheck('google-spreadsheet.addCell')
             .appendField(Blockly.Translate('google-spreadsheet_writeCells_cells'));
 
         this.setInputsInline(false);
@@ -56,20 +56,11 @@ Blockly.Blocks['google-spreadsheet.writeCells'] = {
 
 Blockly.JavaScript.forBlock['google-spreadsheet.writeCells'] = function (block) {
     const { instance, alias } = getInstanceAndAlias(block);
+    // cellsCode enthält mehrere Zeilen wie: ({sheet: ..., cell: ..., value: ...}), ...
     const cellsCode = Blockly.JavaScript.statementToCode(block, 'CELLS');
-    // cellsCode enthält mehrere Zeilen wie: addCell({sheetName: ..., cell: ..., data: ...});
-    // Wir sammeln die Argumente in ein Array
-    const cells = [];
-    const cellRegex = /addCell\((\{[^}]+\})\);/g;
-    let match;
-    while ((match = cellRegex.exec(cellsCode)) !== null) {
-        try {
-            cells.push(eval(`(${match[1]})`));
-        } catch (e) {
-            console.error('Error parsing cell data:', e);
-        }
-    }
-    const statement = `sendTo("google-spreadsheet${instance}", "writeCells", {cells:${JSON.stringify(cells)}, alias:"${alias}"})`;
+    // Baue ein Array aus den Objekten
+    const cellsArray = `[${cellsCode.replace(/\n/g, '').replace(/,$/, '')}]`;
+    const statement = `sendTo("google-spreadsheet${instance}", "writeCells", {cells: ${cellsArray}, alias: "${alias}"})`;
     return `${statement};\n`;
 };
 
@@ -79,8 +70,8 @@ Blockly.Blocks['google-spreadsheet.addCell'] = {
         this.appendValueInput('SHEET_NAME').appendField('Sheet');
         this.appendValueInput('CELL').appendField('Cell');
         this.appendValueInput('DATA').appendField('Data');
-        this.setPreviousStatement(true, 'google-spreadsheet.writeCell');
-        this.setNextStatement(true, 'google-spreadsheet.writeCell');
+        this.setPreviousStatement(true, 'google-spreadsheet.addCell');
+        this.setNextStatement(true, 'google-spreadsheet.addCell');
         this.setColour(Blockly.GoogleSheets.HUE);
     },
 };
@@ -89,5 +80,5 @@ Blockly.JavaScript.forBlock['google-spreadsheet.addCell'] = function (block) {
     const sheetName = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
     const cell = Blockly.JavaScript.valueToCode(block, 'CELL', Blockly.JavaScript.ORDER_ATOMIC);
     const data = Blockly.JavaScript.valueToCode(block, 'DATA', Blockly.JavaScript.ORDER_ATOMIC);
-    return `addCell({sheet: ${sheetName}, cell: ${cell}, value: ${data}});\n`;
+    return `{sheet: ${sheetName}, cell: ${cell}, value: ${data}},\n`;
 };

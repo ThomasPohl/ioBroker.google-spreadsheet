@@ -50,7 +50,7 @@ Blockly.JavaScript.forBlock['google-spreadsheet.read'] = function (block) {
     const cell = Blockly.JavaScript.valueToCode(block, 'CELL', Blockly.JavaScript.ORDER_ATOMIC);
 
     return [
-        `await new Promise((resolve)=>{sendTo("google-spreadsheet${instance}", "readCell", {sheet: ${sheetName}, cell: ${cell}, alias: "${alias}"}, (response)=>{resolve(response)}, (response)=>{console.log('Error'); resolve('');}); })`,
+        `await new Promise((resolve)=>{sendTo("google-spreadsheet${instance}", "readCell", {sheet: ${sheetName}, cell: ${cell}, alias: "${alias}"}, (response)=>{resolve(response)}, (response)=>{console.log('Error: ' + response.error); resolve('');}); })`,
         Blockly.JavaScript.ORDER_ATOMIC,
     ];
 };
