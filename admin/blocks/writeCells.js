@@ -2,7 +2,6 @@
 /*global Blockly */
 /*global getInstances */
 /*global getInstanceAndAlias */
-/*global makeAsync */
 
 /// --- Write Cells  --------------------------------------------------
 

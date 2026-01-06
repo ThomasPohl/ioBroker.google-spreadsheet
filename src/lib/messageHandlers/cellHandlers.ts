@@ -2,6 +2,10 @@ import type { SpreadsheetUtils } from '../google';
 
 /**
  * Handles writing to a single cell of a spreadsheet sheet.
+ *
+ * @param spreadsheet The SpreadsheetUtils instance to use.
+ * @param log The logger instance for logging.
+ * @param message The message containing parameters for the operation.
  */
 export function handleWriteCell(
     spreadsheet: SpreadsheetUtils,
@@ -35,6 +39,10 @@ export function handleWriteCell(
 
 /**
  * Handles writing to multiple cells of one or more spreadsheet sheets.
+ *
+ * @param spreadsheet The SpreadsheetUtils instance to use.
+ * @param log The logger instance for logging.
+ * @param message The message containing parameters for the operation.
  */
 export function handleWriteCells(
     spreadsheet: SpreadsheetUtils,
@@ -72,6 +80,11 @@ export function handleWriteCells(
 
 /**
  * Handles reading a single cell of a spreadsheet sheet.
+ * Returns the value of the cell.
+ *
+ * @param spreadsheet The SpreadsheetUtils instance to use.
+ * @param log The logger instance for logging.
+ * @param message The message containing parameters for the operation.
  */
 export function handleReadCell(
     spreadsheet: SpreadsheetUtils,

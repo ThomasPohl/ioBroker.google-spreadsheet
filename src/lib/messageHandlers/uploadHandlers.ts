@@ -3,6 +3,10 @@ import fs from 'fs';
 
 /**
  * Handles uploading a file to a Google Drive folder.
+ *
+ * @param spreadsheet The SpreadsheetUtils instance to use.
+ * @param log The logger instance for logging.
+ * @param message The message containing parameters for the operation.
  */
 export function handleUpload(
     spreadsheet: SpreadsheetUtils,

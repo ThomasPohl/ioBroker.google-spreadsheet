@@ -2,6 +2,10 @@ import type { SpreadsheetUtils } from '../google';
 
 /**
  * Handles appending data to a spreadsheet sheet.
+ *
+ * @param spreadsheet The SpreadsheetUtils instance to use.
+ * @param log The logger instance for logging.
+ * @param message The message containing parameters for the operation.
  */
 export function handleAppend(
     spreadsheet: SpreadsheetUtils,
@@ -35,6 +39,10 @@ export function handleAppend(
 
 /**
  * Handles deleting rows in a spreadsheet sheet.
+ *
+ * @param spreadsheet The SpreadsheetUtils instance to use.
+ * @param log The logger instance for logging.
+ * @param message The message containing parameters for the operation.
  */
 export function handleDeleteRows(
     spreadsheet: SpreadsheetUtils,
@@ -95,6 +103,10 @@ export function handleCreateSheet(
 
 /**
  * Handles deleting a spreadsheet sheet.
+ *
+ * @param spreadsheet The SpreadsheetUtils instance to use.
+ * @param log The logger instance for logging.
+ * @param message The message containing parameters for the operation.
  */
 export function handleDeleteSheet(
     spreadsheet: SpreadsheetUtils,
@@ -121,6 +133,10 @@ export function handleDeleteSheet(
 
 /**
  * Handles deleting multiple spreadsheet sheets.
+ *
+ * @param spreadsheet The SpreadsheetUtils instance to use.
+ * @param log The logger instance for logging.
+ * @param message The message containing parameters for the operation.
  */
 export function handleDeleteSheets(
     spreadsheet: SpreadsheetUtils,
@@ -147,6 +163,10 @@ export function handleDeleteSheets(
 
 /**
  * Handles duplicating a spreadsheet sheet.
+ *
+ * @param spreadsheet The SpreadsheetUtils instance to use.
+ * @param log The logger instance for logging.
+ * @param message The message containing parameters for the operation.
  */
 export function handleDuplicateSheet(
     spreadsheet: SpreadsheetUtils,

@@ -2,6 +2,7 @@
 /*global Blockly */
 /*global getInstances */
 /*global getInstanceAndAlias */
+/*global document */
 
 /// ---Create sheet  --------------------------------------------------
 Blockly.Words['google-spreadsheet_create-sheet_catch'] = { en: 'on error', de: 'bei Fehler' };
@@ -98,8 +99,7 @@ Blockly.Blocks['google-spreadsheet.createSheet'] = {
 // Mutator-Container-Block for Drag & Drop error handling
 Blockly.Blocks['createSheet_mutator_container'] = {
     init: function () {
-        this.appendDummyInput()
-            .appendField(Blockly.Translate('google-spreadsheet_create-sheet_mutator-container'));
+        this.appendDummyInput().appendField(Blockly.Translate('google-spreadsheet_create-sheet_mutator-container'));
         this.appendStatementInput('STACK');
         this.setColour(Blockly.GoogleSheets.HUE);
         this.setTooltip(Blockly.Translate('google-spreadsheet_create-sheet_mutator-container'));
@@ -110,8 +110,7 @@ Blockly.Blocks['createSheet_mutator_container'] = {
 // Mutator-Block for error handling
 Blockly.Blocks['createSheet_mutator_catch'] = {
     init: function () {
-        this.appendDummyInput('CATCH')
-            .appendField(Blockly.Translate('google-spreadsheet_create-sheet_catch'));
+        this.appendDummyInput('CATCH').appendField(Blockly.Translate('google-spreadsheet_create-sheet_catch'));
         this.setPreviousStatement(true);
         this.setNextStatement(true);
         this.setColour(Blockly.GoogleSheets.HUE);

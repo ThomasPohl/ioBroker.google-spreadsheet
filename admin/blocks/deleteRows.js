@@ -2,7 +2,7 @@
 /*global Blockly */
 /*global getInstances */
 /*global getInstanceAndAlias */
- /*global makeAsync */
+/*global makeAsync */
 
 /// --- Delete rows  --------------------------------------------------
 

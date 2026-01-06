@@ -1,11 +1,15 @@
-"use strict";
+'use strict';
 /*global Blockly */
 /*global getInstances */
 /*global getInstanceAndAlias */
+/*global document */
 
 // Translations
 Blockly.Words['google-spreadsheet_duplicate-sheet_duplicate-in'] = { en: 'duplicate in', de: 'dupliziere in' };
-Blockly.Words['google-spreadsheet_duplicate-sheet_sheetName'] = { en: 'the sheet with the name', de: 'das Blatt mit dem Namen' };
+Blockly.Words['google-spreadsheet_duplicate-sheet_sheetName'] = {
+    en: 'the sheet with the name',
+    de: 'das Blatt mit dem Namen',
+};
 Blockly.Words['google-spreadsheet_duplicate-sheet_newSheetName'] = { en: 'new name', de: 'neuer Name' };
 Blockly.Words['google-spreadsheet_duplicate-sheet_newPosition'] = { en: 'at position', de: 'an Position' };
 Blockly.Words['google-spreadsheet_duplicate-sheet_then'] = { en: 'then', de: 'then' };
@@ -78,7 +82,9 @@ Blockly.Blocks['google-spreadsheet.duplicateSheet'] = {
     },
     updateShape_: function () {
         if (this.hasCatch_ && !this.getInput('CATCH')) {
-            this.appendStatementInput('CATCH').appendField(Blockly.Translate('google-spreadsheet_duplicate-sheet_catch'));
+            this.appendStatementInput('CATCH').appendField(
+                Blockly.Translate('google-spreadsheet_duplicate-sheet_catch'),
+            );
         } else if (!this.hasCatch_ && this.getInput('CATCH')) {
             this.removeInput('CATCH');
         }
@@ -136,7 +142,9 @@ Blockly.JavaScript.forBlock['google-spreadsheet.duplicateSheet'] = function (blo
     let source = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
     let target = Blockly.JavaScript.valueToCode(block, 'NEW_SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
     let index = Blockly.JavaScript.valueToCode(block, 'NEW_POSITION', Blockly.JavaScript.ORDER_ATOMIC);
-    if (!index) index = -1;
+    if (!index) {
+        index = -1;
+    }
     const statements_do = Blockly.JavaScript.statementToCode(block, 'DO');
     let catchCode = '';
     if (block.getInput('CATCH0')) {
