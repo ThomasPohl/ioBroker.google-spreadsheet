@@ -2,6 +2,7 @@
 /*global Blockly */
 /*global getInstances */
 /*global getInstanceAndAlias */
+/*global makeAsync */
 
 /// --- Write Cells  --------------------------------------------------
 
@@ -68,7 +69,8 @@ Blockly.JavaScript.forBlock['google-spreadsheet.writeCells'] = function (block) 
             console.error('Error parsing cell data:', e);
         }
     }
-    return `await sendToAsync("google-spreadsheet${instance}", "writeCells", {cells: ${JSON.stringify(cells)}, "alias":"${alias}"});\n`;
+    const statement = `sendTo("google-spreadsheet${instance}", "writeCells", {cells:${JSON.stringify(cells)}, alias:"${alias}"})`;
+    return `${statement};\n`;
 };
 
 // Hilfsblock für einzelne Zelleingabe (nur für writeCells)
@@ -87,5 +89,5 @@ Blockly.JavaScript.forBlock['google-spreadsheet.addCell'] = function (block) {
     const sheetName = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
     const cell = Blockly.JavaScript.valueToCode(block, 'CELL', Blockly.JavaScript.ORDER_ATOMIC);
     const data = Blockly.JavaScript.valueToCode(block, 'DATA', Blockly.JavaScript.ORDER_ATOMIC);
-    return `addCell({sheetName: ${sheetName}, cell: ${cell}, data: ${data}});\n`;
+    return `addCell({sheet: ${sheetName}, cell: ${cell}, value: ${data}});\n`;
 };

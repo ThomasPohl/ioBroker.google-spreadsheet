@@ -2,6 +2,7 @@
 /*global Blockly */
 /*global getInstances */
 /*global getInstanceAndAlias */
+/*global makeAsync */
 
 /// --- Append  --------------------------------------------------
 Blockly.Words['google-spreadsheet_append_add-to'] = { en: 'append to', de: 'füge zu' };
@@ -51,5 +52,6 @@ Blockly.JavaScript.forBlock['google-spreadsheet.append'] = function (block) {
     }
     const sheetName = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
 
-    return `await sendToAsync("google-spreadsheet${instance}", "append", {"sheetName":${sheetName}, "alias":"${alias}", "data":${data}});\n`;
+    const statement = `sendTo("google-spreadsheet${instance}", "append", {sheet:${sheetName}, alias:"${alias}", values:${data}})`;
+    return `${statement};\n`;
 };

@@ -128,7 +128,6 @@ class SpreadsheetUtils {
         this.log.debug("Sheet created successfully");
         resolve();
       }).catch((error) => {
-        this.log.error(`Error while creating sheet:${error}`);
         reject(new Error(`Error while creating sheet: ${error.message}`));
       });
     });
@@ -371,18 +370,18 @@ class SpreadsheetUtils {
   /**
    * Write data to a cell in a Google Spreadsheet
    *
-   * @param sheetName Name of the sheet
+   * @param sheet Name of the sheet
    * @param cell Cell to write to
-   * @param data Data to write
+   * @param value Value to write
    * @param sheetAlias Alias of the sheet to use (optional)
    */
-  writeCell(sheetName, cell, data, sheetAlias = null) {
-    return this.writeCells([{ sheetName, cell, data }], sheetAlias);
+  writeCell(sheet, cell, value, sheetAlias = null) {
+    return this.writeCells([{ sheet, cell, value }], sheetAlias);
   }
   /**
    * Write multiple cells in a Google Spreadsheet
    *
-   * @param cells Array of objects: { sheetName, cell, data }
+   * @param cells Array of objects: { sheet, cell, value }
    * @param sheetAlias Alias of the sheet to use (optional)
    */
   writeCells(cells, sheetAlias = null) {
@@ -391,10 +390,10 @@ class SpreadsheetUtils {
     this.log.info(`Writing cells to spreadsheetId: ${spreadsheetId}`);
     const grouped = {};
     for (const cellObj of cells) {
-      if (!grouped[cellObj.sheetName]) {
-        grouped[cellObj.sheetName] = [];
+      if (!grouped[cellObj.sheet]) {
+        grouped[cellObj.sheet] = [];
       }
-      grouped[cellObj.sheetName].push({ cell: cellObj.cell, data: cellObj.data });
+      grouped[cellObj.sheet].push({ cell: cellObj.cell, data: cellObj.value });
     }
     const data = [];
     for (const sheetName in grouped) {

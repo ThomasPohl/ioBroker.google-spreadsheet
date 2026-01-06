@@ -2,6 +2,7 @@
 /*global Blockly */
 /*global getInstances */
 /*global getInstanceAndAlias */
+/*global makeAsync */
 
 /// --- Write Cell  --------------------------------------------------
 
@@ -55,5 +56,6 @@ Blockly.JavaScript.forBlock['google-spreadsheet.writeCell'] = function (block) {
     const cell = Blockly.JavaScript.valueToCode(block, 'CELL', Blockly.JavaScript.ORDER_ATOMIC);
     const data = Blockly.JavaScript.valueToCode(block, 'DATA', Blockly.JavaScript.ORDER_ATOMIC);
 
-    return `await sendToAsync("google-spreadsheet${instance}", "writeCell", {"sheetName": ${sheetName}, "cell": ${cell}, "data":${data}, "alias":"${alias}"});\n`;
+    const statement = `sendTo("google-spreadsheet${instance}", "writeCell", {sheet:${sheetName}, cell:${cell}, value:${data}, alias:"${alias}"})`;
+    return makeAsync(statement);
 };

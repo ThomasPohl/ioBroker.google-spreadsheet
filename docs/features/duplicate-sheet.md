@@ -19,7 +19,36 @@ The feature accepts the following parameters:
 
 ![Blockly](../img/blockly-duplicate-sheet.png)
 
-In Blockly, the parameters `source`, `target`, and `index` are passed to the Google API.
+The Blockly block is a container block. The statements inside the block are only executed if the sheet is duplicated successfully.
+
+### Error Handling
+
+You can add an error handler using the gear icon (mutator, drag & drop). Statements in the error handler are only executed if an error occurs while duplicating the sheet.
+
+**Behavior:**
+- **Without error handler:** The statements in the block are always executed, regardless of the result.
+- **With error handler:**
+  - The statements in the block are only executed on success.
+  - The statements in the error handler are only executed on error.
+
+The parameters `source`, `target`, `index`, and optional `alias` are passed as usual.
+
+### Example
+
+```javascript
+sendTo(
+  "google-spreadsheet.0",
+  "duplicateSheet",
+  { source: "originalName", target: "newName", index: 3 },
+  function (res) {
+    if (res && res.error) {
+      // Error handler code
+    } else {
+      // Success code
+    }
+  }
+);
+```
 
 ## Javascript
 

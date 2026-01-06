@@ -86,6 +86,27 @@ function getInstanceAndAlias(block) {
     return { instance: dropdown_instance, alias: sheetAlias };
 }
 
+function makeAsync(statement) {
+    return `await new Promise((resolve)=>{${statement} ()=>{resolve()}); });\n`;
+}
+
+function createSendToCall(instance, command, params, waitForCompletion = false) {
+    const paramString = JSON.stringify(params);
+
+    let statement = '';
+
+    if (waitForCompletion) {
+        statement += 'await new Promise((resolve)=>{';
+    }
+    statement += `sendTo("google-spreadsheet${instance}", "${command}", ${paramString}`;
+    if (waitForCompletion) {
+        statement += `, ()=>{resolve()}); });\n`;
+    } else {
+        statement += ');';
+    }
+    return statement;
+}
+
 /* eslint-enable @typescript-eslint/no-unused-vars */
 
 function loadJS(filename) {

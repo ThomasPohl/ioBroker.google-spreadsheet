@@ -2,6 +2,7 @@
 /*global Blockly */
 /*global getInstances */
 /*global getInstanceAndAlias */
+ /*global makeAsync */
 
 /// --- Delete rows  --------------------------------------------------
 
@@ -68,6 +69,6 @@ Blockly.JavaScript.forBlock['google-spreadsheet.deleteRows'] = function (block) 
 
     const startRow = Blockly.JavaScript.valueToCode(block, 'START_ROW', Blockly.JavaScript.ORDER_ATOMIC);
     const endRow = Blockly.JavaScript.valueToCode(block, 'END_ROW', Blockly.JavaScript.ORDER_ATOMIC);
-    return `await sendToAsync("google-spreadsheet${instance}", "deleteRows", {"sheetName":${sheetName},"start":${startRow}
-    }, "end":${endRow}, "alias":"${alias}"});\n`;
+    const statement = `sendTo("google-spreadsheet${instance}", "deleteRows", {sheet:${sheetName}, alias:"${alias}", rows:[${startRow}, ${endRow}]})`;
+    return makeAsync(statement);
 };

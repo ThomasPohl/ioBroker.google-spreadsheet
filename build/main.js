@@ -5,6 +5,10 @@ var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
 var __copyProps = (to, from, except, desc) => {
   if (from && typeof from === "object" || typeof from === "function") {
     for (let key of __getOwnPropNames(from))
@@ -21,9 +25,15 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
   mod
 ));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var main_exports = {};
+__export(main_exports, {
+  GoogleSpreadsheet: () => GoogleSpreadsheet
+});
+module.exports = __toCommonJS(main_exports);
 var utils = __toESM(require("@iobroker/adapter-core"));
 var import_google = require("./lib/google");
-var import_messageHandlers = require("./lib/messageHandlers");
+var import_messageHandlers = require("./lib/messageHandlers/index");
 class GoogleSpreadsheet extends utils.Adapter {
   /**
    * Creates an instance of the adapter class.
@@ -129,6 +139,9 @@ class GoogleSpreadsheet extends utils.Adapter {
           }
         }).catch((error) => {
           this.log.error(`Cannot ${obj.command}: ${error}`);
+          if (obj.callback) {
+            this.sendTo(obj.from, obj.command, { error: error.message }, obj.callback);
+          }
         });
       } else {
         this.log.warn(`unknown command: ${obj.command}`);
@@ -138,7 +151,12 @@ class GoogleSpreadsheet extends utils.Adapter {
 }
 if (require.main !== module) {
   module.exports = (options) => new GoogleSpreadsheet(options);
+  module.exports.GoogleSpreadsheet = GoogleSpreadsheet;
 } else {
   (() => new GoogleSpreadsheet())();
 }
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  GoogleSpreadsheet
+});
 //# sourceMappingURL=main.js.map

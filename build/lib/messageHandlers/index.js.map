@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../src/lib/messageHandlers/index.ts"],
+  "sourcesContent": ["export {\n    handleAppend,\n    handleDeleteRows,\n    handleCreateSheet,\n    handleDeleteSheet,\n    handleDeleteSheets,\n    handleDuplicateSheet,\n} from './sheetHandlers';\nexport { handleWriteCell, handleWriteCells, handleReadCell } from './cellHandlers';\nexport { handleUpload } from './uploadHandlers';\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA,2BAOO;AACP,0BAAkE;AAClE,4BAA6B;",
+  "names": []
+}

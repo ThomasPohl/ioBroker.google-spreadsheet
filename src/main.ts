@@ -12,7 +12,7 @@ import {
     handleWriteCell,
     handleWriteCells,
     handleReadCell,
-} from './lib/messageHandlers';
+} from './lib/messageHandlers/index';
 
 /**
  * The adapter class
@@ -141,6 +141,9 @@ class GoogleSpreadsheet extends utils.Adapter {
                     })
                     .catch((error: Error) => {
                         this.log.error(`Cannot ${obj.command}: ${error}`);
+                        if (obj.callback) {
+                            this.sendTo(obj.from, obj.command, { error: error.message }, obj.callback);
+                        }
                     });
             } else {
                 this.log.warn(`unknown command: ${obj.command}`);

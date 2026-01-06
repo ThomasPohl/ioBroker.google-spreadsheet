@@ -2,6 +2,7 @@
 /*global Blockly */
 /*global getInstances */
 /*global getInstanceAndAlias */
+/*global makeAsync */
 
 Blockly.Words['google-spreadsheet_delete-sheet_delete-on'] = { en: 'delete in', de: 'lösche in' };
 Blockly.Words['google-spreadsheet_delete-sheet_sheetName'] = {
@@ -43,5 +44,6 @@ Blockly.JavaScript.forBlock['google-spreadsheet.deleteSheet'] = function (block)
     const { instance, alias } = getInstanceAndAlias(block);
     const sheetName = Blockly.JavaScript.valueToCode(block, 'SHEET_NAME', Blockly.JavaScript.ORDER_ATOMIC);
 
-    return `await sendToAsync("google-spreadsheet${instance}", "deleteSheet", {"sheetName":${sheetName}, "alias":"${alias}"});\n`;
+    const statement = `sendTo("google-spreadsheet${instance}", "deleteSheet", {sheet:${sheetName}, alias:"${alias}"})`;
+    return makeAsync(statement);
 };
