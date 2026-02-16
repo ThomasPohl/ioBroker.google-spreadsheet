@@ -1,4 +1,7 @@
 # Older changes
+## 0.3.1
+* (Thomas Pohl) Fixed reading cells and added error handling
+
 ## 0.3.0
 * (Thomas Pohl) Added writing of single cells
 * (Thomas Pohl) Added reading of single cells

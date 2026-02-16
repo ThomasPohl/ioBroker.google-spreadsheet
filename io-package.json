@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "google-spreadsheet",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "news": {
+      "1.0.1": {
+        "en": "Fix for admin ui",
+        "de": "Fix für admin ui",
+        "ru": "Обсуждение admin ui",
+        "pt": "Corrigir para o administrador ui",
+        "nl": "Fix voor admin ui",
+        "fr": "Correction pour admin ui",
+        "it": "Fissare per admin ui",
+        "es": "Fijación para administración ui",
+        "pl": "Napraw dla admin ui",
+        "uk": "Виправлення для адміністратора ui",
+        "zh-cn": "管理员的修补"
+      },
       "1.0.0": {
         "en": "Support for multiple spreadsheets with aliases\nAutomatic migration of old configs\nImproved tests, error handling, and logging\nBetter async handling in Blockly blocks",
         "de": "Unterstützung für mehrere Tabellen mit Aliasen\nAutomatische Migration von alten Configs\nVerbesserte Tests, Fehlerbehandlung und Protokollierung\nBesseres async Handling in Blockly Blöcken",
@@ -80,19 +93,6 @@
         "pl": "Dodano odczyt i zapis pojedynczych komórek",
         "uk": "Додано читання та запис окремих клітинок",
         "zh-cn": "增加单细胞的读写"
-      },
-      "0.2.0": {
-        "en": "Parsing of private key is more robust",
-        "de": "Das Parsen des privaten Schlüssels ist robuster",
-        "ru": "Анализ закрытого ключа стал более надежным.",
-        "pt": "A análise da chave privada é mais robusta",
-        "nl": "Het parseren van de privésleutel is robuuster",
-        "fr": "L'analyse de la clé privée est plus robuste",
-        "it": "L'analisi della chiave privata è più solida",
-        "es": "El análisis de la clave privada es más sólido",
-        "pl": "Analiza klucza prywatnego jest bardziej niezawodna",
-        "uk": "Розбір закритого ключа більш надійний",
-        "zh-cn": "私钥解析更加稳健"
       }
     },
     "titleLang": {
