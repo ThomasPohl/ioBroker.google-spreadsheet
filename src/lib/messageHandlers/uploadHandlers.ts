@@ -1,5 +1,5 @@
 import type { SpreadsheetUtils } from '../google';
-import fs from 'fs';
+import fs from 'node:fs';
 
 /**
  * Handles uploading a file to a Google Drive folder.
