@@ -142,6 +142,8 @@ Make sure the Service Account has adequate permissions to write to the spreadshe
 * (Thomas Pohl) The privateKey is saved now encrypted
 * (Thomas Pohl) Support for node.js 22
 
+[Older changelogs can be found there](CHANGELOG_OLD.md)
+
 ## License
 
    Copyright (c) 2024-2026 Thomas Pohl
