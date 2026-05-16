@@ -6,5 +6,5 @@ export {
     handleDeleteSheets,
     handleDuplicateSheet,
 } from './sheetHandlers';
-export { handleWriteCell, handleWriteCells, handleReadCell } from './cellHandlers';
+export { handleWriteCell, handleWriteCells, handleReadCell, handleReadCells } from './cellHandlers';
 export { handleUpload } from './uploadHandlers';

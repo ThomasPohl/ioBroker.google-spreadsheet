@@ -12,6 +12,7 @@ import {
     handleWriteCell,
     handleWriteCells,
     handleReadCell,
+    handleReadCells,
 } from './lib/messageHandlers/index';
 
 /**
@@ -125,6 +126,7 @@ class GoogleSpreadsheet extends utils.Adapter {
             writeCell: { handler: handleWriteCell, logMessage: 'write cell' },
             writeCells: { handler: handleWriteCells, logMessage: 'write cells' },
             readCell: { handler: handleReadCell, logMessage: 'read cell' },
+            readCells: { handler: handleReadCells, logMessage: 'read cells' },
         };
 
         this.log.debug(`Received message: ${JSON.stringify(obj)}`);

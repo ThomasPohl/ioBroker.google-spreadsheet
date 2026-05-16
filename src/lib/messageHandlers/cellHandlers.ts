@@ -1,3 +1,36 @@
+/**
+ * Handles reading a range of cells of a spreadsheet sheet.
+ * Returns the values as 2D array.
+ *
+ * @param spreadsheet The SpreadsheetUtils instance to use.
+ * @param log The logger instance for logging.
+ * @param message The message containing parameters for the operation.
+ */
+export function handleReadCells(
+    spreadsheet: SpreadsheetUtils,
+    log: ioBroker.Logger,
+    message: Record<string, any>,
+): Promise<any[][]> {
+    const messageData: Record<string, any> = message.message as Record<string, any>;
+    let sheet = messageData.sheet;
+    const range = messageData.range;
+    const alias = messageData.alias;
+    if (!sheet && messageData.sheetName) {
+        log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
+        sheet = messageData.sheetName;
+    }
+    if (!sheet || !range) {
+        log.error("Missing parameters for readCells: 'sheet', 'range'");
+        return Promise.reject(new Error('Missing parameters for readCells'));
+    }
+    // A1 Notation für Range, z.B. A1:A7 oder A1:B10
+    const rangePattern = new RegExp('^[A-Z]+[0-9]+:[A-Z]+[0-9]+$');
+    if (!rangePattern.test(range)) {
+        log.error(`Invalid range pattern ${range}. Expected: A1:A7`);
+        return Promise.reject(new Error(`Invalid range pattern ${range}. Expected: A1:A7`));
+    }
+    return spreadsheet.readCells(sheet, range, alias);
+}
 import type { SpreadsheetUtils } from '../google';
 
 /**
