@@ -121,6 +121,7 @@ Make sure the Service Account has adequate permissions to write to the spreadshe
     ### **WORK IN PROGRESS**
 -->
 ### **WORK IN PROGRESS**
+- (Thomas Pohl) Added readCells feature: Read multiple cells in one call using A1 notation (e.g. A1:B10), including Blockly block and documentation.
 - (copilot) Adapter requires node.js >= 22 now
 
 ### 1.0.1 (2026-02-16)
