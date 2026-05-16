@@ -143,4 +143,3 @@ export function handleReadCell(
     }
     return spreadsheet.readCell(sheet, cell, alias);
 }
-

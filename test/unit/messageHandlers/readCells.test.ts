@@ -1,4 +1,3 @@
-
 import { handleReadCells } from '../../../src/lib/messageHandlers/cellHandlers.ts';
 import sinon from 'sinon';
 import { expect } from 'chai';
@@ -9,7 +8,10 @@ describe('handleReadCells', () => {
 
     beforeEach(() => {
         spreadsheet = {
-            readCells: sinon.stub().resolves([[1, 2], [3, 4]]),
+            readCells: sinon.stub().resolves([
+                [1, 2],
+                [3, 4],
+            ]),
         };
         log = { error: sinon.stub(), warn: sinon.stub() };
     });
@@ -18,7 +20,10 @@ describe('handleReadCells', () => {
         const message = { message: { sheet: 'Tabelle1', range: 'A1:B2' } };
         const result = await handleReadCells(spreadsheet, log, message);
         sinon.assert.calledWith(spreadsheet.readCells, 'Tabelle1', 'A1:B2', undefined);
-        expect(result).to.deep.equal([[1, 2], [3, 4]]);
+        expect(result).to.deep.equal([
+            [1, 2],
+            [3, 4],
+        ]);
     });
 
     it('should reject if parameters are missing', async () => {
