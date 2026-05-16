@@ -19,10 +19,31 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 var cellHandlers_exports = {};
 __export(cellHandlers_exports, {
   handleReadCell: () => handleReadCell,
+  handleReadCells: () => handleReadCells,
   handleWriteCell: () => handleWriteCell,
   handleWriteCells: () => handleWriteCells
 });
 module.exports = __toCommonJS(cellHandlers_exports);
+function handleReadCells(spreadsheet, log, message) {
+  const messageData = message.message;
+  let sheet = messageData.sheet;
+  const range = messageData.range;
+  const alias = messageData.alias;
+  if (!sheet && messageData.sheetName) {
+    log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
+    sheet = messageData.sheetName;
+  }
+  if (!sheet || !range) {
+    log.error("Missing parameters for readCells: 'sheet', 'range'");
+    return Promise.reject(new Error("Missing parameters for readCells"));
+  }
+  const rangePattern = new RegExp("^[A-Z]+[0-9]+:[A-Z]+[0-9]+$");
+  if (!rangePattern.test(range)) {
+    log.error(`Invalid range pattern ${range}. Expected: A1:A7`);
+    return Promise.reject(new Error(`Invalid range pattern ${range}. Expected: A1:A7`));
+  }
+  return spreadsheet.readCells(sheet, range, alias);
+}
 function handleWriteCell(spreadsheet, log, message) {
   const messageData = message.message;
   let sheet = messageData.sheet;
@@ -100,6 +121,7 @@ function handleReadCell(spreadsheet, log, message) {
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   handleReadCell,
+  handleReadCells,
   handleWriteCell,
   handleWriteCells
 });

@@ -34,6 +34,7 @@ This adapter can be used to automatically interact with google sheets.
 * [Delete sheets](docs/features/delete-sheets.md)
 * [Duplicate sheets](docs/features/duplicate-sheet.md)
 * [Read cell](docs/features/read-cell.md)
+* [Read cells](docs/features/read-cells.md)
 * [Write cell](docs/features/write-cell.md)
 * [Write cells](docs/features/write-cells.md)
 

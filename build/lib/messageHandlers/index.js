@@ -25,6 +25,7 @@ __export(messageHandlers_exports, {
   handleDeleteSheets: () => import_sheetHandlers.handleDeleteSheets,
   handleDuplicateSheet: () => import_sheetHandlers.handleDuplicateSheet,
   handleReadCell: () => import_cellHandlers.handleReadCell,
+  handleReadCells: () => import_cellHandlers.handleReadCells,
   handleUpload: () => import_uploadHandlers.handleUpload,
   handleWriteCell: () => import_cellHandlers.handleWriteCell,
   handleWriteCells: () => import_cellHandlers.handleWriteCells
@@ -42,6 +43,7 @@ var import_uploadHandlers = require("./uploadHandlers");
   handleDeleteSheets,
   handleDuplicateSheet,
   handleReadCell,
+  handleReadCells,
   handleUpload,
   handleWriteCell,
   handleWriteCells

@@ -126,7 +126,8 @@ class GoogleSpreadsheet extends utils.Adapter {
       upload: { handler: import_messageHandlers.handleUpload, logMessage: "upload file" },
       writeCell: { handler: import_messageHandlers.handleWriteCell, logMessage: "write cell" },
       writeCells: { handler: import_messageHandlers.handleWriteCells, logMessage: "write cells" },
-      readCell: { handler: import_messageHandlers.handleReadCell, logMessage: "read cell" }
+      readCell: { handler: import_messageHandlers.handleReadCell, logMessage: "read cell" },
+      readCells: { handler: import_messageHandlers.handleReadCells, logMessage: "read cells" }
     };
     this.log.debug(`Received message: ${JSON.stringify(obj)}`);
     if (typeof obj === "object" && obj.message) {
