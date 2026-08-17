@@ -34,6 +34,7 @@ This adapter can be used to automatically interact with google sheets.
 * [Delete sheets](docs/features/delete-sheets.md)
 * [Duplicate sheets](docs/features/duplicate-sheet.md)
 * [Read cell](docs/features/read-cell.md)
+* [Read cells](docs/features/read-cells.md)
 * [Write cell](docs/features/write-cell.md)
 * [Write cells](docs/features/write-cells.md)
 
@@ -120,6 +121,7 @@ Make sure the Service Account has adequate permissions to write to the spreadshe
     ### **WORK IN PROGRESS**
 -->
 ### **WORK IN PROGRESS**
+- (Thomas Pohl) Added readCells feature: Read multiple cells in one call using A1 notation (e.g. A1:B10), including Blockly block and documentation.
 - (copilot) Adapter requires node.js >= 22 now
 
 ### 1.0.1 (2026-02-16)
