@@ -500,6 +500,41 @@ export class SpreadsheetUtils {
                 });
         });
     }
+
+    /**
+     * Read data from a range of cells in a Google Spreadsheet
+     *
+     * @param sheetName Name of the sheet
+     * @param range A1 notation range to read (e.g. "A1:A7")
+     * @param sheetAlias Alias of the sheet to use (optional)
+     * @returns The data from the range as 2D array
+     */
+    public async readCells(sheetName: string, range: string, sheetAlias: string | null = null): Promise<any[][]> {
+        const sheets = this.init();
+        const spreadsheetId = this.getSpreadsheetId(sheetAlias);
+        return new Promise<any[][]>((resolve, reject) => {
+            if (range.startsWith("'") && range.endsWith("'")) {
+                range = range.substring(1, range.length - 1);
+            }
+            sheets.spreadsheets.values
+                .get({
+                    range: `${sheetName}!${range}`,
+                    spreadsheetId,
+                })
+                .then(response => {
+                    this.log.debug('Data successfully retrieved from google spreadsheet');
+                    if (response.data.values && response.data.values.length > 0) {
+                        resolve(response.data.values);
+                    } else {
+                        resolve([]);
+                    }
+                })
+                .catch(error => {
+                    this.log.error(`Error while retrieving data from Google Spreadsheet:${error}`);
+                    reject(new Error(`Error while retrieving data from Google Spreadsheet: ${error.message}`));
+                });
+        });
+    }
     private prepareValues(message: any): any {
         if (Array.isArray(message)) {
             return [message];
