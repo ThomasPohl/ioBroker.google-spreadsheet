@@ -24,6 +24,7 @@ sendTo('google-spreadsheet.<instance>', <command>, <message>[, callback]);
 | `deleteSheet`   | Delete a sheet                              | `sheetName`, `alias?`              | `{ success: true }` on success, or `{ error: string }` on failure |
 | `deleteSheets`  | Delete multiple sheets                      | `sheetNames`, `alias?`             | `{ success: true }` on success, or `{ error: string }` on failure |
 | `duplicateSheet`| Duplicate a sheet                           | `source`, `target`, `index`, `alias?` | `{ success: true }` on success, or `{ error: string }` on failure |
+| `getLastRow`    | Get the number of the last non-empty row    | `sheet`, `alias?` | The row number, or `{ error: string }` on failure |
 | `upload`        | Upload a file to Google Drive               | `target`, `parentFolder`, `source` | `{ success: true }` on success, or `{ error: string }` on failure |
 | `writeCell`     | Write to a single cell                      | `sheetName`, `cell`, `data`, `alias?` | `{ success: true }` on success, or `{ error: string }` on failure |
 | `writeCells`    | Write to multiple cells                     | `cells`, `alias?`                  | `{ success: true }` on success, or `{ error: string }` on failure |
@@ -65,6 +66,7 @@ For detailed usage and examples of each command, see the following documents:
 - [Delete Sheet](features/delete-sheet.md)
 - [Delete Sheets](features/delete-sheets.md)
 - [Duplicate Sheet](features/duplicate-sheet.md)
+- [Get Last Row](features/get-last-row.md)
 - [Read Cell](features/read-cell.md)
 - [Write Cell](features/write-cell.md)
 - [Write Cells](features/write-cells.md)

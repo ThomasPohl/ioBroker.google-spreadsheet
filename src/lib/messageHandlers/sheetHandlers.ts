@@ -184,3 +184,29 @@ export function handleDuplicateSheet(
     }
     return spreadsheet.duplicateSheet(source, target, index, alias);
 }
+
+/**
+ * Handles retrieving the number of the last non-empty row in a sheet.
+ *
+ * @param spreadsheet The SpreadsheetUtils instance
+ * @param log The logger instance
+ * @param message The message containing parameters
+ */
+export function handleGetLastRow(
+    spreadsheet: SpreadsheetUtils,
+    log: ioBroker.Logger,
+    message: Record<string, any>,
+): Promise<number> {
+    const messageData: Record<string, any> = message.message as Record<string, any>;
+    let sheet = messageData.sheet;
+    const alias = messageData.alias;
+    if (!sheet && messageData.sheetName) {
+        log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
+        sheet = messageData.sheetName;
+    }
+    if (!sheet) {
+        log.error("Missing parameter for getLastRow: 'sheet'");
+        return Promise.reject(new Error('Missing parameters for getLastRow'));
+    }
+    return spreadsheet.getLastRow(sheet, alias);
+}

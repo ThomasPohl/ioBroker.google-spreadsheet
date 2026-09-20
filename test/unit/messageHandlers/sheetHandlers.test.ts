@@ -7,6 +7,7 @@ import {
     handleDeleteSheet,
     handleDeleteSheets,
     handleDuplicateSheet,
+    handleGetLastRow,
 } from '../../../src/lib/messageHandlers/sheetHandlers';
 
 describe('sheetHandlers', () => {
@@ -22,6 +23,7 @@ describe('sheetHandlers', () => {
             deleteSheet: sinon.stub().resolves('deleteSheetResult'),
             deleteSheets: sinon.stub().resolves('deleteSheetsResult'),
             duplicateSheet: sinon.stub().resolves('duplicateSheetResult'),
+            getLastRow: sinon.stub().resolves(3),
         };
         log = { debug: sinon.spy(), error: sinon.spy(), warn: sinon.spy(), info: sinon.spy() };
         obj = { message: {}, from: 'test', callback: sinon.spy() };
@@ -65,5 +67,12 @@ describe('sheetHandlers', () => {
         const result = await handleDuplicateSheet(spreadsheet, log, obj);
         expect(spreadsheet.duplicateSheet.calledWith('Sheet1', 'Copy', 1, 'main')).to.be.true;
         expect(result).to.equal('duplicateSheetResult');
+    });
+
+    it('handleGetLastRow calls spreadsheet.getLastRow', async () => {
+        obj.message = { sheet: 'Sheet1', alias: 'main' };
+        const result = await handleGetLastRow(spreadsheet, log, obj);
+        expect(spreadsheet.getLastRow.calledWith('Sheet1', 'main')).to.be.true;
+        expect(result).to.equal(3);
     });
 });

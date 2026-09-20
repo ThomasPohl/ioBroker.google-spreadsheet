@@ -206,5 +206,27 @@ describe('SpreadsheetUtils', () => {
                 }
             });
         });
+
+        describe('getLastRow', () => {
+            it('should return the number of the last non-empty row', async () => {
+                sheetsStub.spreadsheets.values.get.resolves({ data: { values: [['row1'], ['row2'], ['row3']] } });
+
+                const result = await utils.getLastRow('Sheet1', 'main');
+
+                expect(sheetsStub.spreadsheets.values.get.calledOnce).to.be.true;
+                const args = sheetsStub.spreadsheets.values.get.firstCall.args[0];
+                expect(args.range).to.equal('Sheet1');
+                expect(args.spreadsheetId).to.equal('id1');
+                expect(result).to.equal(3);
+            });
+
+            it('should return 0 for an empty sheet', async () => {
+                sheetsStub.spreadsheets.values.get.resolves({ data: {} });
+
+                const result = await utils.getLastRow('Sheet1', null);
+
+                expect(result).to.equal(0);
+            });
+        });
     });
 });

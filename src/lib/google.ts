@@ -500,6 +500,34 @@ export class SpreadsheetUtils {
                 });
         });
     }
+
+    /**
+     * Get the number of the last non-empty row in a Google Spreadsheet sheet.
+     *
+     * @param sheetName Name of the sheet
+     * @param sheetAlias Alias of the sheet to use (optional)
+     * @returns The number of the last non-empty row, or 0 for an empty sheet
+     */
+    public async getLastRow(sheetName: string, sheetAlias: string | null = null): Promise<number> {
+        const sheets = this.init();
+        const spreadsheetId = this.getSpreadsheetId(sheetAlias);
+        return new Promise<number>((resolve, reject) => {
+            sheets.spreadsheets.values
+                .get({
+                    range: sheetName,
+                    spreadsheetId,
+                })
+                .then(response => {
+                    this.log.debug('Last row successfully retrieved from google spreadsheet');
+                    resolve(response.data.values?.length ?? 0);
+                })
+                .catch(error => {
+                    this.log.error(`Error while retrieving the last row from Google Spreadsheet:${error}`);
+                    reject(new Error(`Error while retrieving the last row from Google Spreadsheet: ${error.message}`));
+                });
+        });
+    }
+
     private prepareValues(message: any): any {
         if (Array.isArray(message)) {
             return [message];
