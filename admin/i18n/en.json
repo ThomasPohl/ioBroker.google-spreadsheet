@@ -1,19 +1,19 @@
 {
     "Main settings": "Main settings",
+    "SpreadsheetId": "Spreadsheet ID",
     "Spreadsheets": "Spreadsheets",
+    "defaultSpreadsheetAlias": "Default",
+    "defaultSpreadsheetAliasHelp": "Set this as the default spreadsheet",
     "google-spreadsheet adapter settings": "Adapter settings for google-spreadsheet",
     "privateKey": "private key",
     "privateKeyHelp": "Open the downloaded private key file and copy just the key starting with -----BEGIN PRIVATE KEY-----",
     "serviceAccountEmail": "service account email",
     "serviceAccountEmailHelp": "the emailaddress of the service account",
     "sheetName": "sheet name",
+    "spreadsheetAlias": "Spreadsheet alias",
+    "spreadsheetAliasHelp": "Alias for the spreadsheet",
     "spreadsheetId": "spreadsheet id",
     "spreadsheetIdHelp": "You can find the id in the URL of your spreadsheet.",
-    "spreadsheetsHelp": "Help for spreadsheets table" ,
-    "defaultSpreadsheetAlias": "Default" ,
-    "defaultSpreadsheetAliasHelp": "Set this as the default spreadsheet" ,
-    "spreadsheetAlias": "Spreadsheet alias" ,
-    "spreadsheetAliasHelp": "Alias for the spreadsheet" ,
-    "SpreadsheetId": "Spreadsheet ID" ,
-    "spreadsheetsErr1": "ERROR: Exactly one default spreadsheet allowed!" 
+    "spreadsheetsErr1": "ERROR: Exactly one default spreadsheet allowed!",
+    "spreadsheetsHelp": "Help for spreadsheets table"
 }
