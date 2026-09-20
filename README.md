@@ -121,7 +121,8 @@ Make sure the Service Account has adequate permissions to write to the spreadshe
     ### **WORK IN PROGRESS**
 -->
 ### **WORK IN PROGRESS**
-- (copilot) Adapter requires node.js >= 22 now
+- (Thomas Pohl) Adapter requires node.js >= 22 now
+- (Thomas Pohl) Added getLastRow feature to retrieve the last non-empty row
 
 ### 1.0.1 (2026-02-16)
 * (Thomas Pohl) Fix for admin ui
@@ -150,7 +151,7 @@ Make sure the Service Account has adequate permissions to write to the spreadshe
 
 ## License
 
-   Copyright (c) 2024-2026 Thomas Pohl
+    Copyright (c) 2024-2026 Thomas Pohl <post@thomaspohl.net>
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
