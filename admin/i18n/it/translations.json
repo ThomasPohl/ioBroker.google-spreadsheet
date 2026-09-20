@@ -1,5 +1,7 @@
 {
+    "Main settings": "Impostazioni principali",
     "SpreadsheetId": "ID del foglio di calcolo",
+    "Spreadsheets": "Fogli di calcolo",
     "defaultSpreadsheetAlias": "Predefinito",
     "defaultSpreadsheetAliasHelp": "Impostalo come foglio di calcolo predefinito",
     "google-spreadsheet adapter settings": "Impostazioni dell'adattatore per il foglio di calcolo di Google",

@@ -1,5 +1,7 @@
 {
+    "Main settings": "Configuraciones principales",
     "SpreadsheetId": "ID de hoja de cálculo",
+    "Spreadsheets": "Hojas de cálculo",
     "defaultSpreadsheetAlias": "Por defecto",
     "defaultSpreadsheetAliasHelp": "Establecer esto como la hoja de cálculo predeterminada",
     "google-spreadsheet adapter settings": "Configuración del adaptador para la hoja de cálculo de Google",

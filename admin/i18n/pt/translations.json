@@ -1,5 +1,7 @@
 {
+    "Main settings": "Configurações principais",
     "SpreadsheetId": "ID da planilha",
+    "Spreadsheets": "Planilhas",
     "defaultSpreadsheetAlias": "Padrão",
     "defaultSpreadsheetAliasHelp": "Defina esta como a planilha padrão",
     "google-spreadsheet adapter settings": "Configurações do adaptador para planilha do google",

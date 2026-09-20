@@ -1,5 +1,7 @@
 {
+    "Main settings": "Belangrijkste instellingen",
     "SpreadsheetId": "Spreadsheet-ID",
+    "Spreadsheets": "Spreadsheets",
     "defaultSpreadsheetAlias": "Standaard",
     "defaultSpreadsheetAliasHelp": "Stel dit in als het standaardspreadsheet",
     "google-spreadsheet adapter settings": "Adapterinstellingen voor google-spreadsheet",

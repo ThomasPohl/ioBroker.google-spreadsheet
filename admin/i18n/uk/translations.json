@@ -1,5 +1,7 @@
 {
+    "Main settings": "Основні налаштування",
     "SpreadsheetId": "Ідентифікатор електронної таблиці",
+    "Spreadsheets": "Електронні таблиці",
     "defaultSpreadsheetAlias": "За замовчуванням",
     "defaultSpreadsheetAliasHelp": "Установіть це як електронну таблицю за умовчанням",
     "google-spreadsheet adapter settings": "Налаштування адаптера для google-таблиць",

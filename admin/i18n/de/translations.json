@@ -1,5 +1,7 @@
 {
+    "Main settings": "Haupteinstellungen",
     "SpreadsheetId": "Tabellenkalkulations-ID",
+    "Spreadsheets": "Tabellenkalkulationen",
     "defaultSpreadsheetAlias": "Standard",
     "defaultSpreadsheetAliasHelp": "Legen Sie dies als Standardtabelle fest",
     "google-spreadsheet adapter settings": "Adaptereinstellungen für Google-Tabelle",

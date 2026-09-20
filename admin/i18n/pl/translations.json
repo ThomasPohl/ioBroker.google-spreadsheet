@@ -1,5 +1,7 @@
 {
+    "Main settings": "Główne ustawienia",
     "SpreadsheetId": "Identyfikator arkusza kalkulacyjnego",
+    "Spreadsheets": "Arkusze kalkulacyjne",
     "defaultSpreadsheetAlias": "Domyślny",
     "defaultSpreadsheetAliasHelp": "Ustaw to jako domyślny arkusz kalkulacyjny",
     "google-spreadsheet adapter settings": "Ustawienia adaptera dla arkusza kalkulacyjnego Google",

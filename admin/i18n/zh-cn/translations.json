@@ -1,5 +1,7 @@
 {
+    "Main settings": "主要设置",
     "SpreadsheetId": "电子表格 ID",
+    "Spreadsheets": "电子表格",
     "defaultSpreadsheetAlias": "默认",
     "defaultSpreadsheetAliasHelp": "将其设置为默认电子表格",
     "google-spreadsheet adapter settings": "谷歌电子表格的适配器设置",

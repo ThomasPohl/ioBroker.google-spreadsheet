@@ -1,5 +1,7 @@
 {
+    "Main settings": "Основные настройки",
     "SpreadsheetId": "Идентификатор таблицы",
+    "Spreadsheets": "Таблицы",
     "defaultSpreadsheetAlias": "По умолчанию",
     "defaultSpreadsheetAliasHelp": "Установите это как таблицу по умолчанию",
     "google-spreadsheet adapter settings": "Настройки адаптера для google-таблицы",

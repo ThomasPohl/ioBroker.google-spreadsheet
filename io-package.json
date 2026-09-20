@@ -3,8 +3,18 @@
     "name": "google-spreadsheet",
     "version": "1.0.1",
     "news": {
-      "1.1.0": {
-        "en": "WORK IN PROGRESS\nAdded getLastRow feature to retrieve the last non-empty row"
+      "NEXT": {
+        "en": "Added getLastRow feature to retrieve the last non-empty row",
+        "de": "GetLastRow-Funktion hinzugefügt, um die letzte nicht leere Zeile abzurufen",
+        "ru": "Добавлена ​​функция getLastRow для получения последней непустой строки.",
+        "pt": "Adicionado recurso getLastRow para recuperar a última linha não vazia",
+        "nl": "GetLastRow-functie toegevoegd om de laatste niet-lege rij op te halen",
+        "fr": "Ajout de la fonctionnalité getLastRow pour récupérer la dernière ligne non vide",
+        "it": "Aggiunta la funzionalità getLastRow per recuperare l'ultima riga non vuota",
+        "es": "Se agregó la función getLastRow para recuperar la última fila que no esté vacía.",
+        "pl": "Dodano funkcję getLastRow umożliwiającą pobranie ostatniego niepustego wiersza",
+        "uk": "Додано функцію getLastRow для отримання останнього непорожнього рядка",
+        "zh-cn": "添加了 getLastRow 功能来检索最后一个非空行"
       },
       "1.0.1": {
         "en": "Fix for admin ui",
