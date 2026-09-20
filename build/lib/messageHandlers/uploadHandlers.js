@@ -31,7 +31,7 @@ __export(uploadHandlers_exports, {
   handleUpload: () => handleUpload
 });
 module.exports = __toCommonJS(uploadHandlers_exports);
-var import_fs = __toESM(require("fs"));
+var import_node_fs = __toESM(require("node:fs"));
 function handleUpload(spreadsheet, log, message) {
   const messageData = message.message;
   const target = messageData.target;
@@ -41,7 +41,7 @@ function handleUpload(spreadsheet, log, message) {
     log.error("Missing parameters for upload: 'target', 'parentFolder', 'source'");
     return Promise.reject(new Error("Missing parameters for upload"));
   }
-  return spreadsheet.upload(target, parentFolder, import_fs.default.createReadStream(source));
+  return spreadsheet.upload(target, parentFolder, import_node_fs.default.createReadStream(source));
 }
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {

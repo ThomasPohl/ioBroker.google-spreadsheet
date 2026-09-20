@@ -35,6 +35,7 @@ var utils = __toESM(require("@iobroker/adapter-core"));
 var import_google = require("./lib/google");
 var import_messageHandlers = require("./lib/messageHandlers/index");
 class GoogleSpreadsheet extends utils.Adapter {
+  spreadsheet;
   /**
    * Creates an instance of the adapter class.
    *
