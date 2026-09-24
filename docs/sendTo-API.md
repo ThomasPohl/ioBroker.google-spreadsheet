@@ -29,6 +29,12 @@ sendTo('google-spreadsheet.<instance>', <command>, <message>[, callback]);
 | `writeCell`     | Write to a single cell                      | `sheetName`, `cell`, `data`, `alias?` | `{ success: true }` on success, or `{ error: string }` on failure |
 | `writeCells`    | Write to multiple cells                     | `cells`, `alias?`                  | `{ success: true }` on success, or `{ error: string }` on failure |
 | `readCell`      | Read a single cell                          | `sheetName`, `cell`, `alias?`      | `{ value: any }` with the cell value, or `{ error: string }` on failure |
+| `readRange`     | Read a rectangular range                    | `sheet`, `range`, `alias?`         | `{ values: any[][] }` on success, or `{ error: string }` on failure |
+| `writeRange`    | Write a rectangular range                   | `sheet`, `range`, `values`, `alias?` | `{ success: true }` on success, or `{ error: string }` on failure |
+| `clearRange`    | Clear a rectangular range                   | `sheet`, `range`, `alias?`         | `{ success: true }` on success, or `{ error: string }` on failure |
+| `setCellFormat` | Set formatting for a range                  | `sheet`, `range`, `format`, `alias?` | `{ success: true }` on success, or `{ error: string }` on failure |
+| `createChart`   | Create a chart                             | `sheet`, `chart`, `alias?`        | `{ success: true }` on success, or `{ error: string }` on failure |
+| `updateChart`   | Update an existing chart                    | `sheet`, `chartId`, `chart`, `alias?` | `{ success: true }` on success, or `{ error: string }` on failure |
 
 ### Result Details
 
@@ -68,8 +74,14 @@ For detailed usage and examples of each command, see the following documents:
 - [Duplicate Sheet](features/duplicate-sheet.md)
 - [Get Last Row](features/get-last-row.md)
 - [Read Cell](features/read-cell.md)
+- [Read Range](features/read-range.md)
 - [Write Cell](features/write-cell.md)
 - [Write Cells](features/write-cells.md)
+- [Write Range](features/write-range.md)
+- [Clear Range](features/clear-range.md)
+- [Set Cell Format](features/set-cell-format.md)
+- [Create Chart](features/create-chart.md)
+- [Update Chart](features/update-chart.md)
 
 ---
 

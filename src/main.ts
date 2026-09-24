@@ -9,10 +9,16 @@ import {
     handleDeleteSheets,
     handleDuplicateSheet,
     handleGetLastRow,
+    handleCreateChart,
+    handleUpdateChart,
     handleUpload,
     handleWriteCell,
     handleWriteCells,
     handleReadCell,
+    handleReadRange,
+    handleWriteRange,
+    handleClearRange,
+    handleSetCellFormat,
 } from './lib/messageHandlers/index';
 
 /**
@@ -123,10 +129,16 @@ class GoogleSpreadsheet extends utils.Adapter {
             deleteSheets: { handler: handleDeleteSheets, logMessage: 'delete sheets' },
             duplicateSheet: { handler: handleDuplicateSheet, logMessage: 'duplicate sheet' },
             getLastRow: { handler: handleGetLastRow, logMessage: 'get last row' },
+            createChart: { handler: handleCreateChart, logMessage: 'create chart' },
+            updateChart: { handler: handleUpdateChart, logMessage: 'update chart' },
             upload: { handler: handleUpload, logMessage: 'upload file' },
             writeCell: { handler: handleWriteCell, logMessage: 'write cell' },
             writeCells: { handler: handleWriteCells, logMessage: 'write cells' },
             readCell: { handler: handleReadCell, logMessage: 'read cell' },
+            readRange: { handler: handleReadRange, logMessage: 'read range' },
+            writeRange: { handler: handleWriteRange, logMessage: 'write range' },
+            clearRange: { handler: handleClearRange, logMessage: 'clear range' },
+            setCellFormat: { handler: handleSetCellFormat, logMessage: 'set cell format' },
         };
 
         this.log.debug(`Received message: ${JSON.stringify(obj)}`);

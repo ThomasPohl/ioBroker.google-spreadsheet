@@ -502,6 +502,244 @@ export class SpreadsheetUtils {
     }
 
     /**
+     * Read a range of cells from a Google Spreadsheet.
+     *
+     * @param sheetName Name of the sheet
+     * @param range A1 range, e.g. A1:B10
+     * @param sheetAlias Alias of the sheet to use (optional)
+     * @returns The values of the requested range as a two-dimensional array
+     */
+    public async readRange(sheetName: string, range: string, sheetAlias: string | null = null): Promise<any[][]> {
+        const sheets = this.init();
+        const spreadsheetId = this.getSpreadsheetId(sheetAlias);
+        const fullRange = this.buildRange(sheetName, range);
+        return new Promise<any[][]>((resolve, reject) => {
+            sheets.spreadsheets.values
+                .get({
+                    range: fullRange,
+                    spreadsheetId,
+                })
+                .then(response => {
+                    this.log.debug('Range successfully retrieved from google spreadsheet');
+                    resolve((response.data.values as any[]) ?? []);
+                })
+                .catch(error => {
+                    this.log.error(`Error while retrieving range from Google Spreadsheet:${error}`);
+                    reject(new Error(`Error while retrieving range from Google Spreadsheet: ${error.message}`));
+                });
+        });
+    }
+
+    /**
+     * Write a rectangular range to a Google Spreadsheet.
+     *
+     * @param sheetName Name of the sheet
+     * @param range A1 range, e.g. A1:B10
+     * @param values Values to write, either a 2D array or a simple array
+     * @param sheetAlias Alias of the sheet to use (optional)
+     */
+    public async writeRange(
+        sheetName: string,
+        range: string,
+        values: any,
+        sheetAlias: string | null = null,
+    ): Promise<void> {
+        const sheets = this.init();
+        const spreadsheetId = this.getSpreadsheetId(sheetAlias);
+        const normalizedValues = this.normalizeRangeValues(values);
+        return new Promise<void>((resolve, reject) => {
+            sheets.spreadsheets.values
+                .update({
+                    range: this.buildRange(sheetName, range),
+                    spreadsheetId,
+                    valueInputOption: 'USER_ENTERED',
+                    requestBody: {
+                        values: normalizedValues,
+                    },
+                })
+                .then(() => {
+                    this.log.debug('Range successfully written to google spreadsheet');
+                    resolve();
+                })
+                .catch(error => {
+                    this.log.error(`Error while writing range to Google Spreadsheet:${error}`);
+                    reject(new Error(`Error while writing range: ${error.message}`));
+                });
+        });
+    }
+
+    /**
+     * Clear a range of cells in a Google Spreadsheet.
+     *
+     * @param sheetName Name of the sheet
+     * @param range A1 range, e.g. A1:B10
+     * @param sheetAlias Alias of the sheet to use (optional)
+     */
+    public clearRange(sheetName: string, range: string, sheetAlias: string | null = null): Promise<void> {
+        const sheets = this.init();
+        const spreadsheetId = this.getSpreadsheetId(sheetAlias);
+        return new Promise<void>((resolve, reject) => {
+            sheets.spreadsheets.values
+                .clear({
+                    spreadsheetId,
+                    range: this.buildRange(sheetName, range),
+                    requestBody: {},
+                })
+                .then(() => {
+                    this.log.debug('Range successfully cleared from google spreadsheet');
+                    resolve();
+                })
+                .catch(error => {
+                    this.log.error(`Error while clearing range from Google Spreadsheet:${error}`);
+                    reject(new Error(`Error while clearing range: ${error.message}`));
+                });
+        });
+    }
+
+    /**
+     * Set the formatting for a range of cells.
+     *
+     * @param sheetName Name of the sheet
+     * @param range A1 range, e.g. A1:B10
+     * @param format Format settings such as backgroundColor and textFormat
+     * @param sheetAlias Alias of the sheet to use (optional)
+     */
+    public async setCellFormat(
+        sheetName: string,
+        range: string,
+        format: Record<string, any>,
+        sheetAlias: string | null = null,
+    ): Promise<void> {
+        const sheets = this.init();
+        const spreadsheetId = this.getSpreadsheetId(sheetAlias);
+        const gridRange = await this.getGridRangeForSheet(sheetName, spreadsheetId, range);
+        const userEnteredFormat: Record<string, any> = {};
+        const supportedFields: string[] = [];
+        if (format.backgroundColor) {
+            userEnteredFormat.backgroundColor = this.normalizeColor(format.backgroundColor);
+            supportedFields.push('backgroundColor');
+        }
+        if (format.textFormat) {
+            userEnteredFormat.textFormat = format.textFormat;
+            supportedFields.push('textFormat');
+        }
+        if (format.horizontalAlignment) {
+            userEnteredFormat.horizontalAlignment = format.horizontalAlignment;
+            supportedFields.push('horizontalAlignment');
+        }
+        if (format.verticalAlignment) {
+            userEnteredFormat.verticalAlignment = format.verticalAlignment;
+            supportedFields.push('verticalAlignment');
+        }
+        if (format.numberFormat) {
+            userEnteredFormat.numberFormat = format.numberFormat;
+            supportedFields.push('numberFormat');
+        }
+        if (supportedFields.length === 0) {
+            throw new Error('No valid format properties provided');
+        }
+        return new Promise<void>((resolve, reject) => {
+            sheets.spreadsheets
+                .batchUpdate({
+                    spreadsheetId,
+                    requestBody: {
+                        requests: [
+                            {
+                                repeatCell: {
+                                    range: gridRange,
+                                    cell: {
+                                        userEnteredFormat,
+                                    },
+                                    fields: `userEnteredFormat(${supportedFields.join(',')})`,
+                                },
+                            },
+                        ],
+                    },
+                })
+                .then(() => {
+                    this.log.debug('Cell format successfully updated in google spreadsheet');
+                    resolve();
+                })
+                .catch(error => {
+                    this.log.error(`Error while setting cell format in Google Spreadsheet:${error}`);
+                    reject(new Error(`Error while setting cell format: ${error.message}`));
+                });
+        });
+    }
+
+    /**
+     * Create a chart in a Google Spreadsheet.
+     *
+     * @param sheetName Name of the sheet
+     * @param chartConfig Chart configuration such as title, range, chartType and position
+     * @param sheetAlias Alias of the sheet to use (optional)
+     */
+    public async createChart(
+        sheetName: string,
+        chartConfig: Record<string, any>,
+        sheetAlias: string | null = null,
+    ): Promise<void> {
+        const sheets = this.init();
+        const spreadsheetId = this.getSpreadsheetId(sheetAlias);
+        const sheetId = await this.getSheetIdByName(sheetName, spreadsheetId);
+        const request = this.buildChartRequest(sheetId, chartConfig, 'addChart');
+        return new Promise<void>((resolve, reject) => {
+            sheets.spreadsheets
+                .batchUpdate({
+                    spreadsheetId,
+                    requestBody: {
+                        requests: [request],
+                    },
+                })
+                .then(() => {
+                    this.log.debug('Chart successfully created in google spreadsheet');
+                    resolve();
+                })
+                .catch(error => {
+                    this.log.error(`Error while creating chart in Google Spreadsheet:${error}`);
+                    reject(new Error(`Error while creating chart: ${error.message}`));
+                });
+        });
+    }
+
+    /**
+     * Update an existing chart in a Google Spreadsheet.
+     *
+     * @param sheetName Name of the sheet 
+     * @param chartId ID of the chart to update
+     * @param chartConfig Chart configuration such as title, range, chartType and position
+     * @param sheetAlias Alias of the sheet to use (optional)
+     */
+    public async updateChart(
+        sheetName: string,
+        chartId: number,
+        chartConfig: Record<string, any>,
+        sheetAlias: string | null = null,
+    ): Promise<void> {
+        const sheets = this.init();
+        const spreadsheetId = this.getSpreadsheetId(sheetAlias);
+        const sheetId = await this.getSheetIdByName(sheetName, spreadsheetId);
+        const request = this.buildChartRequest(sheetId, chartConfig, 'updateChartSpec', chartId);
+        return new Promise<void>((resolve, reject) => {
+            sheets.spreadsheets
+                .batchUpdate({
+                    spreadsheetId,
+                    requestBody: {
+                        requests: [request],
+                    },
+                })
+                .then(() => {
+                    this.log.debug('Chart successfully updated in google spreadsheet');
+                    resolve();
+                })
+                .catch(error => {
+                    this.log.error(`Error while updating chart in Google Spreadsheet:${error}`);
+                    reject(new Error(`Error while updating chart: ${error.message}`));
+                });
+        });
+    }
+
+    /**
      * Get the number of the last non-empty row in a Google Spreadsheet sheet.
      *
      * @param sheetName Name of the sheet
@@ -534,6 +772,196 @@ export class SpreadsheetUtils {
         }
         return [[message]];
     }
+
+    private buildRange(sheetName: string, range: string): string {
+        return range.includes('!') ? range : `${sheetName}!${range}`;
+    }
+
+    private normalizeRangeValues(values: any): any[][] {
+        if (Array.isArray(values) && values.length > 0 && Array.isArray(values[0])) {
+            return values;
+        }
+        if (Array.isArray(values)) {
+            return [values];
+        }
+        return [[values]];
+    }
+
+    private normalizeColor(color: any): Record<string, number> {
+        if (typeof color === 'string' && color.startsWith('#')) {
+            const hex = color.replace('#', '');
+            const normalized = hex.length === 3 ? hex.split('').map(ch => ch + ch).join('') : hex;
+            const r = Number.parseInt(normalized.substring(0, 2), 16) / 255;
+            const g = Number.parseInt(normalized.substring(2, 4), 16) / 255;
+            const b = Number.parseInt(normalized.substring(4, 6), 16) / 255;
+            return { red: r, green: g, blue: b, alpha: 1 };
+        }
+        if (typeof color === 'object' && color !== null) {
+            return {
+                red: Number(color.red ?? 0),
+                green: Number(color.green ?? 0),
+                blue: Number(color.blue ?? 0),
+                alpha: Number(color.alpha ?? 1),
+            };
+        }
+        return { red: 0, green: 0, blue: 0, alpha: 1 };
+    }
+
+    private parseA1Range(range: string): { startRowIndex: number; endRowIndex: number; startColumnIndex: number; endColumnIndex: number } {
+        const normalized = range.trim().replace(/^'([^']+)'!/, '');
+        const match = normalized.match(/^([A-Z]+)([0-9]+)(?::([A-Z]+)([0-9]+))?$/i);
+        if (!match) {
+            throw new Error(`Invalid cell range: ${range}`);
+        }
+        const startCol = this.columnToIndex(match[1]);
+        const startRow = Number(match[2]);
+        const endCol = match[3] ? this.columnToIndex(match[3]) : startCol;
+        const endRow = match[4] ? Number(match[4]) : startRow;
+        return {
+            startRowIndex: Math.max(0, startRow - 1),
+            endRowIndex: Math.max(startRow, endRow),
+            startColumnIndex: startCol,
+            endColumnIndex: endCol + 1,
+        };
+    }
+
+    private columnToIndex(column: string): number {
+        let value = 0;
+        for (const char of column.toUpperCase()) {
+            value = value * 26 + (char.charCodeAt(0) - 64);
+        }
+        return value - 1;
+    }
+
+    private async getSheetIdByName(sheetName: string, spreadsheetId: string): Promise<number> {
+        const sheets = this.init();
+        const spreadsheet = await sheets.spreadsheets.get({ spreadsheetId });
+        const sheet = spreadsheet.data.sheets?.find(
+            item => item.properties && item.properties.title === sheetName,
+        );
+        if (!sheet || !sheet.properties || sheet.properties.sheetId === undefined || sheet.properties.sheetId === null) {
+            throw new Error(`Sheet not found: ${sheetName}`);
+        }
+        return Number(sheet.properties.sheetId);
+    }
+
+    private async getGridRangeForSheet(
+        sheetName: string,
+        spreadsheetId: string,
+        range: string,
+    ): Promise<sheets_v4.Schema$GridRange> {
+        const sheetId = await this.getSheetIdByName(sheetName, spreadsheetId);
+        const parsed = this.parseA1Range(range);
+        return {
+            sheetId,
+            startRowIndex: parsed.startRowIndex,
+            endRowIndex: parsed.endRowIndex,
+            startColumnIndex: parsed.startColumnIndex,
+            endColumnIndex: parsed.endColumnIndex,
+        };
+    }
+
+    private buildChartRequest(
+        sheetId: number,
+        chartConfig: Record<string, any>,
+        operation: 'addChart' | 'updateChartSpec',
+        chartId?: number,
+    ): any {
+        const chartType = this.normalizeChartType(chartConfig.chartType || 'line');
+        const range = this.parseA1Range(chartConfig.range || 'A1:B2');
+        const spec = {
+            title: chartConfig.title || 'Chart',
+            basicChart: {
+                chartType,
+                legendPosition: chartConfig.legendPosition || 'BOTTOM_LEGEND',
+                headerCount: 1,
+                axis: [
+                    { position: 'BOTTOM_AXIS', title: chartConfig.xAxis || 'X' },
+                    { position: 'LEFT_AXIS', title: chartConfig.yAxis || 'Y' },
+                ],
+                domains: [
+                    {
+                        domain: {
+                            sourceRange: {
+                                sources: [
+                                    {
+                                        sheetId,
+                                        startRowIndex: range.startRowIndex,
+                                        endRowIndex: range.endRowIndex,
+                                        startColumnIndex: range.startColumnIndex,
+                                        endColumnIndex: range.startColumnIndex + 1,
+                                    },
+                                ],
+                            },
+                        },
+                    },
+                ],
+                series: [
+                    {
+                        series: {
+                            sourceRange: {
+                                sources: [
+                                    {
+                                        sheetId,
+                                        startRowIndex: range.startRowIndex,
+                                        endRowIndex: range.endRowIndex,
+                                        startColumnIndex: range.startColumnIndex + 1,
+                                        endColumnIndex: range.endColumnIndex,
+                                    },
+                                ],
+                            },
+                        },
+                        targetAxis: 'LEFT_AXIS',
+                    },
+                ],
+            },
+        };
+
+        const position = chartConfig.position || { row: 0, column: 0, width: 640, height: 360 };
+        const request: Record<string, any> = {
+            chart: {
+                spec,
+                position: {
+                    overlayPosition: {
+                        anchorCell: {
+                            sheetId,
+                            rowIndex: Number(position.row ?? 0),
+                            columnIndex: Number(position.column ?? 0),
+                        },
+                        offsetXPixels: 0,
+                        offsetYPixels: 0,
+                    },
+                    size: {
+                        widthPixels: Number(position.width ?? 640),
+                        heightPixels: Number(position.height ?? 360),
+                    },
+                },
+            },
+        };
+        if (operation === 'addChart') {
+            return { addChart: request };
+        }
+        return {
+            updateChartSpec: {
+                chartId: Number(chartId ?? 0),
+                spec,
+            },
+        };
+    }
+
+    private normalizeChartType(chartType: string): string {
+        const normalized = chartType.toUpperCase();
+        const map: Record<string, string> = {
+            LINE: 'LINE',
+            BAR: 'BAR',
+            COLUMN: 'COLUMN',
+            PIE: 'PIE',
+            AREA: 'AREA',
+            SCATTER: 'SCATTER',
+        };
+        return map[normalized] || 'LINE';
+    }
+
     private formatPrivateKey(privateKey: string): string | undefined {
         //replace all \n with line breaks
         if (privateKey) {

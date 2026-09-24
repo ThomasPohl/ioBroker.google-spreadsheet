@@ -18,9 +18,13 @@ var __copyProps = (to, from, except, desc) => {
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 var cellHandlers_exports = {};
 __export(cellHandlers_exports, {
+  handleClearRange: () => handleClearRange,
   handleReadCell: () => handleReadCell,
+  handleReadRange: () => handleReadRange,
+  handleSetCellFormat: () => handleSetCellFormat,
   handleWriteCell: () => handleWriteCell,
-  handleWriteCells: () => handleWriteCells
+  handleWriteCells: () => handleWriteCells,
+  handleWriteRange: () => handleWriteRange
 });
 module.exports = __toCommonJS(cellHandlers_exports);
 function handleWriteCell(spreadsheet, log, message) {
@@ -97,10 +101,96 @@ function handleReadCell(spreadsheet, log, message) {
   }
   return spreadsheet.readCell(sheet, cell, alias);
 }
+function handleReadRange(spreadsheet, log, message) {
+  const messageData = message.message;
+  let sheet = messageData.sheet;
+  let range = messageData.range;
+  const alias = messageData.alias;
+  if (!sheet && messageData.sheetName) {
+    log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
+    sheet = messageData.sheetName;
+  }
+  if (!range && messageData.cellRange) {
+    log.warn("Parameter 'cellRange' is deprecated, please use 'range' instead!");
+    range = messageData.cellRange;
+  }
+  if (!sheet || !range) {
+    log.error("Missing parameters for readRange: 'sheet', 'range'");
+    return Promise.reject(new Error("Missing parameters for readRange"));
+  }
+  return spreadsheet.readRange(sheet, range, alias);
+}
+function handleWriteRange(spreadsheet, log, message) {
+  const messageData = message.message;
+  let sheet = messageData.sheet;
+  let range = messageData.range;
+  let values = messageData.values;
+  const alias = messageData.alias;
+  if (!sheet && messageData.sheetName) {
+    log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
+    sheet = messageData.sheetName;
+  }
+  if (!range && messageData.cellRange) {
+    log.warn("Parameter 'cellRange' is deprecated, please use 'range' instead!");
+    range = messageData.cellRange;
+  }
+  if (typeof values === "undefined" && typeof messageData.data !== "undefined") {
+    log.warn("Parameter 'data' is deprecated, please use 'values' instead!");
+    values = messageData.data;
+  }
+  if (!sheet || !range || typeof values === "undefined") {
+    log.error("Missing parameters for writeRange: 'sheet', 'range', 'values'");
+    return Promise.reject(new Error("Missing parameters for writeRange"));
+  }
+  return spreadsheet.writeRange(sheet, range, values, alias);
+}
+function handleClearRange(spreadsheet, log, message) {
+  const messageData = message.message;
+  let sheet = messageData.sheet;
+  let range = messageData.range;
+  const alias = messageData.alias;
+  if (!sheet && messageData.sheetName) {
+    log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
+    sheet = messageData.sheetName;
+  }
+  if (!range && messageData.cellRange) {
+    log.warn("Parameter 'cellRange' is deprecated, please use 'range' instead!");
+    range = messageData.cellRange;
+  }
+  if (!sheet || !range) {
+    log.error("Missing parameters for clearRange: 'sheet', 'range'");
+    return Promise.reject(new Error("Missing parameters for clearRange"));
+  }
+  return spreadsheet.clearRange(sheet, range, alias);
+}
+function handleSetCellFormat(spreadsheet, log, message) {
+  const messageData = message.message;
+  let sheet = messageData.sheet;
+  let range = messageData.range;
+  const format = messageData.format;
+  const alias = messageData.alias;
+  if (!sheet && messageData.sheetName) {
+    log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
+    sheet = messageData.sheetName;
+  }
+  if (!range && messageData.cellRange) {
+    log.warn("Parameter 'cellRange' is deprecated, please use 'range' instead!");
+    range = messageData.cellRange;
+  }
+  if (!sheet || !range || !format) {
+    log.error("Missing parameters for setCellFormat: 'sheet', 'range', 'format'");
+    return Promise.reject(new Error("Missing parameters for setCellFormat"));
+  }
+  return spreadsheet.setCellFormat(sheet, range, format, alias);
+}
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
+  handleClearRange,
   handleReadCell,
+  handleReadRange,
+  handleSetCellFormat,
   handleWriteCell,
-  handleWriteCells
+  handleWriteCells,
+  handleWriteRange
 });
 //# sourceMappingURL=cellHandlers.js.map

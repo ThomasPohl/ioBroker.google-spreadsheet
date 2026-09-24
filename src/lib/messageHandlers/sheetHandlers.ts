@@ -210,3 +210,50 @@ export function handleGetLastRow(
     }
     return spreadsheet.getLastRow(sheet, alias);
 }
+
+/**
+ * Handles creating a chart in a spreadsheet sheet.
+ */
+export function handleCreateChart(
+    spreadsheet: SpreadsheetUtils,
+    log: ioBroker.Logger,
+    message: Record<string, any>,
+): Promise<void> {
+    const messageData: Record<string, any> = message.message as Record<string, any>;
+    let sheet = messageData.sheet;
+    const chart = messageData.chart || messageData;
+    const alias = messageData.alias;
+    if (!sheet && messageData.sheetName) {
+        log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
+        sheet = messageData.sheetName;
+    }
+    if (!sheet || !chart.range) {
+        log.error("Missing parameters for createChart: 'sheet', 'chart.range'");
+        return Promise.reject(new Error('Missing parameters for createChart'));
+    }
+    return spreadsheet.createChart(sheet, chart, alias);
+}
+
+/**
+ * Handles updating an existing chart in a spreadsheet sheet.
+ */
+export function handleUpdateChart(
+    spreadsheet: SpreadsheetUtils,
+    log: ioBroker.Logger,
+    message: Record<string, any>,
+): Promise<void> {
+    const messageData: Record<string, any> = message.message as Record<string, any>;
+    let sheet = messageData.sheet;
+    const chart = messageData.chart || messageData;
+    const alias = messageData.alias;
+    const chartId = messageData.chartId ?? messageData.id;
+    if (!sheet && messageData.sheetName) {
+        log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
+        sheet = messageData.sheetName;
+    }
+    if (!sheet || !chart.range || chartId === undefined) {
+        log.error("Missing parameters for updateChart: 'sheet', 'chart.range', 'chartId'");
+        return Promise.reject(new Error('Missing parameters for updateChart'));
+    }
+    return spreadsheet.updateChart(sheet, Number(chartId), chart, alias);
+}

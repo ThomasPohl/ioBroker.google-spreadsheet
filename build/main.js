@@ -124,10 +124,17 @@ class GoogleSpreadsheet extends utils.Adapter {
       deleteSheet: { handler: import_messageHandlers.handleDeleteSheet, logMessage: "delete sheet" },
       deleteSheets: { handler: import_messageHandlers.handleDeleteSheets, logMessage: "delete sheets" },
       duplicateSheet: { handler: import_messageHandlers.handleDuplicateSheet, logMessage: "duplicate sheet" },
+      getLastRow: { handler: import_messageHandlers.handleGetLastRow, logMessage: "get last row" },
+      createChart: { handler: import_messageHandlers.handleCreateChart, logMessage: "create chart" },
+      updateChart: { handler: import_messageHandlers.handleUpdateChart, logMessage: "update chart" },
       upload: { handler: import_messageHandlers.handleUpload, logMessage: "upload file" },
       writeCell: { handler: import_messageHandlers.handleWriteCell, logMessage: "write cell" },
       writeCells: { handler: import_messageHandlers.handleWriteCells, logMessage: "write cells" },
-      readCell: { handler: import_messageHandlers.handleReadCell, logMessage: "read cell" }
+      readCell: { handler: import_messageHandlers.handleReadCell, logMessage: "read cell" },
+      readRange: { handler: import_messageHandlers.handleReadRange, logMessage: "read range" },
+      writeRange: { handler: import_messageHandlers.handleWriteRange, logMessage: "write range" },
+      clearRange: { handler: import_messageHandlers.handleClearRange, logMessage: "clear range" },
+      setCellFormat: { handler: import_messageHandlers.handleSetCellFormat, logMessage: "set cell format" }
     };
     this.log.debug(`Received message: ${JSON.stringify(obj)}`);
     if (typeof obj === "object" && obj.message) {

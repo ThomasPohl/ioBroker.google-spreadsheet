@@ -19,11 +19,14 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 var sheetHandlers_exports = {};
 __export(sheetHandlers_exports, {
   handleAppend: () => handleAppend,
+  handleCreateChart: () => handleCreateChart,
   handleCreateSheet: () => handleCreateSheet,
   handleDeleteRows: () => handleDeleteRows,
   handleDeleteSheet: () => handleDeleteSheet,
   handleDeleteSheets: () => handleDeleteSheets,
-  handleDuplicateSheet: () => handleDuplicateSheet
+  handleDuplicateSheet: () => handleDuplicateSheet,
+  handleGetLastRow: () => handleGetLastRow,
+  handleUpdateChart: () => handleUpdateChart
 });
 module.exports = __toCommonJS(sheetHandlers_exports);
 function handleAppend(spreadsheet, log, message) {
@@ -133,13 +136,62 @@ function handleDuplicateSheet(spreadsheet, log, message) {
   }
   return spreadsheet.duplicateSheet(source, target, index, alias);
 }
+function handleGetLastRow(spreadsheet, log, message) {
+  const messageData = message.message;
+  let sheet = messageData.sheet;
+  const alias = messageData.alias;
+  if (!sheet && messageData.sheetName) {
+    log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
+    sheet = messageData.sheetName;
+  }
+  if (!sheet) {
+    log.error("Missing parameter for getLastRow: 'sheet'");
+    return Promise.reject(new Error("Missing parameters for getLastRow"));
+  }
+  return spreadsheet.getLastRow(sheet, alias);
+}
+function handleCreateChart(spreadsheet, log, message) {
+  const messageData = message.message;
+  let sheet = messageData.sheet;
+  const chart = messageData.chart || messageData;
+  const alias = messageData.alias;
+  if (!sheet && messageData.sheetName) {
+    log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
+    sheet = messageData.sheetName;
+  }
+  if (!sheet || !chart.range) {
+    log.error("Missing parameters for createChart: 'sheet', 'chart.range'");
+    return Promise.reject(new Error("Missing parameters for createChart"));
+  }
+  return spreadsheet.createChart(sheet, chart, alias);
+}
+function handleUpdateChart(spreadsheet, log, message) {
+  var _a;
+  const messageData = message.message;
+  let sheet = messageData.sheet;
+  const chart = messageData.chart || messageData;
+  const alias = messageData.alias;
+  const chartId = (_a = messageData.chartId) != null ? _a : messageData.id;
+  if (!sheet && messageData.sheetName) {
+    log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
+    sheet = messageData.sheetName;
+  }
+  if (!sheet || !chart.range || chartId === void 0) {
+    log.error("Missing parameters for updateChart: 'sheet', 'chart.range', 'chartId'");
+    return Promise.reject(new Error("Missing parameters for updateChart"));
+  }
+  return spreadsheet.updateChart(sheet, Number(chartId), chart, alias);
+}
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   handleAppend,
+  handleCreateChart,
   handleCreateSheet,
   handleDeleteRows,
   handleDeleteSheet,
   handleDeleteSheets,
-  handleDuplicateSheet
+  handleDuplicateSheet,
+  handleGetLastRow,
+  handleUpdateChart
 });
 //# sourceMappingURL=sheetHandlers.js.map
