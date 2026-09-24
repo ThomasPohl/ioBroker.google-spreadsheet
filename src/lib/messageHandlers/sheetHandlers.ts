@@ -1,4 +1,5 @@
 import type { SpreadsheetUtils } from '../google';
+import { normalizeLegacyMessage, preferValue } from '../validation';
 
 /**
  * Handles appending data to a spreadsheet sheet.
@@ -13,18 +14,10 @@ export function handleAppend(
     message: Record<string, any>,
 ): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-        const messageData: Record<string, any> = message.message as Record<string, any>;
-        let sheet = messageData.sheet;
-        let values = messageData.values;
+        const messageData: Record<string, any> = normalizeLegacyMessage(message.message as Record<string, any>);
+        const sheet = preferValue(messageData.sheet, messageData.sheetName) as string | undefined;
+        const values = preferValue(messageData.values, messageData.data);
         const alias = messageData.alias;
-        if (!sheet && messageData.sheetName) {
-            log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
-            sheet = messageData.sheetName;
-        }
-        if (!values && messageData.data) {
-            log.warn("Parameter 'data' is deprecated, please use 'values' instead!");
-            values = messageData.data;
-        }
         if (!sheet || !values) {
             log.error("Missing parameters for append: 'sheet' and/or 'values'");
             reject(new Error('Missing parameters for append'));
@@ -50,15 +43,11 @@ export function handleDeleteRows(
     message: Record<string, any>,
 ): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-        const messageData: Record<string, any> = message.message as Record<string, any>;
-        let sheet = messageData.sheet;
+        const messageData: Record<string, any> = normalizeLegacyMessage(message.message as Record<string, any>);
+        const sheet = preferValue(messageData.sheet, messageData.sheetName) as string | undefined;
         const start = messageData.start;
         const end = messageData.end;
         const alias = messageData.alias;
-        if (!sheet && messageData.sheetName) {
-            log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
-            sheet = messageData.sheetName;
-        }
         if (!sheet || typeof start !== 'number' || typeof end !== 'number') {
             log.error("Missing parameters for deleteRows: 'sheet', 'start', 'end'");
             reject(new Error('Missing parameters for deleteRows'));
@@ -87,13 +76,9 @@ export function handleCreateSheet(
         log.warn('Deprecated call of createSheet with string as message. Please use an object with sheet!');
         return spreadsheet.createSheet(message.message, null);
     }
-    const messageData: Record<string, any> = message.message as Record<string, any>;
-    let sheet = messageData.sheet;
+    const messageData: Record<string, any> = normalizeLegacyMessage(message.message as Record<string, any>);
+    const sheet = preferValue(messageData.sheet, messageData.sheetName) as string | undefined;
     const alias = messageData.alias;
-    if (!sheet && messageData.sheetName) {
-        log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
-        sheet = messageData.sheetName;
-    }
     if (!sheet) {
         log.error("Missing parameter for createSheet: 'sheet'");
         return Promise.reject(new Error('Missing parameters for createSheet'));
@@ -117,13 +102,9 @@ export function handleDeleteSheet(
         log.warn('Deprecated call of deleteSheet with string as message. Please use an object with sheet!');
         return spreadsheet.deleteSheet(message.message);
     }
-    const messageData: Record<string, any> = message.message as Record<string, any>;
-    let sheet = messageData.sheet;
+    const messageData: Record<string, any> = normalizeLegacyMessage(message.message as Record<string, any>);
+    const sheet = preferValue(messageData.sheet, messageData.sheetName) as string | undefined;
     const alias = messageData.alias;
-    if (!sheet && messageData.sheetName) {
-        log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
-        sheet = messageData.sheetName;
-    }
     if (!sheet) {
         log.error("Missing parameter for deleteSheet: 'sheet'");
         return Promise.reject(new Error('Missing parameters for deleteSheet'));
@@ -147,13 +128,9 @@ export function handleDeleteSheets(
         log.warn('Deprecated call of deleteSheets with array as message. Please use an object with sheets!');
         return spreadsheet.deleteSheets(message.message as string[], null);
     }
-    const messageData: Record<string, any> = message.message as Record<string, any>;
-    let sheets = messageData.sheets;
+    const messageData: Record<string, any> = normalizeLegacyMessage(message.message as Record<string, any>);
+    const sheets = preferValue(messageData.sheets, messageData.sheetNames) as string[] | undefined;
     const alias = messageData.alias;
-    if (!sheets && messageData.sheetNames) {
-        log.warn("Parameter 'sheetNames' is deprecated, please use 'sheets' instead!");
-        sheets = messageData.sheetNames;
-    }
     if (!sheets) {
         log.error("Missing parameter for deleteSheets: 'sheets'");
         return Promise.reject(new Error('Missing parameters for deleteSheets'));
@@ -173,7 +150,7 @@ export function handleDuplicateSheet(
     log: ioBroker.Logger,
     message: Record<string, any>,
 ): Promise<void> {
-    const messageData: Record<string, any> = message.message as Record<string, any>;
+    const messageData: Record<string, any> = normalizeLegacyMessage(message.message as Record<string, any>);
     const source = messageData.source;
     const target = messageData.target;
     const index = messageData.index;
@@ -197,16 +174,51 @@ export function handleGetLastRow(
     log: ioBroker.Logger,
     message: Record<string, any>,
 ): Promise<number> {
-    const messageData: Record<string, any> = message.message as Record<string, any>;
-    let sheet = messageData.sheet;
+    const messageData: Record<string, any> = normalizeLegacyMessage(message.message as Record<string, any>);
+    const sheet = preferValue(messageData.sheet, messageData.sheetName) as string | undefined;
     const alias = messageData.alias;
-    if (!sheet && messageData.sheetName) {
-        log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
-        sheet = messageData.sheetName;
-    }
     if (!sheet) {
         log.error("Missing parameter for getLastRow: 'sheet'");
         return Promise.reject(new Error('Missing parameters for getLastRow'));
     }
     return spreadsheet.getLastRow(sheet, alias);
+}
+
+/**
+ * Handles creating a chart in a spreadsheet sheet.
+ */
+export function handleCreateChart(
+    spreadsheet: SpreadsheetUtils,
+    log: ioBroker.Logger,
+    message: Record<string, any>,
+): Promise<void> {
+    const messageData: Record<string, any> = normalizeLegacyMessage(message.message as Record<string, any>);
+    const sheet = preferValue(messageData.sheet, messageData.sheetName) as string | undefined;
+    const chart = messageData.chart || messageData;
+    const alias = messageData.alias;
+    if (!sheet || !chart.range) {
+        log.error("Missing parameters for createChart: 'sheet', 'chart.range'");
+        return Promise.reject(new Error('Missing parameters for createChart'));
+    }
+    return spreadsheet.createChart(sheet, chart, alias);
+}
+
+/**
+ * Handles updating an existing chart in a spreadsheet sheet.
+ */
+export function handleUpdateChart(
+    spreadsheet: SpreadsheetUtils,
+    log: ioBroker.Logger,
+    message: Record<string, any>,
+): Promise<void> {
+    const messageData: Record<string, any> = normalizeLegacyMessage(message.message as Record<string, any>);
+    const sheet = preferValue(messageData.sheet, messageData.sheetName) as string | undefined;
+    const chart = messageData.chart || messageData;
+    const alias = messageData.alias;
+    const chartId = messageData.chartId ?? messageData.id;
+    if (!sheet || !chart.range || chartId === undefined) {
+        log.error("Missing parameters for updateChart: 'sheet', 'chart.range', 'chartId'");
+        return Promise.reject(new Error('Missing parameters for updateChart'));
+    }
+    return spreadsheet.updateChart(sheet, Number(chartId), chart, alias);
 }

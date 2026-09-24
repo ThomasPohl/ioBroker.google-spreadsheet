@@ -62,6 +62,8 @@ describe('SpreadsheetUtils', () => {
                     values: {
                         append: sinon.stub().resolves({}),
                         get: sinon.stub().resolves({ data: { values: [['test']] } }),
+                        update: sinon.stub().resolves({}),
+                        clear: sinon.stub().resolves({}),
                         batchUpdate: sinon.stub().resolves({}),
                     },
                     get: sinon.stub().resolves({
@@ -204,6 +206,88 @@ describe('SpreadsheetUtils', () => {
                 } catch (error: any) {
                     expect(error.message).to.equal('No data found');
                 }
+            });
+        });
+
+        describe('range operations', () => {
+            it('should read a range', async () => {
+                const result = await utils.readRange('Sheet1', 'A1:B2', 'main');
+
+                expect(sheetsStub.spreadsheets.values.get.calledOnce).to.be.true;
+                const args = sheetsStub.spreadsheets.values.get.firstCall.args[0];
+                expect(args.range).to.equal('Sheet1!A1:B2');
+                expect(args.spreadsheetId).to.equal('id1');
+                expect(result).to.deep.equal([['test']]);
+            });
+
+            it('should write a range', async () => {
+                await utils.writeRange('Sheet1', 'A1:B2', [['a', 'b'], ['c', 'd']], 'main');
+
+                expect(sheetsStub.spreadsheets.values.update.calledOnce).to.be.true;
+                const args = sheetsStub.spreadsheets.values.update.firstCall.args[0];
+                expect(args.range).to.equal('Sheet1!A1:B2');
+                expect(args.valueInputOption).to.equal('USER_ENTERED');
+                expect(args.requestBody.values).to.deep.equal([['a', 'b'], ['c', 'd']]);
+            });
+
+            it('should clear a range', async () => {
+                await utils.clearRange('Sheet1', 'A1:B2', 'main');
+
+                expect(sheetsStub.spreadsheets.values.clear.calledOnce).to.be.true;
+                const args = sheetsStub.spreadsheets.values.clear.firstCall.args[0];
+                expect(args.range).to.equal('Sheet1!A1:B2');
+                expect(args.spreadsheetId).to.equal('id1');
+            });
+        });
+
+        describe('format operations', () => {
+            it('should set cell format for a range', async () => {
+                await utils.setCellFormat(
+                    'Sheet1',
+                    'A1:B2',
+                    { backgroundColor: { red: 1, green: 0, blue: 0 }, textFormat: { bold: true } },
+                    'main',
+                );
+
+                expect(sheetsStub.spreadsheets.batchUpdate.calledOnce).to.be.true;
+                const args = sheetsStub.spreadsheets.batchUpdate.firstCall.args[0];
+                expect(args.requestBody.requests[0].repeatCell).to.exist;
+                expect(args.requestBody.requests[0].repeatCell.range.startRowIndex).to.equal(0);
+                expect(args.requestBody.requests[0].repeatCell.range.endRowIndex).to.equal(2);
+            });
+        });
+
+        describe('chart operations', () => {
+            it('should create a chart', async () => {
+                await utils.createChart(
+                    'Sheet1',
+                    {
+                        title: 'Temperature',
+                        chartType: 'line',
+                        range: 'A1:B5',
+                        position: { row: 1, column: 4, width: 400, height: 250 },
+                    },
+                    'main',
+                );
+
+                expect(sheetsStub.spreadsheets.batchUpdate.calledOnce).to.be.true;
+                const args = sheetsStub.spreadsheets.batchUpdate.firstCall.args[0];
+                expect(args.requestBody.requests[0].addChart).to.exist;
+                expect(args.requestBody.requests[0].addChart.chart.spec.title).to.equal('Temperature');
+            });
+
+            it('should update an existing chart', async () => {
+                await utils.updateChart(
+                    'Sheet1',
+                    0,
+                    { title: 'Updated Temperature', range: 'A1:B5', chartType: 'bar' },
+                    'main',
+                );
+
+                expect(sheetsStub.spreadsheets.batchUpdate.calledOnce).to.be.true;
+                const args = sheetsStub.spreadsheets.batchUpdate.firstCall.args[0];
+                expect(args.requestBody.requests[0].updateChartSpec).to.exist;
+                expect(args.requestBody.requests[0].updateChartSpec.chartId).to.equal(0);
             });
         });
 
