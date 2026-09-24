@@ -33,7 +33,7 @@ __export(main_exports, {
 module.exports = __toCommonJS(main_exports);
 var utils = __toESM(require("@iobroker/adapter-core"));
 var import_google = require("./lib/google");
-var import_messageHandlers = require("./lib/messageHandlers/index");
+var import_commandRegistry = require("./lib/commandRegistry");
 class GoogleSpreadsheet extends utils.Adapter {
   spreadsheet;
   /**
@@ -117,31 +117,12 @@ class GoogleSpreadsheet extends utils.Adapter {
    * @param obj The message object
    */
   onMessage(obj) {
-    const handlers = {
-      append: { handler: import_messageHandlers.handleAppend, logMessage: "append to spreadsheet" },
-      deleteRows: { handler: import_messageHandlers.handleDeleteRows, logMessage: "delete rows from spreadsheet" },
-      createSheet: { handler: import_messageHandlers.handleCreateSheet, logMessage: "create sheet" },
-      deleteSheet: { handler: import_messageHandlers.handleDeleteSheet, logMessage: "delete sheet" },
-      deleteSheets: { handler: import_messageHandlers.handleDeleteSheets, logMessage: "delete sheets" },
-      duplicateSheet: { handler: import_messageHandlers.handleDuplicateSheet, logMessage: "duplicate sheet" },
-      getLastRow: { handler: import_messageHandlers.handleGetLastRow, logMessage: "get last row" },
-      createChart: { handler: import_messageHandlers.handleCreateChart, logMessage: "create chart" },
-      updateChart: { handler: import_messageHandlers.handleUpdateChart, logMessage: "update chart" },
-      upload: { handler: import_messageHandlers.handleUpload, logMessage: "upload file" },
-      writeCell: { handler: import_messageHandlers.handleWriteCell, logMessage: "write cell" },
-      writeCells: { handler: import_messageHandlers.handleWriteCells, logMessage: "write cells" },
-      readCell: { handler: import_messageHandlers.handleReadCell, logMessage: "read cell" },
-      readRange: { handler: import_messageHandlers.handleReadRange, logMessage: "read range" },
-      writeRange: { handler: import_messageHandlers.handleWriteRange, logMessage: "write range" },
-      clearRange: { handler: import_messageHandlers.handleClearRange, logMessage: "clear range" },
-      setCellFormat: { handler: import_messageHandlers.handleSetCellFormat, logMessage: "set cell format" }
-    };
     this.log.debug(`Received message: ${JSON.stringify(obj)}`);
     if (typeof obj === "object" && obj.message) {
-      if (obj.command && obj.command in handlers) {
+      if (obj.command && obj.command in import_commandRegistry.COMMAND_REGISTRY) {
         const command = obj.command;
-        this.log.debug(handlers[command].logMessage);
-        handlers[command].handler(this.spreadsheet, this.log, obj).then((result) => {
+        this.log.debug(import_commandRegistry.COMMAND_REGISTRY[command].logMessage);
+        import_commandRegistry.COMMAND_REGISTRY[command].handler(this.spreadsheet, this.log, obj).then((result) => {
           if (obj.callback) {
             this.sendTo(obj.from, obj.command, result ? result : "Message received", obj.callback);
           }

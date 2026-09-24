@@ -1,25 +1,7 @@
 import * as utils from '@iobroker/adapter-core';
 
 import { SpreadsheetUtils } from './lib/google';
-import {
-    handleAppend,
-    handleDeleteRows,
-    handleCreateSheet,
-    handleDeleteSheet,
-    handleDeleteSheets,
-    handleDuplicateSheet,
-    handleGetLastRow,
-    handleCreateChart,
-    handleUpdateChart,
-    handleUpload,
-    handleWriteCell,
-    handleWriteCells,
-    handleReadCell,
-    handleReadRange,
-    handleWriteRange,
-    handleClearRange,
-    handleSetCellFormat,
-} from './lib/messageHandlers/index';
+import { COMMAND_REGISTRY } from './lib/commandRegistry';
 
 /**
  * The adapter class
@@ -121,33 +103,12 @@ class GoogleSpreadsheet extends utils.Adapter {
      * @param obj The message object
      */
     private onMessage(obj: ioBroker.Message): void {
-        const handlers = {
-            append: { handler: handleAppend, logMessage: 'append to spreadsheet' },
-            deleteRows: { handler: handleDeleteRows, logMessage: 'delete rows from spreadsheet' },
-            createSheet: { handler: handleCreateSheet, logMessage: 'create sheet' },
-            deleteSheet: { handler: handleDeleteSheet, logMessage: 'delete sheet' },
-            deleteSheets: { handler: handleDeleteSheets, logMessage: 'delete sheets' },
-            duplicateSheet: { handler: handleDuplicateSheet, logMessage: 'duplicate sheet' },
-            getLastRow: { handler: handleGetLastRow, logMessage: 'get last row' },
-            createChart: { handler: handleCreateChart, logMessage: 'create chart' },
-            updateChart: { handler: handleUpdateChart, logMessage: 'update chart' },
-            upload: { handler: handleUpload, logMessage: 'upload file' },
-            writeCell: { handler: handleWriteCell, logMessage: 'write cell' },
-            writeCells: { handler: handleWriteCells, logMessage: 'write cells' },
-            readCell: { handler: handleReadCell, logMessage: 'read cell' },
-            readRange: { handler: handleReadRange, logMessage: 'read range' },
-            writeRange: { handler: handleWriteRange, logMessage: 'write range' },
-            clearRange: { handler: handleClearRange, logMessage: 'clear range' },
-            setCellFormat: { handler: handleSetCellFormat, logMessage: 'set cell format' },
-        };
-
         this.log.debug(`Received message: ${JSON.stringify(obj)}`);
         if (typeof obj === 'object' && obj.message) {
-            if (obj.command && obj.command in handlers) {
-                const command = obj.command as keyof typeof handlers;
-                this.log.debug(handlers[command].logMessage);
-                handlers[command]
-                    .handler(this.spreadsheet, this.log, obj)
+            if (obj.command && obj.command in COMMAND_REGISTRY) {
+                const command = obj.command as keyof typeof COMMAND_REGISTRY;
+                this.log.debug(COMMAND_REGISTRY[command].logMessage);
+                COMMAND_REGISTRY[command].handler(this.spreadsheet, this.log, obj)
                     .then((result: any) => {
                         if (obj.callback) {
                             this.sendTo(obj.from, obj.command, result ? result : 'Message received', obj.callback);

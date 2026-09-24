@@ -142,4 +142,105 @@ describe('GoogleSpreadsheet', () => {
             expect(result).to.equal('testValue');
         });
     });
+
+    describe('Adapter message integration', () => {
+        it('should dispatch writeRange and send callback result', async () => {
+            const instance = createInstance();
+            const callback = sinon.spy();
+            instance.spreadsheet = {
+                writeRange: sinon.stub().resolves('range-ok'),
+                setCellFormat: sinon.stub(),
+                createChart: sinon.stub(),
+            };
+
+            instance.onMessage({
+                command: 'writeRange',
+                message: { sheet: 'Sheet1', range: 'A1:B2', values: [['a', 'b'], ['c', 'd']], alias: 'main' },
+                from: 'tester',
+                callback,
+            });
+
+            await new Promise(resolve => setImmediate(resolve));
+            expect(instance.spreadsheet.writeRange.calledOnce).to.be.true;
+            expect(instance.sendTo.calledWith('tester', 'writeRange', 'range-ok', callback)).to.be.true;
+        });
+
+        it('should dispatch setCellFormat and return error callback when validation fails', async () => {
+            const instance = createInstance();
+            const callback = sinon.spy();
+            instance.spreadsheet = {
+                writeRange: sinon.stub(),
+                setCellFormat: sinon.stub().rejects(new Error('No valid format properties provided')),
+                createChart: sinon.stub(),
+            };
+
+            instance.onMessage({
+                command: 'setCellFormat',
+                message: { sheet: 'Sheet1', range: 'A1:B2', format: {}, alias: 'main' },
+                from: 'tester',
+                callback,
+            });
+
+            await new Promise(resolve => setImmediate(resolve));
+            expect(instance.spreadsheet.setCellFormat.calledOnce).to.be.true;
+            expect(instance.sendTo.calledWith('tester', 'setCellFormat', { error: 'No valid format properties provided' }, callback)).to.be.true;
+        });
+
+        it('should dispatch readRange with selected alias and return data', async () => {
+            const instance = createInstance({
+                spreadsheets: [
+                    { alias: 'main', spreadsheetId: 'id1', isDefault: false },
+                    { alias: 'archive', spreadsheetId: 'id2', isDefault: true },
+                ],
+            });
+            const callback = sinon.spy();
+            instance.spreadsheet = {
+                readRange: sinon.stub().resolves([['x', 'y']]),
+                setCellFormat: sinon.stub(),
+                createChart: sinon.stub(),
+                writeRange: sinon.stub(),
+            };
+
+            instance.onMessage({
+                command: 'readRange',
+                message: { sheet: 'Sheet1', range: 'A1:B2', alias: 'archive' },
+                from: 'tester',
+                callback,
+            });
+
+            await new Promise(resolve => setImmediate(resolve));
+            expect(instance.spreadsheet.readRange.calledOnceWith('Sheet1', 'A1:B2', 'archive')).to.be.true;
+            expect(instance.sendTo.calledWith('tester', 'readRange', [['x', 'y']], callback)).to.be.true;
+        });
+
+        it('should dispatch createChart and send callback result', async () => {
+            const instance = createInstance();
+            const callback = sinon.spy();
+            instance.spreadsheet = {
+                writeRange: sinon.stub(),
+                setCellFormat: sinon.stub(),
+                createChart: sinon.stub().resolves('chart-created'),
+            };
+
+            instance.onMessage({
+                command: 'createChart',
+                message: {
+                    sheet: 'Sheet1',
+                    chart: {
+                        title: 'Temperature',
+                        chartType: 'line',
+                        range: 'A1:B5',
+                        position: { row: 1, column: 4, width: 400, height: 250 },
+                    },
+                    alias: 'main',
+                },
+                from: 'tester',
+                callback,
+            });
+
+            await new Promise(resolve => setImmediate(resolve));
+            expect(instance.spreadsheet.createChart.calledOnce).to.be.true;
+            expect(instance.sendTo.calledWith('tester', 'createChart', 'chart-created', callback)).to.be.true;
+        });
+    });
 });

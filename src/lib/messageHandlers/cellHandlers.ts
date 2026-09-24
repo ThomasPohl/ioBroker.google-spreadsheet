@@ -1,4 +1,5 @@
 import type { SpreadsheetUtils } from '../google';
+import { isValidCellPattern, normalizeLegacyMessage, preferValue } from '../validation';
 
 /**
  * Handles writing to a single cell of a spreadsheet sheet.
@@ -12,25 +13,17 @@ export function handleWriteCell(
     log: ioBroker.Logger,
     message: Record<string, any>,
 ): Promise<void> {
-    const messageData: Record<string, any> = message.message as Record<string, any>;
-    let sheet = messageData.sheet;
+    const messageData: Record<string, any> = normalizeLegacyMessage(message.message as Record<string, any>);
+    const sheet = preferValue(messageData.sheet, messageData.sheetName) as string | undefined;
     const cell = messageData.cell;
-    let value = messageData.value;
+    const value = preferValue(messageData.value, messageData.data);
     const alias = messageData.alias;
-    if (!sheet && messageData.sheetName) {
-        log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
-        sheet = messageData.sheetName;
-    }
-    if (!value && messageData.data) {
-        log.warn("Parameter 'data' is deprecated, please use 'value' instead!");
-        value = messageData.data;
-    }
+
     if (!sheet || !cell || typeof value === 'undefined') {
         log.error("Missing parameters for writeCell: 'sheet', 'cell', 'value'");
         return Promise.reject(new Error('Missing parameters for writeCell'));
     }
-    const cellPattern = new RegExp('^[A-Z]+[0-9]+$');
-    if (!cellPattern.test(cell)) {
+    if (!isValidCellPattern(cell)) {
         log.error(`Invalid cell pattern ${cell}. Expected: A1`);
         return Promise.reject(new Error(`Invalid cell pattern ${cell}. Expected: A1`));
     }
@@ -56,24 +49,20 @@ export function handleWriteCells(
         log.error("Missing parameter for writeCells: 'cells'");
         return Promise.reject(new Error('Missing parameters for writeCells'));
     }
-    const cellPattern = new RegExp('^[A-Z]+[0-9]+$');
     for (const cellObj of cells) {
-        if (!cellObj.sheet && cellObj.sheetName) {
-            log.warn("Parameter 'sheetName' in cells is deprecated, please use 'sheet' instead!");
-            cellObj.sheet = cellObj.sheetName;
-        }
-        if (!cellObj.value && typeof cellObj.data !== 'undefined') {
-            log.warn("Parameter 'data' in cells is deprecated, please use 'value' instead!");
-            cellObj.value = cellObj.data;
-        }
-        if (!cellObj.sheet || !cellObj.cell || typeof cellObj.value === 'undefined') {
+        const normalized = normalizeLegacyMessage(cellObj);
+        const sheet = preferValue(normalized.sheet, normalized.sheetName) as string | undefined;
+        const value = preferValue(normalized.value, normalized.data);
+        if (!sheet || !normalized.cell || typeof value === 'undefined') {
             log.error("Missing parameters for writeCells: 'sheet', 'cell', 'value' in cells");
             return Promise.reject(new Error('Missing parameters for writeCells'));
         }
-        if (!cellPattern.test(cellObj.cell)) {
-            log.error(`Invalid cell pattern ${cellObj.cell}. Expected: A1`);
-            return Promise.reject(new Error(`Invalid cell pattern ${cellObj.cell}. Expected: A1`));
+        if (!isValidCellPattern(normalized.cell)) {
+            log.error(`Invalid cell pattern ${normalized.cell}. Expected: A1`);
+            return Promise.reject(new Error(`Invalid cell pattern ${normalized.cell}. Expected: A1`));
         }
+        normalized.sheet = sheet;
+        normalized.value = value;
     }
     return spreadsheet.writeCells(cells, alias);
 }
@@ -91,20 +80,15 @@ export function handleReadCell(
     log: ioBroker.Logger,
     message: Record<string, any>,
 ): Promise<any> {
-    const messageData: Record<string, any> = message.message as Record<string, any>;
-    let sheet = messageData.sheet;
+    const messageData: Record<string, any> = normalizeLegacyMessage(message.message as Record<string, any>);
+    const sheet = preferValue(messageData.sheet, messageData.sheetName) as string | undefined;
     const cell = messageData.cell;
     const alias = messageData.alias;
-    if (!sheet && messageData.sheetName) {
-        log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
-        sheet = messageData.sheetName;
-    }
     if (!sheet || !cell) {
         log.error("Missing parameters for readCell: 'sheet', 'cell'");
         return Promise.reject(new Error('Missing parameters for readCell'));
     }
-    const cellPattern = new RegExp('^[A-Z]+[0-9]+$');
-    if (!cellPattern.test(cell)) {
+    if (!isValidCellPattern(cell)) {
         log.error(`Invalid cell pattern ${cell}. Expected: A1`);
         return Promise.reject(new Error(`Invalid cell pattern ${cell}. Expected: A1`));
     }
@@ -119,18 +103,10 @@ export function handleReadRange(
     log: ioBroker.Logger,
     message: Record<string, any>,
 ): Promise<any[][]> {
-    const messageData: Record<string, any> = message.message as Record<string, any>;
-    let sheet = messageData.sheet;
-    let range = messageData.range;
+    const messageData: Record<string, any> = normalizeLegacyMessage(message.message as Record<string, any>);
+    const sheet = preferValue(messageData.sheet, messageData.sheetName) as string | undefined;
+    const range = preferValue(messageData.range, messageData.cellRange) as string | undefined;
     const alias = messageData.alias;
-    if (!sheet && messageData.sheetName) {
-        log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
-        sheet = messageData.sheetName;
-    }
-    if (!range && messageData.cellRange) {
-        log.warn("Parameter 'cellRange' is deprecated, please use 'range' instead!");
-        range = messageData.cellRange;
-    }
     if (!sheet || !range) {
         log.error("Missing parameters for readRange: 'sheet', 'range'");
         return Promise.reject(new Error('Missing parameters for readRange'));
@@ -146,23 +122,11 @@ export function handleWriteRange(
     log: ioBroker.Logger,
     message: Record<string, any>,
 ): Promise<void> {
-    const messageData: Record<string, any> = message.message as Record<string, any>;
-    let sheet = messageData.sheet;
-    let range = messageData.range;
-    let values = messageData.values;
+    const messageData: Record<string, any> = normalizeLegacyMessage(message.message as Record<string, any>);
+    const sheet = preferValue(messageData.sheet, messageData.sheetName) as string | undefined;
+    const range = preferValue(messageData.range, messageData.cellRange) as string | undefined;
+    const values = preferValue(messageData.values, messageData.data);
     const alias = messageData.alias;
-    if (!sheet && messageData.sheetName) {
-        log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
-        sheet = messageData.sheetName;
-    }
-    if (!range && messageData.cellRange) {
-        log.warn("Parameter 'cellRange' is deprecated, please use 'range' instead!");
-        range = messageData.cellRange;
-    }
-    if (typeof values === 'undefined' && typeof messageData.data !== 'undefined') {
-        log.warn("Parameter 'data' is deprecated, please use 'values' instead!");
-        values = messageData.data;
-    }
     if (!sheet || !range || typeof values === 'undefined') {
         log.error("Missing parameters for writeRange: 'sheet', 'range', 'values'");
         return Promise.reject(new Error('Missing parameters for writeRange'));
@@ -178,18 +142,10 @@ export function handleClearRange(
     log: ioBroker.Logger,
     message: Record<string, any>,
 ): Promise<void> {
-    const messageData: Record<string, any> = message.message as Record<string, any>;
-    let sheet = messageData.sheet;
-    let range = messageData.range;
+    const messageData: Record<string, any> = normalizeLegacyMessage(message.message as Record<string, any>);
+    const sheet = preferValue(messageData.sheet, messageData.sheetName) as string | undefined;
+    const range = preferValue(messageData.range, messageData.cellRange) as string | undefined;
     const alias = messageData.alias;
-    if (!sheet && messageData.sheetName) {
-        log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
-        sheet = messageData.sheetName;
-    }
-    if (!range && messageData.cellRange) {
-        log.warn("Parameter 'cellRange' is deprecated, please use 'range' instead!");
-        range = messageData.cellRange;
-    }
     if (!sheet || !range) {
         log.error("Missing parameters for clearRange: 'sheet', 'range'");
         return Promise.reject(new Error('Missing parameters for clearRange'));
@@ -205,19 +161,11 @@ export function handleSetCellFormat(
     log: ioBroker.Logger,
     message: Record<string, any>,
 ): Promise<void> {
-    const messageData: Record<string, any> = message.message as Record<string, any>;
-    let sheet = messageData.sheet;
-    let range = messageData.range;
+    const messageData: Record<string, any> = normalizeLegacyMessage(message.message as Record<string, any>);
+    const sheet = preferValue(messageData.sheet, messageData.sheetName) as string | undefined;
+    const range = preferValue(messageData.range, messageData.cellRange) as string | undefined;
     const format = messageData.format;
     const alias = messageData.alias;
-    if (!sheet && messageData.sheetName) {
-        log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
-        sheet = messageData.sheetName;
-    }
-    if (!range && messageData.cellRange) {
-        log.warn("Parameter 'cellRange' is deprecated, please use 'range' instead!");
-        range = messageData.cellRange;
-    }
     if (!sheet || !range || !format) {
         log.error("Missing parameters for setCellFormat: 'sheet', 'range', 'format'");
         return Promise.reject(new Error('Missing parameters for setCellFormat'));

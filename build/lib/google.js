@@ -21,36 +21,19 @@ __export(google_exports, {
   SpreadsheetUtils: () => SpreadsheetUtils
 });
 module.exports = __toCommonJS(google_exports);
-var import_googleapis = require("googleapis");
+var import_googleClient = require("./googleClient");
+var import_errors = require("./errors");
+var import_validation = require("./validation");
 class SpreadsheetUtils {
-  /**
-   * Constructor
-   *
-   * @param config The adapter configuration
-   * @param log The logger
-   */
   constructor(config, log) {
     this.config = config;
     this.log = log;
+    this.client = new import_googleClient.GoogleClient(config, log);
   }
+  client;
   init() {
-    const auth = new import_googleapis.google.auth.GoogleAuth({
-      credentials: {
-        client_email: this.config.serviceAccountEmail,
-        private_key: this.formatPrivateKey(this.config.privateKey)
-      },
-      scopes: ["https://www.googleapis.com/auth/spreadsheets"]
-    });
-    return import_googleapis.google.sheets({ version: "v4", auth });
+    return this.client.getSheetsClient();
   }
-  /**
-   * Delete rows from a Google Spreadsheet
-   *
-   * @param sheetName Name of the sheet
-   * @param start First row to delete
-   * @param end Last row to delete
-   * @param sheetAlias Alias of the sheet to use (optional)
-   */
   deleteRows(sheetName, start, end, sheetAlias = null) {
     const sheets = this.init();
     const spreadsheetId = this.getSpreadsheetId(sheetAlias);
@@ -58,7 +41,7 @@ class SpreadsheetUtils {
       sheets.spreadsheets.get({ spreadsheetId }).then((spreadsheet) => {
         if (spreadsheet && spreadsheet.data.sheets) {
           const sheet = spreadsheet.data.sheets.find(
-            (sheet2) => sheet2.properties && sheet2.properties.title == sheetName
+            (item) => item.properties && item.properties.title === sheetName
           );
           if (sheet && sheet.properties) {
             const sheetId = sheet.properties.sheetId;
@@ -82,12 +65,7 @@ class SpreadsheetUtils {
               this.log.debug("Rows successfully deleted from google spreadsheet");
               resolve();
             }).catch((error) => {
-              this.log.error(`Error while deleting rows from Google Spreadsheet:${error}`);
-              reject(
-                new Error(
-                  `Error while deleting rows from Google Spreadsheet: ${error.message}`
-                )
-              );
+              reject((0, import_errors.wrapGoogleError)("Error while deleting rows from Google Spreadsheet", error));
             });
           } else {
             reject(new Error("Sheet not found"));
@@ -96,17 +74,10 @@ class SpreadsheetUtils {
           reject(new Error("No sheets found in spreadsheet"));
         }
       }).catch((error) => {
-        this.log.error(`Error while deleting rows from Google Spreadsheet:${error}`);
-        reject(new Error(`Error while deleting rows from Google Spreadsheet: ${error.message}`));
+        reject((0, import_errors.wrapGoogleError)("Error while deleting rows from Google Spreadsheet", error));
       });
     });
   }
-  /**
-   * Create a new sheet in the Google Sheets
-   *
-   * @param title The title of the new sheet
-   * @param sheetAlias Alias of the sheet to use (optional)
-   */
   createSheet(title, sheetAlias = null) {
     const sheets = this.init();
     const spreadsheetId = this.getSpreadsheetId(sheetAlias);
@@ -128,18 +99,10 @@ class SpreadsheetUtils {
         this.log.debug("Sheet created successfully");
         resolve();
       }).catch((error) => {
-        reject(new Error(`Error while creating sheet: ${error.message}`));
+        reject((0, import_errors.wrapGoogleError)("Error while creating sheet", error));
       });
     });
   }
-  /**
-   * Duplicate a sheet in the Google Spreadsheet
-   *
-   * @param source Name of the source sheet
-   * @param target Name of the target sheet
-   * @param index Position of the new sheet
-   * @param sheetAlias Alias of the sheet to use (optional)
-   */
   duplicateSheet(source, target, index, sheetAlias = null) {
     const sheets = this.init();
     const spreadsheetId = this.getSpreadsheetId(sheetAlias);
@@ -147,11 +110,11 @@ class SpreadsheetUtils {
       sheets.spreadsheets.get({ spreadsheetId }).then((spreadsheet) => {
         if (spreadsheet && spreadsheet.data.sheets) {
           const sheet = spreadsheet.data.sheets.find(
-            (sheet2) => sheet2.properties && sheet2.properties.title == source
+            (item) => item.properties && item.properties.title === source
           );
           if (sheet && sheet.properties) {
             let insertIndex = index;
-            if (insertIndex == -1 || insertIndex == void 0) {
+            if (insertIndex === -1 || insertIndex === void 0) {
               insertIndex = spreadsheet.data.sheets.length;
             }
             sheets.spreadsheets.batchUpdate({
@@ -171,38 +134,21 @@ class SpreadsheetUtils {
               this.log.debug("Data successfully sent to google spreadsheet");
               resolve();
             }).catch((error) => {
-              this.log.error(`Error while sending data to Google Spreadsheet:${error}`);
-              reject(new Error(`Error while duplicating sheet: ${error.message}`));
+              reject((0, import_errors.wrapGoogleError)("Error while duplicating sheet", error));
             });
           } else {
-            this.log.warn(`Cannot find sheet: ${source}`);
             reject(new Error(`Cannot find sheet: ${source}`));
           }
         } else {
           reject(new Error("No sheets found in spreadsheet"));
         }
       }).catch((error) => {
-        this.log.error(`Error while sending data to Google Spreadsheet:${error}`);
-        reject(new Error(`Error while duplicating sheet: ${error.message}`));
+        reject((0, import_errors.wrapGoogleError)("Error while duplicating sheet", error));
       });
     });
   }
-  /**
-   * Upload a file to the Google Drive
-   *
-   * @param target Name of the target file
-   * @param parentFolder Name of the parent folder
-   * @param filecontent Data of the file
-   */
   upload(target, parentFolder, filecontent) {
-    const auth = new import_googleapis.google.auth.GoogleAuth({
-      credentials: {
-        client_email: this.config.serviceAccountEmail,
-        private_key: this.formatPrivateKey(this.config.privateKey)
-      },
-      scopes: ["https://www.googleapis.com/auth/spreadsheets"]
-    });
-    const driveapi = import_googleapis.google.drive({ version: "v3", auth });
+    const driveapi = this.client.getDriveClient();
     return new Promise((resolve, reject) => {
       driveapi.files.create({
         requestBody: {
@@ -218,17 +164,10 @@ class SpreadsheetUtils {
         this.log.debug("Data successfully uploaded to google spreadsheet");
         resolve();
       }).catch((error) => {
-        this.log.error(`Error while uploading data to Google Spreadsheet:${error}`);
-        reject(new Error(`Error while uploading data to Google Spreadsheet: ${error.message}`));
+        reject((0, import_errors.wrapGoogleError)("Error while uploading data to Google Spreadsheet", error));
       });
     });
   }
-  /**
-   * Delete a sheet from the Google Spreadsheet
-   *
-   * @param title The title of the sheet to delete
-   * @param sheetAlias Alias of the sheet to use (optional)
-   */
   deleteSheet(title, sheetAlias = null) {
     const sheets = this.init();
     const spreadsheetId = this.getSpreadsheetId(sheetAlias);
@@ -236,7 +175,7 @@ class SpreadsheetUtils {
       sheets.spreadsheets.get({ spreadsheetId }).then((spreadsheet) => {
         if (spreadsheet && spreadsheet.data.sheets) {
           const sheet = spreadsheet.data.sheets.find(
-            (sheet2) => sheet2.properties && sheet2.properties.title == title
+            (item) => item.properties && item.properties.title === title
           );
           if (sheet && sheet.properties) {
             sheets.spreadsheets.batchUpdate({
@@ -254,8 +193,7 @@ class SpreadsheetUtils {
               this.log.debug("Data successfully sent to google spreadsheet");
               resolve();
             }).catch((error) => {
-              this.log.error(`Error while sending data to Google Spreadsheet:${error}`);
-              reject(new Error(`Error while deleting sheet: ${error.message}`));
+              reject((0, import_errors.wrapGoogleError)("Error while deleting sheet", error));
             });
           } else {
             reject(new Error("Sheet not found"));
@@ -264,17 +202,10 @@ class SpreadsheetUtils {
           reject(new Error("No sheets found in spreadsheet"));
         }
       }).catch((error) => {
-        this.log.error(`Error while sending data to Google Spreadsheet:${error}`);
-        reject(new Error(`Error while deleting sheet: ${error.message}`));
+        reject((0, import_errors.wrapGoogleError)("Error while deleting sheet", error));
       });
     });
   }
-  /**
-   * Delete multiple sheets from the Google Spreadsheet
-   *
-   * @param titles The titles of the sheets to delete
-   * @param sheetAlias Alias of the sheet to use (optional)
-   */
   deleteSheets(titles, sheetAlias = null) {
     const sheets = this.init();
     const spreadsheetId = this.getSpreadsheetId(sheetAlias);
@@ -284,7 +215,7 @@ class SpreadsheetUtils {
           const requests = [];
           for (const title of titles) {
             const sheet = spreadsheet.data.sheets.find(
-              (sheet2) => sheet2.properties && sheet2.properties.title == title
+              (item) => item.properties && item.properties.title === title
             );
             if (sheet && sheet.properties) {
               requests.push({
@@ -304,8 +235,7 @@ class SpreadsheetUtils {
               this.log.debug("Sheets successfully deleted from google spreadsheet");
               resolve();
             }).catch((error) => {
-              this.log.error(`Error while deleting sheets from Google Spreadsheet:${error}`);
-              reject(new Error(`Error while deleting sheets: ${error.message}`));
+              reject((0, import_errors.wrapGoogleError)("Error while deleting sheets", error));
             });
           } else {
             reject(new Error("No matching sheets found to delete"));
@@ -314,27 +244,18 @@ class SpreadsheetUtils {
           reject(new Error("No sheets found in spreadsheet"));
         }
       }).catch((error) => {
-        this.log.error(`Error while deleting sheets from Google Spreadsheet:${error}`);
-        reject(new Error(`Error while deleting sheets: ${error.message}`));
+        reject((0, import_errors.wrapGoogleError)("Error while deleting sheets", error));
       });
     });
   }
-  /**
-   * Send data to a Google Spreadsheet
-   *
-   * @param sheetName Name of the sheet
-   * @param data Data to send
-   * @param sheetAlias Alias of the sheet to use (optional)
-   */
   append(sheetName, data, sheetAlias = null) {
     const sheets = this.init();
+    const spreadsheetId = this.getSpreadsheetId(sheetAlias);
     return new Promise((resolve, reject) => {
       sheets.spreadsheets.values.append({
-        // The [A1 notation](/sheets/api/guides/concepts#cell) of a range to search for a logical table of data. Values are appended after the last row of the table.
         range: sheetName,
-        spreadsheetId: this.getSpreadsheetId(sheetAlias),
+        spreadsheetId,
         valueInputOption: "USER_ENTERED",
-        // Request body metadata
         requestBody: {
           values: this.prepareValues(data)
         }
@@ -342,48 +263,16 @@ class SpreadsheetUtils {
         this.log.debug("Data successfully sent to google spreadsheet");
         resolve();
       }).catch((error) => {
-        this.log.error(`Error while sending data to Google Spreadsheet:${error}`);
-        reject(new Error(`Error while appending data: ${error.message}`));
+        reject((0, import_errors.wrapGoogleError)("Error while appending data", error));
       });
     });
   }
-  /**
-   * Get the spreadsheetId based on the alias or default
-   *
-   * @param sheetAlias Alias of the sheet to use (optional)
-   * @returns The spreadsheetId
-   */
   getSpreadsheetId(sheetAlias) {
-    if (sheetAlias) {
-      const sheet = this.config.spreadsheets.find((s) => s.alias === sheetAlias);
-      if (sheet) {
-        return sheet.spreadsheetId;
-      }
-      this.log.warn(`No spreadsheet found for alias ${sheetAlias}, using default spreadsheetId`);
-    }
-    const defaultSheet = this.config.spreadsheets.find((s) => s.isDefault);
-    if (defaultSheet) {
-      return defaultSheet.spreadsheetId;
-    }
-    throw new Error("No default spreadsheetId found in configuration");
+    return this.client.getSpreadsheetId(sheetAlias);
   }
-  /**
-   * Write data to a cell in a Google Spreadsheet
-   *
-   * @param sheet Name of the sheet
-   * @param cell Cell to write to
-   * @param value Value to write
-   * @param sheetAlias Alias of the sheet to use (optional)
-   */
   writeCell(sheet, cell, value, sheetAlias = null) {
     return this.writeCells([{ sheet, cell, value }], sheetAlias);
   }
-  /**
-   * Write multiple cells in a Google Spreadsheet
-   *
-   * @param cells Array of objects: { sheet, cell, value }
-   * @param sheetAlias Alias of the sheet to use (optional)
-   */
   writeCells(cells, sheetAlias = null) {
     const sheets = this.init();
     const spreadsheetId = this.getSpreadsheetId(sheetAlias);
@@ -398,10 +287,7 @@ class SpreadsheetUtils {
     const data = [];
     for (const sheetName in grouped) {
       for (const entry of grouped[sheetName]) {
-        let cell = entry.cell;
-        if (cell.startsWith("'") && cell.endsWith("'")) {
-          cell = cell.substring(1, cell.length - 1);
-        }
+        const cell = (0, import_validation.normalizeCellReference)(entry.cell);
         data.push({
           range: `${sheetName}!${cell}`,
           values: this.prepareValues(entry.data)
@@ -420,28 +306,17 @@ class SpreadsheetUtils {
         this.log.debug("Cells successfully written to google spreadsheet");
         resolve();
       }).catch((error) => {
-        this.log.error(`Error while writing cells to Google Spreadsheet:${error}`);
-        reject(new Error(`Error while writing cells: ${error.message}`));
+        reject((0, import_errors.wrapGoogleError)("Error while writing cells", error));
       });
     });
   }
-  /**
-   * Read data from a cell in a Google Spreadsheet
-   *
-   * @param sheetName Name of the sheet
-   * @param cell Cell to read from
-   * @param sheetAlias Alias of the sheet to use (optional)
-   * @returns The data from the cell
-   */
   async readCell(sheetName, cell, sheetAlias = null) {
     const sheets = this.init();
     const spreadsheetId = this.getSpreadsheetId(sheetAlias);
     return new Promise((resolve, reject) => {
-      if (cell.startsWith("'") && cell.endsWith("'")) {
-        cell = cell.substring(1, cell.length - 1);
-      }
+      const normalizedCell = (0, import_validation.normalizeCellReference)(cell);
       sheets.spreadsheets.values.get({
-        range: `${sheetName}!${cell}`,
+        range: `${sheetName}!${normalizedCell}`,
         spreadsheetId
       }).then((response) => {
         this.log.debug("Data successfully retrieved from google spreadsheet");
@@ -451,19 +326,10 @@ class SpreadsheetUtils {
           reject(new Error("No data found"));
         }
       }).catch((error) => {
-        this.log.error(`Error while retrieving data from Google Spreadsheet:${error}`);
-        reject(new Error(`Error while retrieving data from Google Spreadsheet: ${error.message}`));
+        reject((0, import_errors.wrapGoogleError)("Error while retrieving data from Google Spreadsheet", error));
       });
     });
   }
-  /**
-   * Read a range of cells from a Google Spreadsheet.
-   *
-   * @param sheetName Name of the sheet
-   * @param range A1 range, e.g. A1:B10
-   * @param sheetAlias Alias of the sheet to use (optional)
-   * @returns The values of the requested range as a two-dimensional array
-   */
   async readRange(sheetName, range, sheetAlias = null) {
     const sheets = this.init();
     const spreadsheetId = this.getSpreadsheetId(sheetAlias);
@@ -477,19 +343,10 @@ class SpreadsheetUtils {
         this.log.debug("Range successfully retrieved from google spreadsheet");
         resolve((_a = response.data.values) != null ? _a : []);
       }).catch((error) => {
-        this.log.error(`Error while retrieving range from Google Spreadsheet:${error}`);
-        reject(new Error(`Error while retrieving range from Google Spreadsheet: ${error.message}`));
+        reject((0, import_errors.wrapGoogleError)("Error while retrieving range from Google Spreadsheet", error));
       });
     });
   }
-  /**
-   * Write a rectangular range to a Google Spreadsheet.
-   *
-   * @param sheetName Name of the sheet
-   * @param range A1 range, e.g. A1:B10
-   * @param values Values to write, either a 2D array or a simple array
-   * @param sheetAlias Alias of the sheet to use (optional)
-   */
   async writeRange(sheetName, range, values, sheetAlias = null) {
     const sheets = this.init();
     const spreadsheetId = this.getSpreadsheetId(sheetAlias);
@@ -506,18 +363,10 @@ class SpreadsheetUtils {
         this.log.debug("Range successfully written to google spreadsheet");
         resolve();
       }).catch((error) => {
-        this.log.error(`Error while writing range to Google Spreadsheet:${error}`);
-        reject(new Error(`Error while writing range: ${error.message}`));
+        reject((0, import_errors.wrapGoogleError)("Error while writing range", error));
       });
     });
   }
-  /**
-   * Clear a range of cells in a Google Spreadsheet.
-   *
-   * @param sheetName Name of the sheet
-   * @param range A1 range, e.g. A1:B10
-   * @param sheetAlias Alias of the sheet to use (optional)
-   */
   clearRange(sheetName, range, sheetAlias = null) {
     const sheets = this.init();
     const spreadsheetId = this.getSpreadsheetId(sheetAlias);
@@ -530,19 +379,10 @@ class SpreadsheetUtils {
         this.log.debug("Range successfully cleared from google spreadsheet");
         resolve();
       }).catch((error) => {
-        this.log.error(`Error while clearing range from Google Spreadsheet:${error}`);
-        reject(new Error(`Error while clearing range: ${error.message}`));
+        reject((0, import_errors.wrapGoogleError)("Error while clearing range from Google Spreadsheet", error));
       });
     });
   }
-  /**
-   * Set the formatting for a range of cells.
-   *
-   * @param sheetName Name of the sheet
-   * @param range A1 range, e.g. A1:B10
-   * @param format Format settings such as backgroundColor and textFormat
-   * @param sheetAlias Alias of the sheet to use (optional)
-   */
   async setCellFormat(sheetName, range, format, sheetAlias = null) {
     const sheets = this.init();
     const spreadsheetId = this.getSpreadsheetId(sheetAlias);
@@ -592,18 +432,10 @@ class SpreadsheetUtils {
         this.log.debug("Cell format successfully updated in google spreadsheet");
         resolve();
       }).catch((error) => {
-        this.log.error(`Error while setting cell format in Google Spreadsheet:${error}`);
-        reject(new Error(`Error while setting cell format: ${error.message}`));
+        reject((0, import_errors.wrapGoogleError)("Error while setting cell format in Google Spreadsheet", error));
       });
     });
   }
-  /**
-   * Create a chart in a Google Spreadsheet.
-   *
-   * @param sheetName Name of the sheet
-   * @param chartConfig Chart configuration such as title, range, chartType and position
-   * @param sheetAlias Alias of the sheet to use (optional)
-   */
   async createChart(sheetName, chartConfig, sheetAlias = null) {
     const sheets = this.init();
     const spreadsheetId = this.getSpreadsheetId(sheetAlias);
@@ -619,19 +451,10 @@ class SpreadsheetUtils {
         this.log.debug("Chart successfully created in google spreadsheet");
         resolve();
       }).catch((error) => {
-        this.log.error(`Error while creating chart in Google Spreadsheet:${error}`);
-        reject(new Error(`Error while creating chart: ${error.message}`));
+        reject((0, import_errors.wrapGoogleError)("Error while creating chart in Google Spreadsheet", error));
       });
     });
   }
-  /**
-   * Update an existing chart in a Google Spreadsheet.
-   *
-   * @param sheetName Name of the sheet 
-   * @param chartId ID of the chart to update
-   * @param chartConfig Chart configuration such as title, range, chartType and position
-   * @param sheetAlias Alias of the sheet to use (optional)
-   */
   async updateChart(sheetName, chartId, chartConfig, sheetAlias = null) {
     const sheets = this.init();
     const spreadsheetId = this.getSpreadsheetId(sheetAlias);
@@ -647,18 +470,10 @@ class SpreadsheetUtils {
         this.log.debug("Chart successfully updated in google spreadsheet");
         resolve();
       }).catch((error) => {
-        this.log.error(`Error while updating chart in Google Spreadsheet:${error}`);
-        reject(new Error(`Error while updating chart: ${error.message}`));
+        reject((0, import_errors.wrapGoogleError)("Error while updating chart in Google Spreadsheet", error));
       });
     });
   }
-  /**
-   * Get the number of the last non-empty row in a Google Spreadsheet sheet.
-   *
-   * @param sheetName Name of the sheet
-   * @param sheetAlias Alias of the sheet to use (optional)
-   * @returns The number of the last non-empty row, or 0 for an empty sheet
-   */
   async getLastRow(sheetName, sheetAlias = null) {
     const sheets = this.init();
     const spreadsheetId = this.getSpreadsheetId(sheetAlias);
@@ -671,8 +486,7 @@ class SpreadsheetUtils {
         this.log.debug("Last row successfully retrieved from google spreadsheet");
         resolve((_b = (_a = response.data.values) == null ? void 0 : _a.length) != null ? _b : 0);
       }).catch((error) => {
-        this.log.error(`Error while retrieving the last row from Google Spreadsheet:${error}`);
-        reject(new Error(`Error while retrieving the last row from Google Spreadsheet: ${error.message}`));
+        reject((0, import_errors.wrapGoogleError)("Error while retrieving the last row from Google Spreadsheet", error));
       });
     });
   }

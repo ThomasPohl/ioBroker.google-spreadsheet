@@ -27,26 +27,18 @@ __export(cellHandlers_exports, {
   handleWriteRange: () => handleWriteRange
 });
 module.exports = __toCommonJS(cellHandlers_exports);
+var import_validation = require("../validation");
 function handleWriteCell(spreadsheet, log, message) {
-  const messageData = message.message;
-  let sheet = messageData.sheet;
+  const messageData = (0, import_validation.normalizeLegacyMessage)(message.message);
+  const sheet = (0, import_validation.preferValue)(messageData.sheet, messageData.sheetName);
   const cell = messageData.cell;
-  let value = messageData.value;
+  const value = (0, import_validation.preferValue)(messageData.value, messageData.data);
   const alias = messageData.alias;
-  if (!sheet && messageData.sheetName) {
-    log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
-    sheet = messageData.sheetName;
-  }
-  if (!value && messageData.data) {
-    log.warn("Parameter 'data' is deprecated, please use 'value' instead!");
-    value = messageData.data;
-  }
   if (!sheet || !cell || typeof value === "undefined") {
     log.error("Missing parameters for writeCell: 'sheet', 'cell', 'value'");
     return Promise.reject(new Error("Missing parameters for writeCell"));
   }
-  const cellPattern = new RegExp("^[A-Z]+[0-9]+$");
-  if (!cellPattern.test(cell)) {
+  if (!(0, import_validation.isValidCellPattern)(cell)) {
     log.error(`Invalid cell pattern ${cell}. Expected: A1`);
     return Promise.reject(new Error(`Invalid cell pattern ${cell}. Expected: A1`));
   }
@@ -60,60 +52,43 @@ function handleWriteCells(spreadsheet, log, message) {
     log.error("Missing parameter for writeCells: 'cells'");
     return Promise.reject(new Error("Missing parameters for writeCells"));
   }
-  const cellPattern = new RegExp("^[A-Z]+[0-9]+$");
   for (const cellObj of cells) {
-    if (!cellObj.sheet && cellObj.sheetName) {
-      log.warn("Parameter 'sheetName' in cells is deprecated, please use 'sheet' instead!");
-      cellObj.sheet = cellObj.sheetName;
-    }
-    if (!cellObj.value && typeof cellObj.data !== "undefined") {
-      log.warn("Parameter 'data' in cells is deprecated, please use 'value' instead!");
-      cellObj.value = cellObj.data;
-    }
-    if (!cellObj.sheet || !cellObj.cell || typeof cellObj.value === "undefined") {
+    const normalized = (0, import_validation.normalizeLegacyMessage)(cellObj);
+    const sheet = (0, import_validation.preferValue)(normalized.sheet, normalized.sheetName);
+    const value = (0, import_validation.preferValue)(normalized.value, normalized.data);
+    if (!sheet || !normalized.cell || typeof value === "undefined") {
       log.error("Missing parameters for writeCells: 'sheet', 'cell', 'value' in cells");
       return Promise.reject(new Error("Missing parameters for writeCells"));
     }
-    if (!cellPattern.test(cellObj.cell)) {
-      log.error(`Invalid cell pattern ${cellObj.cell}. Expected: A1`);
-      return Promise.reject(new Error(`Invalid cell pattern ${cellObj.cell}. Expected: A1`));
+    if (!(0, import_validation.isValidCellPattern)(normalized.cell)) {
+      log.error(`Invalid cell pattern ${normalized.cell}. Expected: A1`);
+      return Promise.reject(new Error(`Invalid cell pattern ${normalized.cell}. Expected: A1`));
     }
+    normalized.sheet = sheet;
+    normalized.value = value;
   }
   return spreadsheet.writeCells(cells, alias);
 }
 function handleReadCell(spreadsheet, log, message) {
-  const messageData = message.message;
-  let sheet = messageData.sheet;
+  const messageData = (0, import_validation.normalizeLegacyMessage)(message.message);
+  const sheet = (0, import_validation.preferValue)(messageData.sheet, messageData.sheetName);
   const cell = messageData.cell;
   const alias = messageData.alias;
-  if (!sheet && messageData.sheetName) {
-    log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
-    sheet = messageData.sheetName;
-  }
   if (!sheet || !cell) {
     log.error("Missing parameters for readCell: 'sheet', 'cell'");
     return Promise.reject(new Error("Missing parameters for readCell"));
   }
-  const cellPattern = new RegExp("^[A-Z]+[0-9]+$");
-  if (!cellPattern.test(cell)) {
+  if (!(0, import_validation.isValidCellPattern)(cell)) {
     log.error(`Invalid cell pattern ${cell}. Expected: A1`);
     return Promise.reject(new Error(`Invalid cell pattern ${cell}. Expected: A1`));
   }
   return spreadsheet.readCell(sheet, cell, alias);
 }
 function handleReadRange(spreadsheet, log, message) {
-  const messageData = message.message;
-  let sheet = messageData.sheet;
-  let range = messageData.range;
+  const messageData = (0, import_validation.normalizeLegacyMessage)(message.message);
+  const sheet = (0, import_validation.preferValue)(messageData.sheet, messageData.sheetName);
+  const range = (0, import_validation.preferValue)(messageData.range, messageData.cellRange);
   const alias = messageData.alias;
-  if (!sheet && messageData.sheetName) {
-    log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
-    sheet = messageData.sheetName;
-  }
-  if (!range && messageData.cellRange) {
-    log.warn("Parameter 'cellRange' is deprecated, please use 'range' instead!");
-    range = messageData.cellRange;
-  }
   if (!sheet || !range) {
     log.error("Missing parameters for readRange: 'sheet', 'range'");
     return Promise.reject(new Error("Missing parameters for readRange"));
@@ -121,23 +96,11 @@ function handleReadRange(spreadsheet, log, message) {
   return spreadsheet.readRange(sheet, range, alias);
 }
 function handleWriteRange(spreadsheet, log, message) {
-  const messageData = message.message;
-  let sheet = messageData.sheet;
-  let range = messageData.range;
-  let values = messageData.values;
+  const messageData = (0, import_validation.normalizeLegacyMessage)(message.message);
+  const sheet = (0, import_validation.preferValue)(messageData.sheet, messageData.sheetName);
+  const range = (0, import_validation.preferValue)(messageData.range, messageData.cellRange);
+  const values = (0, import_validation.preferValue)(messageData.values, messageData.data);
   const alias = messageData.alias;
-  if (!sheet && messageData.sheetName) {
-    log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
-    sheet = messageData.sheetName;
-  }
-  if (!range && messageData.cellRange) {
-    log.warn("Parameter 'cellRange' is deprecated, please use 'range' instead!");
-    range = messageData.cellRange;
-  }
-  if (typeof values === "undefined" && typeof messageData.data !== "undefined") {
-    log.warn("Parameter 'data' is deprecated, please use 'values' instead!");
-    values = messageData.data;
-  }
   if (!sheet || !range || typeof values === "undefined") {
     log.error("Missing parameters for writeRange: 'sheet', 'range', 'values'");
     return Promise.reject(new Error("Missing parameters for writeRange"));
@@ -145,18 +108,10 @@ function handleWriteRange(spreadsheet, log, message) {
   return spreadsheet.writeRange(sheet, range, values, alias);
 }
 function handleClearRange(spreadsheet, log, message) {
-  const messageData = message.message;
-  let sheet = messageData.sheet;
-  let range = messageData.range;
+  const messageData = (0, import_validation.normalizeLegacyMessage)(message.message);
+  const sheet = (0, import_validation.preferValue)(messageData.sheet, messageData.sheetName);
+  const range = (0, import_validation.preferValue)(messageData.range, messageData.cellRange);
   const alias = messageData.alias;
-  if (!sheet && messageData.sheetName) {
-    log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
-    sheet = messageData.sheetName;
-  }
-  if (!range && messageData.cellRange) {
-    log.warn("Parameter 'cellRange' is deprecated, please use 'range' instead!");
-    range = messageData.cellRange;
-  }
   if (!sheet || !range) {
     log.error("Missing parameters for clearRange: 'sheet', 'range'");
     return Promise.reject(new Error("Missing parameters for clearRange"));
@@ -164,19 +119,11 @@ function handleClearRange(spreadsheet, log, message) {
   return spreadsheet.clearRange(sheet, range, alias);
 }
 function handleSetCellFormat(spreadsheet, log, message) {
-  const messageData = message.message;
-  let sheet = messageData.sheet;
-  let range = messageData.range;
+  const messageData = (0, import_validation.normalizeLegacyMessage)(message.message);
+  const sheet = (0, import_validation.preferValue)(messageData.sheet, messageData.sheetName);
+  const range = (0, import_validation.preferValue)(messageData.range, messageData.cellRange);
   const format = messageData.format;
   const alias = messageData.alias;
-  if (!sheet && messageData.sheetName) {
-    log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
-    sheet = messageData.sheetName;
-  }
-  if (!range && messageData.cellRange) {
-    log.warn("Parameter 'cellRange' is deprecated, please use 'range' instead!");
-    range = messageData.cellRange;
-  }
   if (!sheet || !range || !format) {
     log.error("Missing parameters for setCellFormat: 'sheet', 'range', 'format'");
     return Promise.reject(new Error("Missing parameters for setCellFormat"));
