@@ -221,13 +221,24 @@ describe('SpreadsheetUtils', () => {
             });
 
             it('should write a range', async () => {
-                await utils.writeRange('Sheet1', 'A1:B2', [['a', 'b'], ['c', 'd']], 'main');
+                await utils.writeRange(
+                    'Sheet1',
+                    'A1:B2',
+                    [
+                        ['a', 'b'],
+                        ['c', 'd'],
+                    ],
+                    'main',
+                );
 
                 expect(sheetsStub.spreadsheets.values.update.calledOnce).to.be.true;
                 const args = sheetsStub.spreadsheets.values.update.firstCall.args[0];
                 expect(args.range).to.equal('Sheet1!A1:B2');
                 expect(args.valueInputOption).to.equal('USER_ENTERED');
-                expect(args.requestBody.values).to.deep.equal([['a', 'b'], ['c', 'd']]);
+                expect(args.requestBody.values).to.deep.equal([
+                    ['a', 'b'],
+                    ['c', 'd'],
+                ]);
             });
 
             it('should clear a range', async () => {

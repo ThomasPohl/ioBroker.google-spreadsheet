@@ -108,7 +108,8 @@ class GoogleSpreadsheet extends utils.Adapter {
             if (obj.command && obj.command in COMMAND_REGISTRY) {
                 const command = obj.command as keyof typeof COMMAND_REGISTRY;
                 this.log.debug(COMMAND_REGISTRY[command].logMessage);
-                COMMAND_REGISTRY[command].handler(this.spreadsheet, this.log, obj)
+                COMMAND_REGISTRY[command]
+                    .handler(this.spreadsheet, this.log, obj)
                     .then((result: any) => {
                         if (obj.callback) {
                             this.sendTo(obj.from, obj.command, result ? result : 'Message received', obj.callback);

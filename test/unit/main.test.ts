@@ -155,7 +155,15 @@ describe('GoogleSpreadsheet', () => {
 
             instance.onMessage({
                 command: 'writeRange',
-                message: { sheet: 'Sheet1', range: 'A1:B2', values: [['a', 'b'], ['c', 'd']], alias: 'main' },
+                message: {
+                    sheet: 'Sheet1',
+                    range: 'A1:B2',
+                    values: [
+                        ['a', 'b'],
+                        ['c', 'd'],
+                    ],
+                    alias: 'main',
+                },
                 from: 'tester',
                 callback,
             });
@@ -183,7 +191,14 @@ describe('GoogleSpreadsheet', () => {
 
             await new Promise(resolve => setImmediate(resolve));
             expect(instance.spreadsheet.setCellFormat.calledOnce).to.be.true;
-            expect(instance.sendTo.calledWith('tester', 'setCellFormat', { error: 'No valid format properties provided' }, callback)).to.be.true;
+            expect(
+                instance.sendTo.calledWith(
+                    'tester',
+                    'setCellFormat',
+                    { error: 'No valid format properties provided' },
+                    callback,
+                ),
+            ).to.be.true;
         });
 
         it('should dispatch readRange with selected alias and return data', async () => {

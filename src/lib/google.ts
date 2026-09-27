@@ -605,7 +605,13 @@ export class SpreadsheetUtils {
     private normalizeColor(color: any): Record<string, number> {
         if (typeof color === 'string' && color.startsWith('#')) {
             const hex = color.replace('#', '');
-            const normalized = hex.length === 3 ? hex.split('').map(ch => ch + ch).join('') : hex;
+            const normalized =
+                hex.length === 3
+                    ? hex
+                          .split('')
+                          .map(ch => ch + ch)
+                          .join('')
+                    : hex;
             const r = Number.parseInt(normalized.substring(0, 2), 16) / 255;
             const g = Number.parseInt(normalized.substring(2, 4), 16) / 255;
             const b = Number.parseInt(normalized.substring(4, 6), 16) / 255;
@@ -622,7 +628,12 @@ export class SpreadsheetUtils {
         return { red: 0, green: 0, blue: 0, alpha: 1 };
     }
 
-    private parseA1Range(range: string): { startRowIndex: number; endRowIndex: number; startColumnIndex: number; endColumnIndex: number } {
+    private parseA1Range(range: string): {
+        startRowIndex: number;
+        endRowIndex: number;
+        startColumnIndex: number;
+        endColumnIndex: number;
+    } {
         const normalized = range.trim().replace(/^'([^']+)'!/, '');
         const match = normalized.match(/^([A-Z]+)([0-9]+)(?::([A-Z]+)([0-9]+))?$/i);
         if (!match) {
@@ -651,10 +662,13 @@ export class SpreadsheetUtils {
     private async getSheetIdByName(sheetName: string, spreadsheetId: string): Promise<number> {
         const sheets = this.init();
         const spreadsheet = await sheets.spreadsheets.get({ spreadsheetId });
-        const sheet = spreadsheet.data.sheets?.find(
-            item => item.properties && item.properties.title === sheetName,
-        );
-        if (!sheet || !sheet.properties || sheet.properties.sheetId === undefined || sheet.properties.sheetId === null) {
+        const sheet = spreadsheet.data.sheets?.find(item => item.properties && item.properties.title === sheetName);
+        if (
+            !sheet ||
+            !sheet.properties ||
+            sheet.properties.sheetId === undefined ||
+            sheet.properties.sheetId === null
+        ) {
             throw new Error(`Sheet not found: ${sheetName}`);
         }
         return Number(sheet.properties.sheetId);

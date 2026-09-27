@@ -21,7 +21,9 @@ Blockly.Blocks['google-spreadsheet.clearRange'] = {
             .appendField(Blockly.Translate('google-spreadsheet_clearRange_clear'))
             .appendField(new Blockly.FieldDropdown(instances), 'INSTANCE');
 
-        this.appendValueInput('SHEET_NAME').appendField(Blockly.Translate('google-spreadsheet_clearRange_on-sheetName'));
+        this.appendValueInput('SHEET_NAME').appendField(
+            Blockly.Translate('google-spreadsheet_clearRange_on-sheetName'),
+        );
         this.appendValueInput('RANGE').appendField(Blockly.Translate('google-spreadsheet_clearRange_in-range'));
 
         this.setInputsInline(false);

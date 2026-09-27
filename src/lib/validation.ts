@@ -13,7 +13,9 @@ export function isValidCellPattern(cell: string): boolean {
     return /^[A-Z]+[0-9]+$/i.test(cell);
 }
 
-export function normalizeLegacyMessage<T extends Record<string, any>>(messageData: T): T & {
+export function normalizeLegacyMessage<T extends Record<string, any>>(
+    messageData: T,
+): T & {
     sheet?: string;
     range?: string;
     value?: any;

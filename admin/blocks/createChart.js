@@ -25,7 +25,9 @@ Blockly.Blocks['google-spreadsheet.createChart'] = {
             .appendField(Blockly.Translate('google-spreadsheet_createChart_create'))
             .appendField(new Blockly.FieldDropdown(instances), 'INSTANCE');
 
-        this.appendValueInput('SHEET_NAME').appendField(Blockly.Translate('google-spreadsheet_createChart_on-sheetName'));
+        this.appendValueInput('SHEET_NAME').appendField(
+            Blockly.Translate('google-spreadsheet_createChart_on-sheetName'),
+        );
         this.appendValueInput('TITLE').appendField(Blockly.Translate('google-spreadsheet_createChart_title'));
         this.appendValueInput('RANGE').appendField(Blockly.Translate('google-spreadsheet_createChart_range'));
         this.appendValueInput('TYPE').appendField(Blockly.Translate('google-spreadsheet_createChart_type'));

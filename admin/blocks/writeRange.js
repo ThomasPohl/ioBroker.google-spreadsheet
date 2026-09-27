@@ -29,7 +29,9 @@ Blockly.Blocks['google-spreadsheet.writeRange'] = {
             .appendField(Blockly.Translate('google-spreadsheet_writeRange_write-to'))
             .appendField(new Blockly.FieldDropdown(instances), 'INSTANCE');
 
-        this.appendValueInput('SHEET_NAME').appendField(Blockly.Translate('google-spreadsheet_writeRange_on-sheetName'));
+        this.appendValueInput('SHEET_NAME').appendField(
+            Blockly.Translate('google-spreadsheet_writeRange_on-sheetName'),
+        );
         this.appendValueInput('RANGE').appendField(Blockly.Translate('google-spreadsheet_writeRange_in-range'));
         this.appendValueInput('VALUES').appendField(Blockly.Translate('google-spreadsheet_writeRange_values'));
 

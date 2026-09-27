@@ -64,9 +64,27 @@ describe('cellHandlers', () => {
     });
 
     it('handleWriteRange calls spreadsheet.writeRange', async () => {
-        obj.message = { sheet: 'Sheet1', range: 'A1:B2', values: [['a', 'b'], ['c', 'd']], alias: 'main' };
+        obj.message = {
+            sheet: 'Sheet1',
+            range: 'A1:B2',
+            values: [
+                ['a', 'b'],
+                ['c', 'd'],
+            ],
+            alias: 'main',
+        };
         const result = await handleWriteRange(spreadsheet, log, obj);
-        expect(spreadsheet.writeRange.calledWith('Sheet1', 'A1:B2', [['a', 'b'], ['c', 'd']], 'main')).to.be.true;
+        expect(
+            spreadsheet.writeRange.calledWith(
+                'Sheet1',
+                'A1:B2',
+                [
+                    ['a', 'b'],
+                    ['c', 'd'],
+                ],
+                'main',
+            ),
+        ).to.be.true;
         expect(result).to.equal('writeRangeResult');
     });
 

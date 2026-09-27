@@ -27,7 +27,9 @@ Blockly.Blocks['google-spreadsheet.updateChart'] = {
             .appendField(Blockly.Translate('google-spreadsheet_updateChart_update'))
             .appendField(new Blockly.FieldDropdown(instances), 'INSTANCE');
 
-        this.appendValueInput('SHEET_NAME').appendField(Blockly.Translate('google-spreadsheet_updateChart_on-sheetName'));
+        this.appendValueInput('SHEET_NAME').appendField(
+            Blockly.Translate('google-spreadsheet_updateChart_on-sheetName'),
+        );
         this.appendValueInput('CHART_ID').appendField(Blockly.Translate('google-spreadsheet_updateChart_id'));
         this.appendValueInput('TITLE').appendField(Blockly.Translate('google-spreadsheet_updateChart_title'));
         this.appendValueInput('RANGE').appendField(Blockly.Translate('google-spreadsheet_updateChart_range'));

@@ -3,7 +3,10 @@
 /*global getInstances */
 /*global getInstanceAndAlias */
 
-Blockly.Words['google-spreadsheet_setCellFormat_format-range'] = { en: 'set format for range in', de: 'Setze Format für Bereich in' };
+Blockly.Words['google-spreadsheet_setCellFormat_format-range'] = {
+    en: 'set format for range in',
+    de: 'Setze Format für Bereich in',
+};
 Blockly.Words['google-spreadsheet_setCellFormat_on-sheetName'] = { en: 'sheet', de: 'Tabellenblatt' };
 Blockly.Words['google-spreadsheet_setCellFormat_in-range'] = { en: 'range', de: 'Bereich' };
 Blockly.Words['google-spreadsheet_setCellFormat_format'] = { en: 'format', de: 'Format' };
@@ -23,7 +26,9 @@ Blockly.Blocks['google-spreadsheet.setCellFormat'] = {
             .appendField(Blockly.Translate('google-spreadsheet_setCellFormat_format-range'))
             .appendField(new Blockly.FieldDropdown(instances), 'INSTANCE');
 
-        this.appendValueInput('SHEET_NAME').appendField(Blockly.Translate('google-spreadsheet_setCellFormat_on-sheetName'));
+        this.appendValueInput('SHEET_NAME').appendField(
+            Blockly.Translate('google-spreadsheet_setCellFormat_on-sheetName'),
+        );
         this.appendValueInput('RANGE').appendField(Blockly.Translate('google-spreadsheet_setCellFormat_in-range'));
         this.appendValueInput('FORMAT').appendField(Blockly.Translate('google-spreadsheet_setCellFormat_format'));
 
