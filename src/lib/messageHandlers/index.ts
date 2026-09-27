@@ -6,6 +6,16 @@ export {
     handleDeleteSheets,
     handleDuplicateSheet,
     handleGetLastRow,
+    handleCreateChart,
+    handleUpdateChart,
 } from './sheetHandlers';
-export { handleWriteCell, handleWriteCells, handleReadCell } from './cellHandlers';
+export {
+    handleWriteCell,
+    handleWriteCells,
+    handleReadCell,
+    handleReadRange,
+    handleWriteRange,
+    handleClearRange,
+    handleSetCellFormat,
+} from './cellHandlers';
 export { handleUpload } from './uploadHandlers';

@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/lib/errors.ts"],
+  "sourcesContent": ["export function wrapGoogleError(operation: string, error: any): Error {\n    const message =\n        error && typeof error === 'object' && 'message' in error\n            ? String(error.message)\n            : String(error ?? 'Unknown error');\n    return new Error(`${operation}: ${message}`);\n}\n\nexport function ensureRequired<T>(value: T | undefined | null, label: string): T {\n    if (value === undefined || value === null || value === '') {\n        throw new Error(`Missing parameters for ${label}`);\n    }\n    return value;\n}\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAO,SAAS,gBAAgB,WAAmB,OAAmB;AAClE,QAAM,UACF,SAAS,OAAO,UAAU,YAAY,aAAa,QAC7C,OAAO,MAAM,OAAO,IACpB,OAAO,wBAAS,eAAe;AACzC,SAAO,IAAI,MAAM,GAAG,SAAS,KAAK,OAAO,EAAE;AAC/C;AAEO,SAAS,eAAkB,OAA6B,OAAkB;AAC7E,MAAI,UAAU,UAAa,UAAU,QAAQ,UAAU,IAAI;AACvD,UAAM,IAAI,MAAM,0BAA0B,KAAK,EAAE;AAAA,EACrD;AACA,SAAO;AACX;",
+  "names": []
+}

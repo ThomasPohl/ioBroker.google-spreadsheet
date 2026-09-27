@@ -1,0 +1,41 @@
+import {
+    handleAppend,
+    handleClearRange,
+    handleCreateChart,
+    handleCreateSheet,
+    handleDeleteRows,
+    handleDeleteSheet,
+    handleDeleteSheets,
+    handleDuplicateSheet,
+    handleGetLastRow,
+    handleReadCell,
+    handleReadRange,
+    handleSetCellFormat,
+    handleUpdateChart,
+    handleUpload,
+    handleWriteCell,
+    handleWriteCells,
+    handleWriteRange,
+} from './messageHandlers';
+
+export const COMMAND_REGISTRY = {
+    append: { handler: handleAppend, logMessage: 'append to spreadsheet' },
+    deleteRows: { handler: handleDeleteRows, logMessage: 'delete rows from spreadsheet' },
+    createSheet: { handler: handleCreateSheet, logMessage: 'create sheet' },
+    deleteSheet: { handler: handleDeleteSheet, logMessage: 'delete sheet' },
+    deleteSheets: { handler: handleDeleteSheets, logMessage: 'delete sheets' },
+    duplicateSheet: { handler: handleDuplicateSheet, logMessage: 'duplicate sheet' },
+    getLastRow: { handler: handleGetLastRow, logMessage: 'get last row' },
+    createChart: { handler: handleCreateChart, logMessage: 'create chart' },
+    updateChart: { handler: handleUpdateChart, logMessage: 'update chart' },
+    upload: { handler: handleUpload, logMessage: 'upload file' },
+    writeCell: { handler: handleWriteCell, logMessage: 'write cell' },
+    writeCells: { handler: handleWriteCells, logMessage: 'write cells' },
+    readCell: { handler: handleReadCell, logMessage: 'read cell' },
+    readRange: { handler: handleReadRange, logMessage: 'read range' },
+    writeRange: { handler: handleWriteRange, logMessage: 'write range' },
+    clearRange: { handler: handleClearRange, logMessage: 'clear range' },
+    setCellFormat: { handler: handleSetCellFormat, logMessage: 'set cell format' },
+} as const;
+
+export type CommandName = keyof typeof COMMAND_REGISTRY;

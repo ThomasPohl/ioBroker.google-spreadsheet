@@ -87,7 +87,8 @@ function getInstanceAndAlias(block) {
 }
 
 function makeAsync(statement) {
-    return `await new Promise((resolve)=>{${statement} ()=>{resolve()}); });\n`;
+    const sendToCall = statement.slice(0, -1);
+    return `await new Promise((resolve)=>{${sendToCall}, ()=>{resolve();}, ()=>{resolve();}); });\n`;
 }
 
 function createSendToCall(instance, command, params, waitForCompletion = false) {
@@ -129,5 +130,11 @@ loadJS('../google-spreadsheet/blocks/deleteSheets.js');
 loadJS('../google-spreadsheet/blocks/duplicateSheet.js');
 loadJS('../google-spreadsheet/blocks/getLastRow.js');
 loadJS('../google-spreadsheet/blocks/readCell.js');
+loadJS('../google-spreadsheet/blocks/readRange.js');
 loadJS('../google-spreadsheet/blocks/writeCell.js');
 loadJS('../google-spreadsheet/blocks/writeCells.js');
+loadJS('../google-spreadsheet/blocks/writeRange.js');
+loadJS('../google-spreadsheet/blocks/clearRange.js');
+loadJS('../google-spreadsheet/blocks/setCellFormat.js');
+loadJS('../google-spreadsheet/blocks/createChart.js');
+loadJS('../google-spreadsheet/blocks/updateChart.js');

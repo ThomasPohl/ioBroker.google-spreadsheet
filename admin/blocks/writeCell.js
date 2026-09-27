@@ -14,16 +14,16 @@ Blockly.Words['google-spreadsheet_writeCell_data'] = { en: 'the data', de: 'die 
 Blockly.GoogleSheets.blocks['google-spreadsheet.writeCell'] =
     '<block type="google-spreadsheet.writeCell">' +
     '     <field name="INSTANCE"></field>' +
-    '     <field name="SHEET_NAME">' +
+    '     <value name="SHEET_NAME">' +
     '         <shadow type="text">' +
     '             <field name="TEXT">text</field>' +
     '         </shadow>' +
-    '     </field>' +
-    '     <field name="CELL">' +
+    '     </value>' +
+    '     <value name="CELL">' +
     '         <shadow type="text">' +
     '             <field name="TEXT">A1</field>' +
     '         </shadow>' +
-    '     </field>' +
+    '     </value>' +
     '     <value name="DATA">' +
     '     </value>' +
     '</block>';

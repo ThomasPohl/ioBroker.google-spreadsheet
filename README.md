@@ -35,8 +35,14 @@ This adapter can be used to automatically interact with google sheets.
 * [Duplicate sheets](docs/features/duplicate-sheet.md)
 * [Get last row](docs/features/get-last-row.md)
 * [Read cell](docs/features/read-cell.md)
+* [Read range](docs/features/read-range.md)
 * [Write cell](docs/features/write-cell.md)
 * [Write cells](docs/features/write-cells.md)
+* [Write range](docs/features/write-range.md)
+* [Clear range](docs/features/clear-range.md)
+* [Set cell format](docs/features/set-cell-format.md)
+* [Create chart](docs/features/create-chart.md)
+* [Update chart](docs/features/update-chart.md)
 
 
 ## Usage
@@ -123,6 +129,7 @@ Make sure the Service Account has adequate permissions to write to the spreadshe
 ### **WORK IN PROGRESS**
 - (Thomas Pohl) Adapter requires node.js >= 22 now
 - (Thomas Pohl) Added getLastRow feature to retrieve the last non-empty row
+- (Thomas Pohl) Added range, formatting and chart features: readRange, writeRange, clearRange, setCellFormat, createChart, updateChart
 
 ### 1.0.1 (2026-02-16)
 * (Thomas Pohl) Fix for admin ui

@@ -19,27 +19,23 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 var sheetHandlers_exports = {};
 __export(sheetHandlers_exports, {
   handleAppend: () => handleAppend,
+  handleCreateChart: () => handleCreateChart,
   handleCreateSheet: () => handleCreateSheet,
   handleDeleteRows: () => handleDeleteRows,
   handleDeleteSheet: () => handleDeleteSheet,
   handleDeleteSheets: () => handleDeleteSheets,
-  handleDuplicateSheet: () => handleDuplicateSheet
+  handleDuplicateSheet: () => handleDuplicateSheet,
+  handleGetLastRow: () => handleGetLastRow,
+  handleUpdateChart: () => handleUpdateChart
 });
 module.exports = __toCommonJS(sheetHandlers_exports);
+var import_validation = require("../validation");
 function handleAppend(spreadsheet, log, message) {
   return new Promise((resolve, reject) => {
-    const messageData = message.message;
-    let sheet = messageData.sheet;
-    let values = messageData.values;
+    const messageData = (0, import_validation.normalizeLegacyMessage)(message.message);
+    const sheet = (0, import_validation.preferValue)(messageData.sheet, messageData.sheetName);
+    const values = (0, import_validation.preferValue)(messageData.values, messageData.data);
     const alias = messageData.alias;
-    if (!sheet && messageData.sheetName) {
-      log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
-      sheet = messageData.sheetName;
-    }
-    if (!values && messageData.data) {
-      log.warn("Parameter 'data' is deprecated, please use 'values' instead!");
-      values = messageData.data;
-    }
     if (!sheet || !values) {
       log.error("Missing parameters for append: 'sheet' and/or 'values'");
       reject(new Error("Missing parameters for append"));
@@ -50,15 +46,11 @@ function handleAppend(spreadsheet, log, message) {
 }
 function handleDeleteRows(spreadsheet, log, message) {
   return new Promise((resolve, reject) => {
-    const messageData = message.message;
-    let sheet = messageData.sheet;
+    const messageData = (0, import_validation.normalizeLegacyMessage)(message.message);
+    const sheet = (0, import_validation.preferValue)(messageData.sheet, messageData.sheetName);
     const start = messageData.start;
     const end = messageData.end;
     const alias = messageData.alias;
-    if (!sheet && messageData.sheetName) {
-      log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
-      sheet = messageData.sheetName;
-    }
     if (!sheet || typeof start !== "number" || typeof end !== "number") {
       log.error("Missing parameters for deleteRows: 'sheet', 'start', 'end'");
       reject(new Error("Missing parameters for deleteRows"));
@@ -72,13 +64,9 @@ function handleCreateSheet(spreadsheet, log, message) {
     log.warn("Deprecated call of createSheet with string as message. Please use an object with sheet!");
     return spreadsheet.createSheet(message.message, null);
   }
-  const messageData = message.message;
-  let sheet = messageData.sheet;
+  const messageData = (0, import_validation.normalizeLegacyMessage)(message.message);
+  const sheet = (0, import_validation.preferValue)(messageData.sheet, messageData.sheetName);
   const alias = messageData.alias;
-  if (!sheet && messageData.sheetName) {
-    log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
-    sheet = messageData.sheetName;
-  }
   if (!sheet) {
     log.error("Missing parameter for createSheet: 'sheet'");
     return Promise.reject(new Error("Missing parameters for createSheet"));
@@ -90,13 +78,9 @@ function handleDeleteSheet(spreadsheet, log, message) {
     log.warn("Deprecated call of deleteSheet with string as message. Please use an object with sheet!");
     return spreadsheet.deleteSheet(message.message);
   }
-  const messageData = message.message;
-  let sheet = messageData.sheet;
+  const messageData = (0, import_validation.normalizeLegacyMessage)(message.message);
+  const sheet = (0, import_validation.preferValue)(messageData.sheet, messageData.sheetName);
   const alias = messageData.alias;
-  if (!sheet && messageData.sheetName) {
-    log.warn("Parameter 'sheetName' is deprecated, please use 'sheet' instead!");
-    sheet = messageData.sheetName;
-  }
   if (!sheet) {
     log.error("Missing parameter for deleteSheet: 'sheet'");
     return Promise.reject(new Error("Missing parameters for deleteSheet"));
@@ -108,13 +92,9 @@ function handleDeleteSheets(spreadsheet, log, message) {
     log.warn("Deprecated call of deleteSheets with array as message. Please use an object with sheets!");
     return spreadsheet.deleteSheets(message.message, null);
   }
-  const messageData = message.message;
-  let sheets = messageData.sheets;
+  const messageData = (0, import_validation.normalizeLegacyMessage)(message.message);
+  const sheets = (0, import_validation.preferValue)(messageData.sheets, messageData.sheetNames);
   const alias = messageData.alias;
-  if (!sheets && messageData.sheetNames) {
-    log.warn("Parameter 'sheetNames' is deprecated, please use 'sheets' instead!");
-    sheets = messageData.sheetNames;
-  }
   if (!sheets) {
     log.error("Missing parameter for deleteSheets: 'sheets'");
     return Promise.reject(new Error("Missing parameters for deleteSheets"));
@@ -122,7 +102,7 @@ function handleDeleteSheets(spreadsheet, log, message) {
   return spreadsheet.deleteSheets(sheets, alias);
 }
 function handleDuplicateSheet(spreadsheet, log, message) {
-  const messageData = message.message;
+  const messageData = (0, import_validation.normalizeLegacyMessage)(message.message);
   const source = messageData.source;
   const target = messageData.target;
   const index = messageData.index;
@@ -133,13 +113,50 @@ function handleDuplicateSheet(spreadsheet, log, message) {
   }
   return spreadsheet.duplicateSheet(source, target, index, alias);
 }
+function handleGetLastRow(spreadsheet, log, message) {
+  const messageData = (0, import_validation.normalizeLegacyMessage)(message.message);
+  const sheet = (0, import_validation.preferValue)(messageData.sheet, messageData.sheetName);
+  const alias = messageData.alias;
+  if (!sheet) {
+    log.error("Missing parameter for getLastRow: 'sheet'");
+    return Promise.reject(new Error("Missing parameters for getLastRow"));
+  }
+  return spreadsheet.getLastRow(sheet, alias);
+}
+function handleCreateChart(spreadsheet, log, message) {
+  const messageData = (0, import_validation.normalizeLegacyMessage)(message.message);
+  const sheet = (0, import_validation.preferValue)(messageData.sheet, messageData.sheetName);
+  const chart = messageData.chart || messageData;
+  const alias = messageData.alias;
+  if (!sheet || !chart.range) {
+    log.error("Missing parameters for createChart: 'sheet', 'chart.range'");
+    return Promise.reject(new Error("Missing parameters for createChart"));
+  }
+  return spreadsheet.createChart(sheet, chart, alias);
+}
+function handleUpdateChart(spreadsheet, log, message) {
+  var _a;
+  const messageData = (0, import_validation.normalizeLegacyMessage)(message.message);
+  const sheet = (0, import_validation.preferValue)(messageData.sheet, messageData.sheetName);
+  const chart = messageData.chart || messageData;
+  const alias = messageData.alias;
+  const chartId = (_a = messageData.chartId) != null ? _a : messageData.id;
+  if (!sheet || !chart.range || chartId === void 0) {
+    log.error("Missing parameters for updateChart: 'sheet', 'chart.range', 'chartId'");
+    return Promise.reject(new Error("Missing parameters for updateChart"));
+  }
+  return spreadsheet.updateChart(sheet, Number(chartId), chart, alias);
+}
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   handleAppend,
+  handleCreateChart,
   handleCreateSheet,
   handleDeleteRows,
   handleDeleteSheet,
   handleDeleteSheets,
-  handleDuplicateSheet
+  handleDuplicateSheet,
+  handleGetLastRow,
+  handleUpdateChart
 });
 //# sourceMappingURL=sheetHandlers.js.map

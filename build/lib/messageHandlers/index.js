@@ -19,15 +19,22 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 var messageHandlers_exports = {};
 __export(messageHandlers_exports, {
   handleAppend: () => import_sheetHandlers.handleAppend,
+  handleClearRange: () => import_cellHandlers.handleClearRange,
+  handleCreateChart: () => import_sheetHandlers.handleCreateChart,
   handleCreateSheet: () => import_sheetHandlers.handleCreateSheet,
   handleDeleteRows: () => import_sheetHandlers.handleDeleteRows,
   handleDeleteSheet: () => import_sheetHandlers.handleDeleteSheet,
   handleDeleteSheets: () => import_sheetHandlers.handleDeleteSheets,
   handleDuplicateSheet: () => import_sheetHandlers.handleDuplicateSheet,
+  handleGetLastRow: () => import_sheetHandlers.handleGetLastRow,
   handleReadCell: () => import_cellHandlers.handleReadCell,
+  handleReadRange: () => import_cellHandlers.handleReadRange,
+  handleSetCellFormat: () => import_cellHandlers.handleSetCellFormat,
+  handleUpdateChart: () => import_sheetHandlers.handleUpdateChart,
   handleUpload: () => import_uploadHandlers.handleUpload,
   handleWriteCell: () => import_cellHandlers.handleWriteCell,
-  handleWriteCells: () => import_cellHandlers.handleWriteCells
+  handleWriteCells: () => import_cellHandlers.handleWriteCells,
+  handleWriteRange: () => import_cellHandlers.handleWriteRange
 });
 module.exports = __toCommonJS(messageHandlers_exports);
 var import_sheetHandlers = require("./sheetHandlers");
@@ -36,14 +43,21 @@ var import_uploadHandlers = require("./uploadHandlers");
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   handleAppend,
+  handleClearRange,
+  handleCreateChart,
   handleCreateSheet,
   handleDeleteRows,
   handleDeleteSheet,
   handleDeleteSheets,
   handleDuplicateSheet,
+  handleGetLastRow,
   handleReadCell,
+  handleReadRange,
+  handleSetCellFormat,
+  handleUpdateChart,
   handleUpload,
   handleWriteCell,
-  handleWriteCells
+  handleWriteCells,
+  handleWriteRange
 });
 //# sourceMappingURL=index.js.map

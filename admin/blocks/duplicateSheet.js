@@ -150,7 +150,7 @@ Blockly.JavaScript.forBlock['google-spreadsheet.duplicateSheet'] = function (blo
     if (block.getInput('CATCH0')) {
         catchCode = Blockly.JavaScript.statementToCode(block, 'CATCH0');
     }
-    let code = `sendTo("google-spreadsheet${instance}", "duplicateSheet", {source: ${source}, target: ${target}, index: ${index}, alias: "${alias}"}, function (res) {\n`;
+    let code = `sendTo("google-spreadsheet${instance}", "duplicateSheet", {source: ${source}, target: ${target}, index: ${index}, alias: "${alias}"}, async function (res) {\n`;
     code += `  if (res && res.error) {\n${catchCode}  } else {\n${statements_do}  }\n`;
     code += '});\n';
     return code;

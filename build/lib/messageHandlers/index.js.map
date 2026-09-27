@@ -1,7 +1,7 @@
 {
   "version": 3,
   "sources": ["../../../src/lib/messageHandlers/index.ts"],
-  "sourcesContent": ["export {\n    handleAppend,\n    handleDeleteRows,\n    handleCreateSheet,\n    handleDeleteSheet,\n    handleDeleteSheets,\n    handleDuplicateSheet,\n} from './sheetHandlers';\nexport { handleWriteCell, handleWriteCells, handleReadCell } from './cellHandlers';\nexport { handleUpload } from './uploadHandlers';\n"],
-  "mappings": ";;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA,2BAOO;AACP,0BAAkE;AAClE,4BAA6B;",
+  "sourcesContent": ["export {\n    handleAppend,\n    handleDeleteRows,\n    handleCreateSheet,\n    handleDeleteSheet,\n    handleDeleteSheets,\n    handleDuplicateSheet,\n    handleGetLastRow,\n    handleCreateChart,\n    handleUpdateChart,\n} from './sheetHandlers';\nexport {\n    handleWriteCell,\n    handleWriteCells,\n    handleReadCell,\n    handleReadRange,\n    handleWriteRange,\n    handleClearRange,\n    handleSetCellFormat,\n} from './cellHandlers';\nexport { handleUpload } from './uploadHandlers';\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA,2BAUO;AACP,0BAQO;AACP,4BAA6B;",
   "names": []
 }
