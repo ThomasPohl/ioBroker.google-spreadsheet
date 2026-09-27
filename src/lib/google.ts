@@ -725,8 +725,9 @@ export class SpreadsheetUtils {
                         },
                     },
                 ],
-                series: [
-                    {
+                series: Array.from(
+                    { length: Math.max(0, range.endColumnIndex - range.startColumnIndex - 1) },
+                    (_, index) => ({
                         series: {
                             sourceRange: {
                                 sources: [
@@ -734,15 +735,15 @@ export class SpreadsheetUtils {
                                         sheetId,
                                         startRowIndex: range.startRowIndex,
                                         endRowIndex: range.endRowIndex,
-                                        startColumnIndex: range.startColumnIndex + 1,
-                                        endColumnIndex: range.endColumnIndex,
+                                        startColumnIndex: range.startColumnIndex + index + 1,
+                                        endColumnIndex: range.startColumnIndex + index + 2,
                                     },
                                 ],
                             },
                         },
                         targetAxis: 'LEFT_AXIS',
-                    },
-                ],
+                    }),
+                ),
             },
         };
 
@@ -759,8 +760,6 @@ export class SpreadsheetUtils {
                         },
                         offsetXPixels: 0,
                         offsetYPixels: 0,
-                    },
-                    size: {
                         widthPixels: Number(position.width ?? 640),
                         heightPixels: Number(position.height ?? 360),
                     },

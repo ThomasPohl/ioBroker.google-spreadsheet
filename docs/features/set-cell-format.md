@@ -11,6 +11,8 @@ The feature accepts the following parameters:
 - `format`: Formatting options such as `backgroundColor`, `textFormat`, `horizontalAlignment`, `verticalAlignment`, and `numberFormat`.
 - `alias` (optional): The spreadsheet alias if you have multiple spreadsheets configured.
 
+In Blockly, enter `format` as a JSON object in the format block, for example `{"backgroundColor":{"red":1,"green":0,"blue":0},"textFormat":{"bold":true}}`.
+
 **Callback result:** `{ success: true }` on success, or `{ error: string }` on failure.
 
 ## Javascript

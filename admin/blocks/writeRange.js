@@ -18,7 +18,23 @@ Blockly.GoogleSheets.blocks['google-spreadsheet.writeRange'] =
     '         <shadow type="text"><field name="TEXT">A1:B2</field></shadow>' +
     '     </value>' +
     '     <value name="VALUES">' +
-    '         <shadow type="text"><field name="TEXT">[[\'a\', \'b\']]</field></shadow>' +
+    '         <shadow type="lists_create_with">' +
+    '             <mutation items="2"></mutation>' +
+    '             <value name="ADD0">' +
+    '                 <shadow type="lists_create_with">' +
+    '                     <mutation items="2"></mutation>' +
+    '                     <value name="ADD0"><shadow type="text"><field name="TEXT">a</field></shadow></value>' +
+    '                     <value name="ADD1"><shadow type="text"><field name="TEXT">b</field></shadow></value>' +
+    '                 </shadow>' +
+    '             </value>' +
+    '             <value name="ADD1">' +
+    '                 <shadow type="lists_create_with">' +
+    '                     <mutation items="2"></mutation>' +
+    '                     <value name="ADD0"><shadow type="text"><field name="TEXT">c</field></shadow></value>' +
+    '                     <value name="ADD1"><shadow type="text"><field name="TEXT">d</field></shadow></value>' +
+    '                 </shadow>' +
+    '             </value>' +
+    '         </shadow>' +
     '     </value>' +
     '</block>';
 

@@ -87,7 +87,8 @@ function getInstanceAndAlias(block) {
 }
 
 function makeAsync(statement) {
-    return `await new Promise((resolve)=>{${statement} ()=>{resolve()}); });\n`;
+    const sendToCall = statement.slice(0, -1);
+    return `await new Promise((resolve)=>{${sendToCall}, ()=>{resolve();}, ()=>{resolve();}); });\n`;
 }
 
 function createSendToCall(instance, command, params, waitForCompletion = false) {

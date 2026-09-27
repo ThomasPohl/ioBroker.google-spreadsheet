@@ -10,7 +10,6 @@ Blockly.Words['google-spreadsheet_read_on-sheetName'] = { en: 'sheet', de: 'Tabe
 Blockly.Words['google-spreadsheet_read_in-cell'] = { en: 'cell', de: 'Zelle' };
 Blockly.GoogleSheets.blocks['google-spreadsheet.read'] =
     '<block type="google-spreadsheet.read">' +
-    '     <field name="INSTANCE"></field>' +
     '     <value name="SHEET_NAME">' +
     '         <shadow type="text">' +
     '             <field name="TEXT">text</field>' +

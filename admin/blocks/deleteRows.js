@@ -21,12 +21,12 @@ Blockly.GoogleSheets.blocks['google-spreadsheet.deleteRows'] =
     '     </value>' +
     '     <value name="START_ROW">' +
     '         <shadow type="math_number">' +
-    '             <field name="NUM1">1</field>' +
+    '             <field name="NUM">1</field>' +
     '         </shadow>' +
     '     </value>' +
     '     <value name="END_ROW">' +
     '         <shadow type="math_number">' +
-    '             <field name="NUM2">2</field>' +
+    '             <field name="NUM">2</field>' +
     '         </shadow>' +
     '     </value>' +
     '</block>';

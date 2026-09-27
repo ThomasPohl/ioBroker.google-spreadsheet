@@ -275,7 +275,7 @@ describe('SpreadsheetUtils', () => {
                     {
                         title: 'Temperature',
                         chartType: 'line',
-                        range: 'A1:B5',
+                        range: 'A1:C3',
                         position: { row: 1, column: 4, width: 400, height: 250 },
                     },
                     'main',
@@ -285,6 +285,29 @@ describe('SpreadsheetUtils', () => {
                 const args = sheetsStub.spreadsheets.batchUpdate.firstCall.args[0];
                 expect(args.requestBody.requests[0].addChart).to.exist;
                 expect(args.requestBody.requests[0].addChart.chart.spec.title).to.equal('Temperature');
+                const position = args.requestBody.requests[0].addChart.chart.position;
+                expect(position.overlayPosition.widthPixels).to.equal(400);
+                expect(position.overlayPosition.heightPixels).to.equal(250);
+                expect(position).not.to.have.property('size');
+
+                const chart = args.requestBody.requests[0].addChart.chart.spec.basicChart;
+                expect(chart.domains[0].domain.sourceRange.sources[0]).to.include({
+                    startRowIndex: 0,
+                    endRowIndex: 3,
+                    startColumnIndex: 0,
+                    endColumnIndex: 1,
+                });
+                expect(chart.series).to.have.length(2);
+                expect(
+                    chart.series.map((item: any) => {
+                        const { startRowIndex, endRowIndex, startColumnIndex, endColumnIndex } =
+                            item.series.sourceRange.sources[0];
+                        return [startRowIndex, endRowIndex, startColumnIndex, endColumnIndex];
+                    }),
+                ).to.deep.equal([
+                    [0, 3, 1, 2],
+                    [0, 3, 2, 3],
+                ]);
             });
 
             it('should update an existing chart', async () => {

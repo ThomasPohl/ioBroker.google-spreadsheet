@@ -71,6 +71,7 @@ If the feature should be available in Blockly:
 5. Load the file from `admin/blockly.js` with `loadJS('../google-spreadsheet/blocks/<feature>.js')`.
 6. For complex inputs, such as `writeCells`, register helper blocks and toolbox entries in the same block file.
 7. Add asynchronous waiting only when it matches the existing blocks and the feature's intended behavior.
+8. Keep asynchronous code valid in its generated nesting context. If a block inserts child statements containing `await` into a callback, mark that callback `async`.
 
 Block text is currently defined directly in block files as `Blockly.Words` entries in English and German. If new admin configuration keys are needed, maintain them in the language files under `admin/i18n/` as well.
 
@@ -98,7 +99,9 @@ Cover at least these layers:
 - handler tests under `test/unit/messageHandlers/`: required fields, invalid formats, aliases, and forwarding to `SpreadsheetUtils`;
 - Google API tests under `test/unit/google.test.ts`: concrete request, range, payload, alias, and relevant errors;
 - `test/unit/main.test.ts` when dispatch, callback responses, or adapter behavior are affected;
-- manually verify the Blockly generator, or add a test when the block creates a complex payload structure.
+- `test/unit/blocklyGenerators.test.ts` for Blockly code generation. It loads every file under `admin/blocks/`, runs every registered `Blockly.JavaScript.forBlock` generator with mocked block inputs, and compiles the generated source using `vm.Script` inside an async script wrapper.
+- when adding a Blockly block, provide representative mock input expressions and assert the generated command and payload in `test/unit/blocklyGenerators.test.ts`; the shared test automatically checks its generator for syntax if it is registered with `Blockly.JavaScript.forBlock`.
+- test generated code in the same nesting context where Blockly places it. Include async child statements inside callback-based blocks to verify that enclosing callbacks are async. For value-output blocks, test the generated expression in expression context; for statement blocks, test the generated source as a script.
 
 Google calls are mocked in unit tests. Never use real Google credentials or network access in unit tests.
 

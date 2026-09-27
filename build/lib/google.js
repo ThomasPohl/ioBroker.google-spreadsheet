@@ -556,9 +556,7 @@ class SpreadsheetUtils {
     var _a;
     const sheets = this.init();
     const spreadsheet = await sheets.spreadsheets.get({ spreadsheetId });
-    const sheet = (_a = spreadsheet.data.sheets) == null ? void 0 : _a.find(
-      (item) => item.properties && item.properties.title === sheetName
-    );
+    const sheet = (_a = spreadsheet.data.sheets) == null ? void 0 : _a.find((item) => item.properties && item.properties.title === sheetName);
     if (!sheet || !sheet.properties || sheet.properties.sheetId === void 0 || sheet.properties.sheetId === null) {
       throw new Error(`Sheet not found: ${sheetName}`);
     }
@@ -606,8 +604,9 @@ class SpreadsheetUtils {
             }
           }
         ],
-        series: [
-          {
+        series: Array.from(
+          { length: Math.max(0, range.endColumnIndex - range.startColumnIndex - 1) },
+          (_, index) => ({
             series: {
               sourceRange: {
                 sources: [
@@ -615,15 +614,15 @@ class SpreadsheetUtils {
                     sheetId,
                     startRowIndex: range.startRowIndex,
                     endRowIndex: range.endRowIndex,
-                    startColumnIndex: range.startColumnIndex + 1,
-                    endColumnIndex: range.endColumnIndex
+                    startColumnIndex: range.startColumnIndex + index + 1,
+                    endColumnIndex: range.startColumnIndex + index + 2
                   }
                 ]
               }
             },
             targetAxis: "LEFT_AXIS"
-          }
-        ]
+          })
+        )
       }
     };
     const position = chartConfig.position || { row: 0, column: 0, width: 640, height: 360 };
@@ -638,9 +637,7 @@ class SpreadsheetUtils {
               columnIndex: Number((_b = position.column) != null ? _b : 0)
             },
             offsetXPixels: 0,
-            offsetYPixels: 0
-          },
-          size: {
+            offsetYPixels: 0,
             widthPixels: Number((_c = position.width) != null ? _c : 640),
             heightPixels: Number((_d = position.height) != null ? _d : 360)
           }

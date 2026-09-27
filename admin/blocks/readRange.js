@@ -9,7 +9,6 @@ Blockly.Words['google-spreadsheet_readRange_in-range'] = { en: 'range', de: 'Ber
 
 Blockly.GoogleSheets.blocks['google-spreadsheet.readRange'] =
     '<block type="google-spreadsheet.readRange">' +
-    '     <field name="INSTANCE"></field>' +
     '     <value name="SHEET_NAME">' +
     '         <shadow type="text">' +
     '             <field name="TEXT">text</field>' +

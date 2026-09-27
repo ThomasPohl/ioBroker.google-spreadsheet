@@ -11,12 +11,27 @@ Blockly.Words['google-spreadsheet_setCellFormat_on-sheetName'] = { en: 'sheet', 
 Blockly.Words['google-spreadsheet_setCellFormat_in-range'] = { en: 'range', de: 'Bereich' };
 Blockly.Words['google-spreadsheet_setCellFormat_format'] = { en: 'format', de: 'Format' };
 
+Blockly.Blocks['google-spreadsheet.formatObject'] = {
+    init: function () {
+        this.appendDummyInput().appendField(
+            new Blockly.FieldTextInput('{"backgroundColor":{"red":1,"green":0,"blue":0},"textFormat":{"bold":true}}'),
+            'JSON',
+        );
+        this.setOutput(true, 'Object');
+        this.setColour(Blockly.GoogleSheets.HUE);
+    },
+};
+
+Blockly.JavaScript.forBlock['google-spreadsheet.formatObject'] = function (block) {
+    return [`JSON.parse(${JSON.stringify(block.getFieldValue('JSON'))})`, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
 Blockly.GoogleSheets.blocks['google-spreadsheet.setCellFormat'] =
     '<block type="google-spreadsheet.setCellFormat">' +
     '     <field name="INSTANCE"></field>' +
     '     <value name="SHEET_NAME"><shadow type="text"><field name="TEXT">Sheet1</field></shadow></value>' +
     '     <value name="RANGE"><shadow type="text"><field name="TEXT">A1:B2</field></shadow></value>' +
-    '     <value name="FORMAT"><shadow type="dict"><field name="DICT">{backgroundColor:{red:1,green:0,blue:0}, textFormat:{bold:true}}</field></shadow></value>' +
+    '     <value name="FORMAT"><shadow type="google-spreadsheet.formatObject"></shadow></value>' +
     '</block>';
 
 Blockly.Blocks['google-spreadsheet.setCellFormat'] = {
