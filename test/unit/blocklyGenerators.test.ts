@@ -120,7 +120,7 @@ describe('Blockly code generators', () => {
     it('provides nested list shadows and generates an array payload for writeRange', () => {
         const toolboxBlock = Blockly.GoogleSheets.blocks['google-spreadsheet.writeRange'];
         expect(toolboxBlock).to.include('<value name="VALUES">');
-        expect((toolboxBlock.match(/<shadow type="lists_create_with">/g) ?? [])).to.have.length(3);
+        expect(toolboxBlock.match(/<shadow type="lists_create_with">/g) ?? []).to.have.length(3);
         expect(toolboxBlock).not.to.include('<shadow type="text"><field name="TEXT">[[');
 
         const generated = Blockly.JavaScript.forBlock['google-spreadsheet.writeRange']({
