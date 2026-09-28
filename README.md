@@ -126,7 +126,7 @@ Make sure the Service Account has adequate permissions to write to the spreadshe
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 1.1.0 (2026-09-28)
 - (Thomas Pohl) Adapter requires node.js >= 22 now
 - (Thomas Pohl) Added getLastRow feature to retrieve the last non-empty row
 - (Thomas Pohl) Added range, formatting and chart features: readRange, writeRange, clearRange, setCellFormat, createChart, updateChart
@@ -149,10 +149,6 @@ Make sure the Service Account has adequate permissions to write to the spreadshe
 ### 0.5.0
 * (Thomas Pohl) Minimum node.js version is now 20
 * (Thomas Pohl) Display connection state
-
-### 0.4.0
-* (Thomas Pohl) The privateKey is saved now encrypted
-* (Thomas Pohl) Support for node.js 22
 
 [Older changelogs can be found there](CHANGELOG_OLD.md)
 

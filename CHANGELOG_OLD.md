@@ -1,4 +1,8 @@
 # Older changes
+## 0.4.0
+* (Thomas Pohl) The privateKey is saved now encrypted
+* (Thomas Pohl) Support for node.js 22
+
 ## 0.3.1
 * (Thomas Pohl) Fixed reading cells and added error handling
 

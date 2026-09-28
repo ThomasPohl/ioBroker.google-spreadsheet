@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "google-spreadsheet",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "news": {
+      "1.1.0": {
+        "en": "Adapter requires node.js >= 22 now\nAdded getLastRow feature to retrieve the last non-empty row\nAdded range, formatting and chart features: readRange, writeRange, clearRange, setCellFormat, createChart, updateChart",
+        "de": "Adapter benötigt jetzt node.js >= 22\nGetLastRow ruft jetzt die letzte nicht leere Zeile ab\nNeue Range-, Formatierungs- und Diagrammfunktionen: ReadRange, ClearRange, SetCellFormat, CreateChart",
+        "ru": "Теперь для адаптера требуется файл node.js >= 22\nДобавлена функция GetLastRow для получения последней непустой строки\nДобавлены функции диапазона, форматирования и диаграмм: ReadRange, WriteRange, CleArrange, SetCellFormat, CreateChart, UpdateChart",
+        "pt": "O adaptador exige node.js >= 2\nAdicionado getLastRow para recuperar a última linha vazia\nMais recursos de intervalo, formatação e gráfico: readRange, writeRange, cleArrange, setCellFormat, createChart",
+        "nl": "Voor de adapter is nu node.js >= 22 nodig\nDe functie GetLastRow toegevoegd om de laatste niet-lege rij op te halen\nFuncties voor bereik, opmaak en grafieken toegevoegd: ReadRange, WriteRange, CLEArrange, SetCellFormat, CreateChart, UpdateChart",
+        "fr": "Adapter nécessite node.js >= 22\nAjout de la fonction GetLastRow pour récupérer la dernière ligne vide\nAjout de plages, de formatages et de graphiques : ReadRange, WriteRange, SetCellFormat, CreateChart, UpdateChart",
+        "it": "Adapter richiede node.js =2 ora\nAggiunta GetLastRow per l'ultima riga non vuota\nAggiunte funzioni di range, formattazione e grafico: ReadRange, ClearRange, setCellFormat, CreateChart",
+        "es": "El adaptador necesita node.js >= 22 ahora\nSe añadió la función GetLastRow para recuperar la última fila no vacía\nFunciones añadidas de rango, formato y gráfico: ReadRange, WriteRange, cleArrange, SetCellFormat, CreateChart, UpdateChart",
+        "pl": "Adapter wymaga teraz node.js >= 22\nDodano funkcję GetLastRow, aby pobrać ostatni niepusty wiersz\nDodano zakres, formatowanie i funkcje wykresu: ReadRange, WriteRange, CleArrange, SetCellFormat, CreateChart, UpdateChart",
+        "uk": "Адаптер вимагає node.js >= 22 зараз\nДодана функція GetLastrow для отримання останнього непорожнього рядка\nДодані можливості діапазону, форматування та діаграми: ReadRange, WriteRange, cleArrange, setCellFormat, CreateChart, UpdateChart",
+        "zh-cn": "适配器现在需要 node.js >= 22\n添加了 getLastRow 功能以检索最后一行非空行\n添加了范围、格式和图表功能：ReadRange、WriteRange、cleArrange、setCellFormat、createChart、UpdateChart"
+      },
       "1.0.1": {
         "en": "Fix for admin ui",
         "de": "Fix für admin ui",
